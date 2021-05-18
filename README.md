@@ -26,4 +26,15 @@ Genome visualizer software project
 
 ### Reunión 18/05
 
+* Prueba de primera versión de create_kar.py
+* De create_kar modificar: El archivo .kar final debe quedar en el mismo orden de como aparecen los contigs en el .gbk. El orden de las bandas se cuenta desde 0 de nuevo. Agregar prefijos de argumentos, verificadores y comentarios a create_kar.
+* Siguiente archivo a crear es el que define las flechas de las secuencias codificantes (CDSs_positive.txt). En el archivo gbk, en cada contig aparece el campo CDS, el location indica donde inicia y termina la secuencia. Si aparece complement(2..444) significa que la secuencia es negativa. Si aparece 2..444 la secuencia es positiva.
+* A la locación de todos los CDS de un contig se les debe sumar el tamaño total del contig anterior --El orden da igual--. Por ejemplo, si dice el contig anterior dice "source 1..100" y el primer CDS del contig siguiente tiene location "4..10", debe quedar como "104..110".
+* La última columna del CDS tiene los colores, eso se saca del archivo de configuración.
 
+#### Tareas
+* Andrea: Arreglar create_kar.py y escribir script para crear archivo CDSspositive.txt y CDSsnegative.txt
+* Roberto
+* Andrés
+
+### Reunión 01/06

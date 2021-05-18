@@ -20,7 +20,7 @@ Genome visualizer software project
 
 #### Tareas
 * Andrea: Tener (&) listo para la próxima reunión.
-* Roberto: Revisar lo que hace DFAST. Ver cómo se anotan los COGs. Preguntar a Vicente si se quiere unir al proyecto.
+* Roberto: Revisar lo que hace DFAST. Ver cómo se anotan los COGs. Preguntar a Vicente si se quiere unir al proyecto. (https://github.com/transcript/COG; Script de python solo requiere descargar la base de datos del NCBI de COGs, crear la base de datos de COG con DIAMOND, y luego buscar con DIAMOND en el .faa. Entrega una tabla con 3 columnas, la tercera es el código COG). Vicente esta abierto a participar.
 * Andrés: Averiguar qué información se debe extraer del GBK para hacer los archivos input para colorear secciones custom.
 
 

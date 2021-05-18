@@ -7,7 +7,7 @@ Genome visualizer software project
 ### create_kar.py
 
 ```python
-python create_kar.py -i <input genbank file path> -o <output kar file path>
+python create_kar.py -i <input_genbank_file_path> -o <output_kar_file_path>
 ```
 
 Example with testing data: 

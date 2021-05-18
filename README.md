@@ -2,6 +2,20 @@
 
 Genome visualizer software project
 
+## Execution:
+
+### create_kar.py
+
+```python
+python create_kar.py -i <input genbank file path> -o <output kar file path>
+```
+
+Example with testing data: 
+```python
+python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
+``` 
+## Meetings journal
+
 ### Reunión 06/01
 
 * GBK a fna, GBK a faa, GBK a gff.

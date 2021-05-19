@@ -5,9 +5,18 @@
 
 from Bio import SeqIO
 import sys
+import numpy as np
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
 ## And finally creates a kar file with original contig order.
+
+def ends_sorted(ends):
+	dic_ends = {i:ends[i] for i in range(len(ends))}
+	dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
+	ends_sort = list(dic_sorted.values())
+	indexes = list(dic_sorted.keys())
+	return ends_sort, indexes
+
 def main(gbk_filename, output_file):
 	
 	gbk_file = open(gbk_filename,"r")
@@ -22,21 +31,24 @@ def main(gbk_filename, output_file):
 		ends.append(end)
 	
 	# Saving original order
-	dic_ends = {i:ends[i] for i in range(len(ends))}
+	#dic_ends = {i:ends[i] for i in range(len(ends))}
 	# Sorting by contig size 
-	dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
+	#dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
 	
-	ends_sort = list(dic_sorted.values())
+	#ends_sort = list(dic_sorted.values())
+	
+	total_size = np.sum(np.array(ends))
+	
 	new_ends = []
 	
 	inits = []
 	init = 0
-	end = ends_sort[0]
+	end = ends[0]
 	for i in range(len(ends)-1):
 		inits.append(init)
 		new_ends.append(end)
 		init = end + 1
-		end = init + ends_sort[i+1]
+		end = init + ends[i+1]
 	inits.append(init)
 	new_ends.append(end)
 		
@@ -44,7 +56,7 @@ def main(gbk_filename, output_file):
 	chrx = str(chrx).zfill(2)
 	lines = []
 	
-	lines.append("chr - chr"+chrx+" 1 0 "+str(ends_sort[-1])+" black\n")
+	lines.append("chr - chr"+chrx+" 1 0 "+str(total_size)+" black\n")
 	for i in range(len(inits)):
 		if len(inits) == 1:
 			break
@@ -53,9 +65,7 @@ def main(gbk_filename, output_file):
 		else:
 			color = " black\n"
 		band = str(i+1).zfill(2)
-		value = dic_sorted.get(i)
-		index = list(dic_sorted.values()).index(value)
-		line = "band chr"+chrx+" band"+band+" band"+band+" "+str(inits[index])+" "+str(new_ends[index])+color
+		line = "band chr"+chrx+" band"+band+" band"+band+" "+str(inits[i])+" "+str(new_ends[i])+color
 		lines.append(line)
 
 	with open(output_file, 'w') as output:

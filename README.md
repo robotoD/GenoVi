@@ -34,7 +34,7 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
 
 #### Tareas
 * Andrea: Tener (&) listo para la próxima reunión.
-* Roberto: Revisar lo que hace DFAST. Ver cómo se anotan los COGs. Preguntar a Vicente si se quiere unir al proyecto. (https://github.com/transcript/COG; Script de python solo requiere descargar la base de datos del NCBI de COGs, crear la base de datos de COG con DIAMOND, y luego buscar con DIAMOND en el .faa. Entrega una tabla con 3 columnas, la tercera es el código COG). Vicente esta abierto a participar.
+* Roberto: Revisar lo que hace DFAST. Ver cómo se anotan los COGs. Preguntar a Vicente si se quiere unir al proyecto.
 * Andrés: Averiguar qué información se debe extraer del GBK para hacer los archivos input para colorear secciones custom.
 
 
@@ -42,13 +42,16 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
 
 * Prueba de primera versión de create_kar.py
 * De create_kar modificar: El archivo .kar final debe quedar en el mismo orden de como aparecen los contigs en el .gbk. El orden de las bandas se cuenta desde 0 de nuevo. Agregar prefijos de argumentos, verificadores y comentarios a create_kar.
-* Siguiente archivo a crear es el que define las flechas de las secuencias codificantes (CDSs_positive.txt). En el archivo gbk, en cada contig aparece el campo CDS, el location indica donde inicia y termina la secuencia. Si aparece complement(2..444) significa que la secuencia es negativa. Si aparece 2..444 la secuencia es positiva.
-* A la locación de todos los CDS de un contig se les debe sumar el tamaño total del contig anterior --El orden da igual--. Por ejemplo, si dice el contig anterior dice "source 1..100" y el primer CDS del contig siguiente tiene location "4..10", debe quedar como "104..110".
-* La última columna del CDS tiene los colores, eso se saca del archivo de configuración.
+* Siguiente archivo a crear es el que define las flechas de las secuencias codificantes (CDSs_positive.txt y CDSs_negative.txt). En el archivo gbk, en cada contig aparece el feature CDS, el location indica donde inicia y termina la secuencia. Si aparece complement(2..444) significa que la secuencia es negativa. Si aparece 2..444 la secuencia es positiva.
+* A la locación de todos los CDS de un contig se les debe sumar el tamaño total del contig anterior --El orden de los contigs da igual--. Por ejemplo, si dice el contig anterior dice "source 1..10000" y el primer CDS del contig siguiente tiene location "4..10", debe quedar como "10004..10010".
+* La última columna del CDS tiene los colores, pero esta informacion no es necesaria. Esto se grafica desde el archivo de configuración.
+* Pipeline para la anotacion de COGs y obtencion de un una tsv con la informacion a graficar: (https://github.com/transcript/COG). Requiere descargar la base de datos COGs del NCBI, Instalar DIAMOND, realizar la base de datos de DIAMOND, hacer la búsqueda con DIAMOND en el .faa. Entrega una tabla con 3 columnas, la tercera es el código COG). Cada uno de los 25 grupos COGs (e.g. A,B,C,D,E...) debe ser ingresado como un archivo aparte (COG_K.txt) indicando el inicio y final de cada CDS clasificado en cada COG (indicado en el archivo anterior). 
+* Vicente esta abierto a participar.
 
 #### Tareas
 * Andrea: Arreglar create_kar.py y escribir script para crear archivo CDSspositive.txt y CDSsnegative.txt
-* Roberto
-* Andrés
+* Roberto: Corroborar pipeline de anotacion COGs para integrarlo al programa. Buscar otros analisis que agregar al visualizador.
+* Andrés: Verificar el pipeline para obtencion de datos de GC-skew y GC-content desde un archivo ###.fna para crear el script de python y automatizar la creacion de archivos.
+* Vicente: Script de python obtener desde un ###.gbk, un archivo ###.faa (para análisis de COGs) y un archivo ###.fna (para cálculo de GC-Skew y GC-content).  
 
 ### Reunión 01/06

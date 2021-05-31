@@ -27,10 +27,15 @@ output_handle = open(args.outputFile, "w")
 #Long version, allows full control of fasta output
 for seq_record in SeqIO.parse(input_handle, "genbank") :
     print("Dealing with GenBank record %s" % seq_record.id)
+    try: # The old way, removed in Biopython 1.73
+        fasta = seq_record.seq.tostring()
+    except AttributeError: # The new way, needs Biopython 1.45 or later.
+        fasta = str(seq_record.seq)
+    
     output_handle.write(">%s %s\n%s\n" % (
            seq_record.id,
            seq_record.description,
-           seq_record.seq))
+           "\n".join([fasta[i:i+60] for i in range(0, len(fasta), 60)])))
 
 output_handle.close()
 input_handle.close()

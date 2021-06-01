@@ -4,16 +4,25 @@ Genome visualizer software project
 
 ## Execution:
 
-### create_kar.py
+### Create kar file
 
 ```python
 python create_kar.py -i <input_genbank_file_path> -o <output_kar_file_path>
 ```
-
 Example with testing data: 
 ```python
 python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
 ``` 
+### Create ODS files
+
+```python
+python create_kar.py -i <input_genbank_file_path> -o <output_kar_file_path> -cp <output_positive_ODS_file> -cn <output_negative_ODS_file>
+```
+Example with testing data: 
+```python
+python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_positive.ods -cn test_negative.ods
+``` 
+
 ## Meetings journal
 
 ### Reunión 06/01
@@ -55,3 +64,12 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
 * Vicente: Script de python obtener desde un ###.gbk, un archivo ###.faa (para análisis de COGs) y un archivo ###.fna (para cálculo de GC-Skew y GC-content).  
 
 ### Reunión 01/06
+* Vicente Saona se une al proyecto (Wohooo!).
+* Archivos CDSpositive y CDSnegative tienen que estar separados por tabs. La extensión da lo mismo. Además, la location de los contigs en los CDS debe llevar la suma total de todos los contigs anteriores (como en el kar). La primera columna de los ODS es la misma primera columna del kar.
+* Hay que editar el gbk que se va a transformar a fna
+
+#### Tareas
+* Andrea: Arreglar creación de CDS.
+* Roberto: Continuar con el pipeline de anotacion COGs.
+* Andrés: Continuar viendo que se hace con los archivos de salida, juntarlos, etc, para obtener los archivos de configuración de Circos. 
+* Vicente: Modificar los scripts que encontró Andrés para incorporar los números que le faltan para el inicio y el fin, con tal de que el output quede listo para Circos.

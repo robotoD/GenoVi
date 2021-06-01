@@ -73,3 +73,5 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_posi
 * Roberto: Continuar con el pipeline de anotacion COGs.
 * Andrés: Continuar viendo que se hace con los archivos de salida, juntarlos, etc, para obtener los archivos de configuración de Circos. 
 * Vicente: Modificar los scripts que encontró Andrés para incorporar los números que le faltan para el inicio y el fin, con tal de que el output quede listo para Circos.
+
+### Reunión 15/06

@@ -38,8 +38,6 @@ def create_kar(gbk_filename, output_file):
 	
 	#ends_sort = list(dic_sorted.values())
 	
-	total_size = np.sum(np.array(ends))
-	
 	new_ends = []
 	
 	inits = []
@@ -49,7 +47,7 @@ def create_kar(gbk_filename, output_file):
 		inits.append(init)
 		new_ends.append(end)
 		init = end + 1
-		end = init + ends[i+1]
+		end = end + ends[i+1]
 	inits.append(init)
 	new_ends.append(end)
 		
@@ -57,7 +55,7 @@ def create_kar(gbk_filename, output_file):
 	chrx = str(chrx).zfill(2)
 	lines = []
 	
-	lines.append("chr - chr"+chrx+" 1 0 "+str(total_size)+" black\n")
+	lines.append("chr - chr"+chrx+" 1 0 "+str(new_ends[-1])+" black\n")
 	for i in range(len(inits)):
 		if len(inits) == 1:
 			break
@@ -87,15 +85,16 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 			new_arr.append([init+sizes_x[i],end+sizes_x[i]])
 		return new_arr
 		
-	def write_lines(locations, sizes_x, output_):
+	def write_lines(locations, sizes_x, names, output_):
 		lines = []
 		for i in range(len(locations)):
-			print(locations[i])
-			line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
+			#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
+			line = [names[i]] + list(map(str, locations[i]))
 			lines.append(line)
 		with open(output_, 'w', newline='') as csvfile:
 			writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 			writer.writerows(lines)	
+			print(output_,"created succesfully.")
 
 	
 	gbk_file = open(gbk_filename,"r")
@@ -103,10 +102,14 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 	negatives = []
 	sizes_p = []
 	sizes_n = []
+	names_p = []
+	names_n = []
 	
 	for j, record in enumerate(SeqIO.parse(gbk_file, "genbank")):
 		aux_p = []
 		aux_n = []
+		name = record.name
+		
 		for feature in record.features:
 			if feature.type == "CDS":
 				location = str(feature.location)[:-3]
@@ -117,20 +120,23 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 						aux_p.append(0)
 					else:
 						aux_p.append(sizes[j-1])
+					names_p.append(name)
 				else:
 					negatives.append(location)
 					if j == 0:
 						aux_n.append(0)
 					else:
 						aux_n.append(sizes[j-1])
+					names_n.append(name)
+					
 		sizes_p = sizes_p + aux_p
 		sizes_n = sizes_n + aux_n
 	
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
-	write_lines(new_pos, sizes_p, cds_p_output)
-	write_lines(new_negs, sizes_n, cds_n_output)
+	write_lines(new_pos, sizes_p, names_p, cds_p_output)
+	write_lines(new_negs, sizes_n, names_n, cds_n_output)
 	
 	return
 				

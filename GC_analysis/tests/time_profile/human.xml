@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="download accessions">
+<ASSEMBLY accession="GCA_000001405.27" alias="GRCh38.p12" center_name="Genome Reference Consortium">
+        <IDENTIFIERS>
+            <PRIMARY_ID>GCA_000001405.27</PRIMARY_ID>
+            <SUBMITTER_ID namespace="Genome Reference Consortium">GRCh38.p12</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>Genome Reference Consortium Human Build 38 patch release 12 (GRCh38.p12)</TITLE>
+        <DESCRIPTION>The human reference assembly defines a standard upon which other whole genome studies are based. Providing the best representation of the human genome is essential for facilitating continued progress in understanding and improving human health. &lt;p&gt;The Human Genome Project (HGP) was an international research collaboration coordinated by the U.S. Department of Energy (DOE) and National Institutes of Health (NIH) whose goals were to determine the sequence of the human chromosomes and identify and map all human genes. The project began in 1988 when Congress funded both the NIH and the DOE and was completed in April of 2003. The HGP used a clone-oriented approach to produce map data, clone reagents, and the assembled human genome sequence. The International Human Genome Sequencing Consortium published the first draft of the human genome, with the sequence 90% complete, in the journal Nature in February 2001. The full sequence was completed in April 2003. The HGP resulted in significant technology, tool, and resource development that continues to have a significant impact on medicine and other life sciences. &lt;/p&gt; &lt;p&gt;The Genome Reference Consortium (GRC) was formed in 2008 to maintain the reference assembly for the human genome. The goals of this group are to correct regions that are misrepresented, to close remaining gaps, and to produce alternative assemblies of structurally variant loci. The consortium does experimental work to address gaps or sub-optimal sequence regions and has developed the infrastructure to review and curate assembly joins. The GRC consists of: The Wellcome Trust Sanger Institute, The Genome Center at Washington University, The European Bioinformatics Institute and The National Center for Biotechnology Information. The public can see regions under review and report genome problems at the GRC website, &lt;a href="http://genomereference.org" alt="link to GRC home page"&gt;http://genomereference.org&lt;/a&gt;. &lt;/p&gt; &lt;p&gt;The human genome assembly submitted by the GRC is available in GenBank under accession ranges GL000001-GL000258 (the scaffolds), and CM000663-CM000686 (the chromosomes).</DESCRIPTION>
+        <NAME>GRCh38.p12</NAME>
+        <ASSEMBLY_LEVEL>chromosome</ASSEMBLY_LEVEL>
+        <GENOME_REPRESENTATION>full</GENOME_REPRESENTATION>
+        <TAXON>
+            <TAXON_ID>9606</TAXON_ID>
+            <SCIENTIFIC_NAME>Homo sapiens</SCIENTIFIC_NAME>
+            <COMMON_NAME>human</COMMON_NAME>
+        </TAXON>
+        <STUDY_REF>
+            <IDENTIFIERS>
+                <PRIMARY_ID>PRJNA31257</PRIMARY_ID>
+            </IDENTIFIERS>
+        </STUDY_REF>
+        <CHROMOSOMES>
+            <CHROMOSOME accession="CM000663.2">
+                <NAME>1</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000664.2">
+                <NAME>2</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000665.2">
+                <NAME>3</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000666.2">
+                <NAME>4</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000667.2">
+                <NAME>5</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000668.2">
+                <NAME>6</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000669.2">
+                <NAME>7</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000670.2">
+                <NAME>8</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000671.2">
+                <NAME>9</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000672.2">
+                <NAME>10</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000673.2">
+                <NAME>11</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000674.2">
+                <NAME>12</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000675.2">
+                <NAME>13</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000676.2">
+                <NAME>14</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000677.2">
+                <NAME>15</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000678.2">
+                <NAME>16</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000679.2">
+                <NAME>17</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000680.2">
+                <NAME>18</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000681.2">
+                <NAME>19</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000682.2">
+                <NAME>20</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000683.2">
+                <NAME>21</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000684.2">
+                <NAME>22</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000685.2">
+                <NAME>X</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="CM000686.2">
+                <NAME>Y</NAME>
+                <TYPE>Chromosome</TYPE>
+            </CHROMOSOME>
+            <CHROMOSOME accession="J01415.2">
+                <NAME>MT</NAME>
+                <TYPE>Mitochondrion</TYPE>
+            </CHROMOSOME>
+        </CHROMOSOMES>
+        <ASSEMBLY_LINKS>
+            <ASSEMBLY_LINK>
+                <URL_LINK>
+                    <LABEL>Sequence Report</LABEL>
+                    <URL>ftp://ftp.ebi.ac.uk/pub/databases/ena/assembly/GCA_000/GCA_000001/GCA_000001405.27_sequence_report.txt</URL>
+                </URL_LINK>
+            </ASSEMBLY_LINK>
+            <ASSEMBLY_LINK>
+                <URL_LINK>
+                    <LABEL>Regions</LABEL>
+                    <URL>ftp://ftp.ebi.ac.uk/pub/databases/ena/assembly/GCA_000/GCA_000001/GCA_000001405.27_regions.txt</URL>
+                </URL_LINK>
+            </ASSEMBLY_LINK>
+        </ASSEMBLY_LINKS>
+        <ASSEMBLY_ATTRIBUTES>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>total-length</TAG>
+                <VALUE>3257347282</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>ungapped-length</TAG>
+                <VALUE>3095978931</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>n50</TAG>
+                <VALUE>59364414</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>spanned-gaps</TAG>
+                <VALUE>661</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>unspanned-gaps</TAG>
+                <VALUE>349</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>scaffold-count</TAG>
+                <VALUE>875</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>count-contig</TAG>
+                <VALUE>1536</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>contig-n50</TAG>
+                <VALUE>56413054</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>contig-L50</TAG>
+                <VALUE>19</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>contig-n75</TAG>
+                <VALUE>23496225</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>contig-n90</TAG>
+                <VALUE>4867933</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>scaf-L50</TAG>
+                <VALUE>17</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>scaf-n75</TAG>
+                <VALUE>31699399</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>scaf-n90</TAG>
+                <VALUE>7557127</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>replicon-count</TAG>
+                <VALUE>25</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>count-non-chromosome-replicon</TAG>
+                <VALUE>1</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>count-alt-loci-units</TAG>
+                <VALUE>35</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>count-regions</TAG>
+                <VALUE>317</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>count-patches</TAG>
+                <VALUE>140</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+            <ASSEMBLY_ATTRIBUTE>
+                <TAG>ENA-LAST-UPDATED</TAG>
+                <VALUE>2018-02-06</VALUE>
+            </ASSEMBLY_ATTRIBUTE>
+        </ASSEMBLY_ATTRIBUTES>
+    </ASSEMBLY>
+</ROOT>

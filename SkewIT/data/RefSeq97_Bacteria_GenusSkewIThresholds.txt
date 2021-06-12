@@ -1,0 +1,1148 @@
+Genus	Num_Genomes	Mean	STDEV 	Threshold
+g__Escherichia	934	0.8486	0.0688	0.7110
+g__Salmonella	707	0.9482	0.0502	0.8478
+g__Burkholderia	619	0.8926	0.1181	0.6564
+g__Bordetella	618	0.4988	0.1394	0.2200
+g__Bacillus	603	0.9422	0.0545	0.8332
+g__Staphylococcus	513	0.9291	0.0697	0.7897
+g__Pseudomonas	489	0.8167	0.1148	0.5871
+g__Klebsiella	479	0.9567	0.0430	0.8707
+g__Streptococcus	461	0.9373	0.0557	0.8259
+g__Vibrio	386	0.9526	0.0686	0.8154
+g__Lactobacillus	377	0.9499	0.0748	0.8003
+g__Mycobacterium	260	0.7460	0.1751	0.3959
+g__Acinetobacter	252	0.9445	0.0759	0.7928
+g__Campylobacter	248	0.7425	0.0968	0.5489
+g__Corynebacterium	224	0.7890	0.2085	0.3720
+g__Brucella	217	0.8296	0.0820	0.6656
+g__Xanthomonas	208	0.7480	0.0747	0.5985
+g__Helicobacter	201	0.6012	0.0923	0.4165
+g__Listeria	184	0.9317	0.0880	0.7557
+g__Mycoplasma	182	0.5485	0.1530	0.2425
+g__Streptomyces	181	0.3352	0.1447	0.046
+g__Chlamydia	152	0.9907	0.0178	0.955
+g__Neisseria	150	0.8348	0.0907	0.653
+g__Enterococcus	144	0.9388	0.0834	0.772
+g__Clostridium	128	0.9557	0.0441	0.868
+g__Enterobacter	125	0.8843	0.0576	0.769
+g__Bifidobacterium	121	0.4869	0.2344	0.018
+g__Yersinia	99	0.7713	0.1785	0.414
+g__Shigella	95	0.6378	0.1223	0.393
+g__Legionella	94	0.9263	0.0422	0.842
+g__Mannheimia	88	0.7636	0.0729	0.618
+g__Rickettsia	86	0.7527	0.0844	0.584
+g__Francisella	83	0.8577	0.1129	0.632
+g__Serratia	80	0.9635	0.0877	0.788
+g__Haemophilus	78	0.5947	0.1561	0.282
+g__Paenibacillus	76	0.9477	0.0498	0.848
+g__Pseudoalteromonas	75	0.6016	0.4096	-0.218
+g__Rhizobium	70	0.5395	0.1540	0.232
+g__Ralstonia	64	0.7888	0.0897	0.609
+g__Citrobacter	64	0.9275	0.0607	0.806
+g__Aeromonas	61	0.9276	0.0456	0.836
+g__Paraburkholderia	58	0.8721	0.0794	0.713
+g__Pasteurella	54	0.8443	0.1332	0.578
+g__Agrobacterium	52	0.7821	0.1495	0.483
+g__Clostridioides	49	0.9716	0.0144	0.943
+g__Shewanella	45	0.9507	0.0933	0.764
+g__Prevotella	44	0.5701	0.1749	0.220
+g__Rhodococcus	44	0.6744	0.2885	0.097
+g__Lactococcus	43	0.9573	0.0325	0.892
+g__Chryseobacterium	42	0.7163	0.0996	0.517
+g__Flavobacterium	40	0.6485	0.1392	0.370
+g__Mycobacteroides	40	0.9373	0.0249	0.887
+g__Phaeobacter	39	0.8439	0.0482	0.748
+g__Azospirillum	38	0.6174	0.1495	0.319
+g__Fusobacterium	38	0.5783	0.1363	0.306
+g__Borrelia	38	1.0044	0.0127	0.979
+g__Leuconostoc	37	0.9229	0.0983	0.726
+g__Sinorhizobium	36	0.6932	0.1266	0.440
+g__Cupriavidus	35	0.7992	0.0859	0.627
+g__Alteromonas	33	0.8355	0.1070	0.621
+g__Leptospira	32	0.8833	0.1238	0.636
+g__Stenotrophomonas	31	0.7719	0.1439	0.484
+g__Bradyrhizobium	31	0.6035	0.1086	0.386
+g__Bacteroides	31	0.8275	0.0796	0.668
+g__Microbacterium	30	0.3810	0.1470	0.087
+g__Spiroplasma	30	0.8945	0.1534	0.588
+g__Pantoea	30	0.8019	0.0922	0.617
+g__Proteus	30	0.9295	0.0411	0.847
+g__Synechococcus	29	0.4288	0.3256	-0.222
+g__Sphingobium	29	0.3853	0.1279	0.130
+g__Elizabethkingia	29	0.8141	0.0465	0.721
+g__Pediococcus	29	0.9747	0.0202	0.934
+g__Treponema	28	0.7466	0.2923	0.162
+g__Borreliella	28	1.0085	0.0154	0.978
+g__Moraxella	27	0.7961	0.1710	0.454
+g__Acetobacter	27	0.8925	0.0792	0.734
+g__Cutibacterium	26	0.9225	0.0990	0.725
+g__Bartonella	26	0.8832	0.0540	0.775
+g__Pectobacterium	26	0.9447	0.0322	0.880
+g__Sphingomonas	25	0.5966	0.1679	0.261
+g__Dehalococcoides	25	0.8348	0.0810	0.673
+g__Akkermansia	24	0.9379	0.1218	0.694
+g__Arcobacter	23	0.5534	0.0772	0.399
+g__Geobacillus	23	0.9477	0.0861	0.775
+g__Porphyromonas	22	0.4207	0.0917	0.237
+g__Wolbachia	22	0.3472	0.1100	0.127
+g__Mesorhizobium	22	0.4351	0.1231	0.189
+g__Blattabacterium	22	0.4065	0.0778	0.251
+g__Weissella	22	0.9583	0.0350	0.888
+g__Deinococcus	21	0.4586	0.2031	0.052
+g__Paracoccus	21	0.6149	0.1191	0.377
+g__Histophilus	21	0.5364	0.0295	0.477
+g__Pandoraea	21	0.9173	0.0329	0.852
+g__Capnocytophaga	20	0.4425	0.1971	0.048
+g__Rhodobacter	20	0.6256	0.0763	0.473
+g__Halomonas	20	0.8803	0.1205	0.639
+g__Piscirickettsia	20	0.9465	0.0533	0.840
+g__Dickeya	20	0.9768	0.0207	0.935
+g__Arthrobacter	19	0.3443	0.1988	-0.053
+g__Buchnera	19	0.5985	0.1431	0.312
+g__Achromobacter	19	0.7807	0.0837	0.613
+g__Mycolicibacterium	17	0.6257	0.1376	0.350
+g__Marinobacter	17	0.8322	0.2052	0.422
+g__Xylella	17	0.6970	0.1614	0.374
+g__Desulfovibrio	17	0.8253	0.1453	0.535
+g__Mesoplasma	17	0.9478	0.0331	0.882
+g__Nostoc	16	0.1029	0.0362	0.030
+g__Raoultella	16	0.9656	0.0320	0.902
+g__Methylobacterium	15	0.1440	0.0474	0.049
+g__Coxiella	15	0.7681	0.1590	0.450
+g__Thermotoga	15	0.3512	0.0587	0.234
+g__Thermus	15	0.7202	0.1536	0.413
+g__Providencia	15	0.9458	0.0252	0.895
+g__Edwardsiella	15	0.9685	0.0173	0.934
+g__Ehrlichia	15	0.9567	0.0087	0.939
+g__Nocardioides	14	0.2822	0.1508	-0.019
+g__Actinomyces	14	0.3269	0.2501	-0.173
+g__Zymomonas	14	0.3835	0.0639	0.256
+g__Acidovorax	14	0.7111	0.1388	0.434
+g__Hymenobacter	13	0.4309	0.1492	0.133
+g__Candidatus_Planktophila	13	0.6508	0.2001	0.251
+g__Ochrobactrum	13	0.7561	0.2442	0.268
+g__Nocardia	13	0.5249	0.1803	0.164
+g__Aggregatibacter	13	0.6289	0.1652	0.298
+g__Geobacter	13	0.6248	0.1166	0.392
+g__Sphingopyxis	13	0.6014	0.1094	0.383
+g__Brevundimonas	13	0.5779	0.1015	0.375
+g__Leptotrichia	13	0.7937	0.1072	0.579
+g__Ureaplasma	13	0.7341	0.0586	0.617
+g__Riemerella	13	0.7974	0.0390	0.719
+g__Cronobacter	13	0.8940	0.0223	0.849
+g__Caulobacter	12	0.6598	0.1005	0.459
+g__Amycolatopsis	12	0.6060	0.1047	0.397
+g__Psychrobacter	12	0.8428	0.0608	0.721
+g__Lysinibacillus	12	0.9594	0.0662	0.827
+g__Brevibacillus	12	0.9731	0.0186	0.936
+g__Planococcus	12	0.9811	0.0172	0.947
+g__Glaesserella	11	0.3413	0.1749	-0.008
+g__Prochlorococcus	11	0.5161	0.1292	0.258
+g__Acidipropionibacterium	11	0.4518	0.0518	0.348
+g__Gordonia	11	0.7151	0.1506	0.414
+g__Erythrobacter	11	0.7229	0.1079	0.507
+g__Morganella	11	0.9086	0.0596	0.789
+g__Actinobacillus	11	0.8379	0.0645	0.709
+g__Erwinia	11	0.8823	0.0429	0.797
+g__Myxococcus	11	0.9148	0.0215	0.872
+g__Calothrix	10	0.0783	0.0242	0.030
+g__Brevibacterium	10	0.2070	0.0450	0.117
+g__Variovorax	10	0.3901	0.1055	0.179
+g__Carnobacterium	10	0.7249	0.2991	0.127
+g__Novosphingobium	10	0.6465	0.1782	0.290
+g__Brachyspira	10	0.5628	0.0700	0.423
+g__Herbaspirillum	10	0.5438	0.1255	0.293
+g__Trueperella	10	0.8003	0.1282	0.544
+g__Sulfitobacter	10	0.7784	0.0841	0.610
+g__Kosakonia	10	0.8380	0.0505	0.737
+g__Liberibacter	10	0.9116	0.0822	0.747
+g__Leclercia	10	0.8295	0.0207	0.788
+g__Photobacterium	10	0.9516	0.0352	0.881
+g__Granulibacter	10	0.9589	0.0172	0.924
+g__Synechocystis	9	0.1010		
+g__Methylorubrum	9	0.1206		
+g__Erysipelothrix	9	0.8754		
+g__Lysobacter	9	0.6499		
+g__Azoarcus	9	0.7946		
+g__Mucilaginibacter	9	0.6869		
+g__Caldicellulosiruptor	9	0.8597		
+g__Rhodopseudomonas	9	0.7932		
+g__Thermoanaerobacter	9	0.9326		
+g__Janthinobacterium	9	0.8796		
+g__Sulfurospirillum	9	0.8829		
+g__Rahnella	9	0.9069		
+g__Labrenzia	9	0.9220		
+g__Virgibacillus	9	0.9516		
+g__Sporosarcina	9	0.9599		
+g__Pseudonocardia	8	0.4801		
+g__Bdellovibrio	8	0.8832		
+g__Massilia	8	0.5949		
+g__Anaplasma	8	0.6467		
+g__Candidatus_Kinetoplastibacterium	8	0.7959		
+g__Acidithiobacillus	8	0.6774		
+g__Pedobacter	8	0.7623		
+g__Altererythrobacter	8	0.7659		
+g__Alcaligenes	8	0.9447		
+g__Polynucleobacter	8	0.9488		
+g__Salinibacter	8	0.9268		
+g__Aerococcus	8	0.9597		
+g__Chromobacterium	8	0.9677		
+g__Exiguobacterium	8	0.9820		
+g__Brachybacterium	7	0.1878		
+g__Microcystis	7	0.1477		
+g__Clavibacter	7	0.1824		
+g__Candidatus_Phytoplasma	7	0.3386		
+g__Kocuria	7	0.4375		
+g__Actinoplanes	7	0.4075		
+g__Colwellia	7	0.8099		
+g__Xenorhabdus	7	0.6086		
+g__Nonlabens	7	0.5358		
+g__Sphingobacterium	7	0.7877		
+g__Aliivibrio	7	0.7726		
+g__Alistipes	7	0.6846		
+g__Taylorella	7	0.8471		
+g__Komagataeibacter	7	0.8935		
+g__Collimonas	7	0.8820		
+g__Pseudarthrobacter	6	0.1423		
+g__Micrococcus	6	0.1644		
+g__Anabaena	6	0.1780		
+g__Leptolyngbya	6	0.1234		
+g__Rathayibacter	6	0.4177		
+g__Nocardiopsis	6	0.2955		
+g__Micromonospora	6	0.2789		
+g__Bosea	6	0.5341		
+g__Spirosoma	6	0.7020		
+g__Glutamicibacter	6	0.5912		
+g__Neorhizobium	6	0.4746		
+g__Cellulomonas	6	0.5819		
+g__Nitrosomonas	6	0.7114		
+g__Rhodoferax	6	0.7169		
+g__Thauera	6	0.7580		
+g__Roseovarius	6	0.6798		
+g__Photorhabdus	6	0.8323		
+g__Cellulophaga	6	0.6703		
+g__Chlorobium	6	0.8619		
+g__Methylomonas	6	0.7952		
+g__Azotobacter	6	0.7621		
+g__Gluconobacter	6	0.8072		
+g__Anoxybacillus	6	0.9385		
+g__Comamonas	6	0.8800		
+g__Melissococcus	6	0.8705		
+g__Ketogulonicigenium	6	0.8654		
+g__Candidatus_Blochmannia	6	0.8838		
+g__Hungateiclostridium	6	0.9358		
+g__Moorella	6	0.8802		
+g__Gardnerella	6	0.9394		
+g__Blautia	6	0.9009		
+g__Oblitimonas	6	0.9334		
+g__Lachnoclostridium	6	0.9318		
+g__Tetragenococcus	6	0.9302		
+g__Microbulbifer	6	0.9687		
+g__Hafnia	6	0.9796		
+g__Curtobacterium	5	0.1369		
+g__Rothia	5	0.2293		
+g__Agromyces	5	0.1653		
+g__Propionibacterium	5	0.4096		
+g__Pseudothermotoga	5	0.3205		
+g__Megasphaera	5	0.5640		
+g__Hydrogenophaga	5	0.6587		
+g__Sorangium	5	0.3858		
+g__Hydrogenobaculum	5	0.3321		
+g__Polaribacter	5	0.4773		
+g__Magnetospirillum	5	0.6729		
+g__Thermosipho	5	0.6448		
+g__Rhodoluna	5	0.5004		
+g__Maribacter	5	0.5655		
+g__Myroides	5	0.8407		
+g__Dietzia	5	0.6712		
+g__Idiomarina	5	0.7837		
+g__Frankia	5	0.6242		
+g__Desulfitobacterium	5	0.8756		
+g__Eubacterium	5	0.8759		
+g__Luteimonas	5	0.7171		
+g__Ethanoligenens	5	0.6781		
+g__Sulfurimonas	5	0.7637		
+g__Thioalkalivibrio	5	0.8411		
+g__Rhodovulum	5	0.8261		
+g__Ruegeria	5	0.8581		
+g__Lelliottia	5	0.9001		
+g__Selenomonas	5	0.9284		
+g__Macrococcus	5	0.9352		
+g__Cellvibrio	5	0.9182		
+g__Oenococcus	5	0.9466		
+g__Alcanivorax	5	0.9868		
+g__Tessaracoccus	4	0.2567		
+g__Celeribacter	4	0.5622		
+g__Devosia	4	0.2514		
+g__Formosa	4	0.5622		
+g__Kitasatospora	4	0.3723		
+g__Serinicoccus	4	0.3870		
+g__Ornithinimicrobium	4	0.3979		
+g__Fervidobacterium	4	0.4368		
+g__Ruminococcus	4	0.5108		
+g__Tannerella	4	0.4123		
+g__Roseomonas	4	0.3917		
+g__Hyphomicrobium	4	0.5744		
+g__Nitrosococcus	4	0.8154		
+g__Actinoalloteichus	4	0.6219		
+g__Delftia	4	0.6050		
+g__Arachidicoccus	4	0.6291		
+g__Entomoplasma	4	0.7132		
+g__Ensifer	4	0.7244		
+g__Anaeromyxobacter	4	0.6002		
+g__Porphyrobacter	4	0.6663		
+g__Tenacibaculum	4	0.7715		
+g__Nitrospirillum	4	0.6429		
+g__Octadecabacter	4	0.7060		
+g__Leisingera	4	0.6911		
+g__Gramella	4	0.6858		
+g__Dokdonia	4	0.6753		
+g__Flammeovirga	4	0.6821		
+g__Rubrobacter	4	0.6976		
+g__Spirochaeta	4	0.8487		
+g__Pelobacter	4	0.8690		
+g__Yangia	4	0.8198		
+g__Parabacteroides	4	0.8108		
+g__Asticcacaulis	4	0.8463		
+g__Leptospirillum	4	0.8609		
+g__Prosthecochloris	4	0.9179		
+g__Pluralibacter	4	0.9161		
+g__Pontibacter	4	0.8918		
+g__Echinicola	4	0.8902		
+g__Bibersteinia	4	0.9000		
+g__Desulfotomaculum	4	0.9117		
+g__Thermoanaerobacterium	4	0.9500		
+g__Salinivibrio	4	0.9609		
+g__Cedecea	4	0.9564		
+g__Thermoclostridium	4	0.9502		
+g__Halobacillus	4	0.9694		
+g__Vagococcus	4	0.9879		
+g__Kangiella	4	0.9645		
+g__Marinomonas	4	0.9642		
+g__Candidatus_Arthromitus	4	0.9849		
+g__Brochothrix	4	0.9951		
+g__Parageobacillus	4	0.9928		
+g__Trichormus	3	0.1123		
+g__Thermosynechococcus	3	0.1513		
+g__Leifsonia	3	0.2159		
+g__Aeromicrobium	3	0.4175		
+g__Schaalia	3	0.4148		
+g__Georgenia	3	0.1841		
+g__Plantactinospora	3	0.3738		
+g__Cryobacterium	3	0.2108		
+g__Catenovulum	3	0.6149		
+g__Aurantimicrobium	3	0.3578		
+g__Orientia	3	0.2738		
+g__Salinibacterium	3	0.4445		
+g__Rhodospirillum	3	0.6279		
+g__Sodalis	3	0.6410		
+g__Cellulosimicrobium	3	0.3848		
+g__Olsenella	3	0.5267		
+g__Terriglobus	3	0.4479		
+g__Dehalobacter	3	0.5637		
+g__Thermodesulfobacterium	3	0.5686		
+g__Gemmata	3	0.4148		
+g__Candidatus_Cardinium	3	0.5029		
+g__Microvirga	3	0.4782		
+g__Methylocystis	3	0.5367		
+g__Candidatus_Pelagibacter	3	0.5557		
+g__Aminobacter	3	0.5311		
+g__Polaromonas	3	0.6634		
+g__Chloroflexus	3	0.5602		
+g__Actinosynnema	3	0.5947		
+g__Candidatus_Thioglobus	3	0.7548		
+g__Flavisolibacter	3	0.6953		
+g__Ornithobacterium	3	0.6828		
+g__Thiomonas	3	0.6481		
+g__Lacinutrix	3	0.6923		
+g__Blastochloris	3	0.7139		
+g__Faecalibacterium	3	0.7073		
+g__Nitrosospira	3	0.7046		
+g__Sphaerochaeta	3	0.7862		
+g__Collinsella	3	0.6777		
+g__Aquimarina	3	0.7015		
+g__Pseudoxanthomonas	3	0.7209		
+g__Pseudodesulfovibrio	3	0.7999		
+g__Salinimonas	3	0.7677		
+g__Martelella	3	0.7929		
+g__Desulfococcus	3	0.8153		
+g__Acholeplasma	3	0.8890		
+g__Chitinophaga	3	0.7923		
+g__Dermabacter	3	0.7736		
+g__Sphingorhabdus	3	0.7681		
+g__Candidatus_Nanopelagicus	3	0.8050		
+g__Neorickettsia	3	0.9001		
+g__Chlorobaculum	3	0.8623		
+g__Roseivivax	3	0.8103		
+g__Renibacterium	3	0.7733		
+g__Roseobacter	3	0.7863		
+g__Dyella	3	0.8442		
+g__Thalassospira	3	0.8917		
+g__Methylomicrobium	3	0.8599		
+g__Eggerthella	3	0.8671		
+g__Thalassotalea	3	0.8912		
+g__Rufibacter	3	0.8724		
+g__Oligotropha	3	0.8639		
+g__Brenneria	3	0.8993		
+g__Oxalobacter	3	0.9011		
+g__Desulfosporosinus	3	0.9219		
+g__Cycloclasticus	3	0.9393		
+g__Thiomicrospira	3	0.9033		
+g__Halioglobus	3	0.9451		
+g__Aquitalea	3	0.9143		
+g__Thiomicrorhabdus	3	0.9571		
+g__Jeotgalibaca	3	0.9312		
+g__Thalassolituus	3	0.9354		
+g__Kushneria	3	0.9415		
+g__Hahella	3	0.9476		
+g__Solibacillus	3	0.9441		
+g__Oceanobacillus	3	0.9609		
+g__Spiribacter	3	0.9503		
+g__Hydrogenovibrio	3	0.9682		
+g__Sporolactobacillus	3	0.9874		
+g__Halorhodospira	2	0.5018		
+g__Nonomuraea	2	0.1275		
+g__Gloeothece	2	0.0749		
+g__Rippkaea	2	0.0792		
+g__Actinomadura	2	0.0908		
+g__Stanieria	2	0.1055		
+g__Scytonema	2	0.1085		
+g__Phenylobacterium	2	0.2927		
+g__Oscillatoria	2	0.1117		
+g__Gloeobacter	2	0.0981		
+g__Dolichospermum	2	0.1464		
+g__Geminocystis	2	0.1248		
+g__Isoptericola	2	0.1810		
+g__Fischerella	2	0.1250		
+g__Phreatobacter	2	0.3378		
+g__Thermocrinis	2	0.2390		
+g__Hydrogenobacter	2	0.1377		
+g__Pseudanabaena	2	0.1543		
+g__Intrasporangium	2	0.1714		
+g__Lysinimonas	2	0.1621		
+g__Plantibacter	2	0.1712		
+g__Beggiatoa	2	0.1922		
+g__Wigglesworthia	2	0.2840		
+g__Acidiphilium	2	0.1857		
+g__Desulfuromonas	2	0.3407		
+g__Saccharothrix	2	0.2440		
+g__Roseiflexus	2	0.3290		
+g__Humibacter	2	0.3256		
+g__Frondihabitans	2	0.2316		
+g__Citricoccus	2	0.2046		
+g__Jonesia	2	0.2603		
+g__Pirellula	2	0.4376		
+g__Planctomyces	2	0.2641		
+g__Janibacter	2	0.2613		
+g__Sulfurihydrogenibium	2	0.2537		
+g__Flaviflexus	2	0.4194		
+g__Tsukamurella	2	0.3741		
+g__Ottowia	2	0.4700		
+g__Granulicella	2	0.4660		
+g__Leucobacter	2	0.4944		
+g__Lawsonella	2	0.3491		
+g__Kosmotoga	2	0.3826		
+g__Tropheryma	2	0.4101		
+g__Sedimentisphaera	2	0.4114		
+g__Planctopirus	2	0.4003		
+g__Nitratireductor	2	0.5988		
+g__Croceicoccus	2	0.5272		
+g__Aequorivita	2	0.5035		
+g__Gemmatimonas	2	0.5053		
+g__Azospira	2	0.4329		
+g__Serpentinomonas	2	0.4867		
+g__Candidatus_Moranella	2	0.4831		
+g__Ramlibacter	2	0.4778		
+g__Melaminivora	2	0.5156		
+g__Luteibacter	2	0.5492		
+g__Marinitoga	2	0.4953		
+g__Alicycliphilus	2	0.5823		
+g__Nakamurella	2	0.6824		
+g__Winogradskyella	2	0.5941		
+g__Gluconacetobacter	2	0.6238		
+g__Rhizobacter	2	0.5517		
+g__Thermobaculum	2	0.5741		
+g__Chloracidobacterium	2	0.7164		
+g__Sphingosinicella	2	0.6508		
+g__Dehalogenimonas	2	0.6187		
+g__Methylophaga	2	0.7036		
+g__Antarcticibacterium	2	0.5945		
+g__Eikenella	2	0.6000		
+g__Candidatus_Endolissoclinum	2	0.6395		
+g__Swingsia	2	0.7788		
+g__Oscillibacter	2	0.6185		
+g__Chelatococcus	2	0.6094		
+g__Sphaerobacter	2	0.7265		
+g__Corallococcus	2	0.6279		
+g__Niveispirillum	2	0.6727		
+g__Sutterella	2	0.7634		
+g__Lutibacter	2	0.6195		
+g__Blastomonas	2	0.6633		
+g__Muricauda	2	0.6883		
+g__Methylibium	2	0.6991		
+g__Nitrobacter	2	0.7284		
+g__Arsenophonus	2	0.6995		
+g__Labrys	2	0.7356		
+g__Meiothermus	2	0.7418		
+g__Pragia	2	0.8192		
+g__Vitreoscilla	2	0.7869		
+g__Dialister	2	0.8521		
+g__Pannonibacter	2	0.7950		
+g__Kozakia	2	0.7721		
+g__Pseudopropionibacterium	2	0.7841		
+g__Microlunatus	2	0.7671		
+g__Limnohabitans	2	0.8348		
+g__Candidatus_Azobacteroides	2	0.8157		
+g__Dictyoglomus	2	0.7956		
+g__Salinispora	2	0.8046		
+g__Olleya	2	0.8285		
+g__Intestinimonas	2	0.7944		
+g__Glaciecola	2	0.8043		
+g__Cyclobacterium	2	0.8046		
+g__Pigmentiphaga	2	0.8463		
+g__Rhodanobacter	2	0.8865		
+g__Laribacter	2	0.8826		
+g__Psychromonas	2	0.8797		
+g__Methylacidiphilum	2	0.8809		
+g__Nitrospira	2	0.8775		
+g__Pelodictyon	2	0.8337		
+g__Paraphotobacterium	2	0.8477		
+g__Desulfomicrobium	2	0.8733		
+g__Niabella	2	0.8544		
+g__Paenisporosarcina	2	0.8619		
+g__Thermaerobacter	2	0.8696		
+g__Tumebacillus	2	0.9131		
+g__Methyloceanibacter	2	0.8870		
+g__Neokomagataea	2	0.9257		
+g__Dechloromonas	2	0.8713		
+g__Nautilia	2	0.8769		
+g__Kyrpidia	2	0.9023		
+g__Mixta	2	0.8781		
+g__Alicyclobacillus	2	0.8982		
+g__Thermodesulfobium	2	0.8819		
+g__Runella	2	0.8818		
+g__Parashewanella	2	0.8954		
+g__Saccharomonospora	2	0.9008		
+g__Parvimonas	2	0.9360		
+g__Halothiobacillus	2	0.9265		
+g__Pusillimonas	2	0.9218		
+g__Endomicrobium	2	0.9017		
+g__Fictibacillus	2	0.9217		
+g__Rhodothermus	2	0.9374		
+g__Halobacteriovorax	2	0.9223		
+g__Mariprofundus	2	0.9177		
+g__Emcibacter	2	0.9542		
+g__Halanaerobium	2	0.9529		
+g__Grimontia	2	0.9511		
+g__Anaerostipes	2	0.9562		
+g__Carboxydocella	2	0.9240		
+g__Aneurinibacillus	2	0.9527		
+g__Oceanisphaera	2	0.9347		
+g__Fibrobacter	2	0.9368		
+g__Methylotenera	2	0.9351		
+g__Rheinheimera	2	0.9322		
+g__Acidaminococcus	2	0.9556		
+g__Methylovorus	2	0.9565		
+g__Tatumella	2	0.9360		
+g__Alkaliphilus	2	0.9526		
+g__Gemella	2	0.9530		
+g__Psychrobacillus	2	0.9638		
+g__Pelosinus	2	0.9602		
+g__Streptobacillus	2	0.9587		
+g__Tatlockia	2	0.9622		
+g__Cohnella	2	0.9657		
+g__Bacteriovorax	2	0.9725		
+g__Cellulosilyticum	2	0.9774		
+g__Tepidanaerobacter	2	0.9708		
+g__Advenella	2	0.9750		
+g__Butyrivibrio	2	0.9850		
+g__Micavibrio	2	0.9878		
+g__Veillonella	2	0.9929		
+g__Thermoactinomyces	2	0.9972		
+g__Chamaesiphon	1	0.0541		
+g__Pleurocapsa	1	0.0642		
+g__Sphaerospermopsis	1	0.0672		
+g__Moorea	1	0.0682		
+g__Trichodesmium	1	0.0723		
+g__Gloeocapsa	1	0.0736		
+g__Streptomonospora	1	0.0769		
+g__Cyanobacterium	1	0.0778		
+g__Candidatus_Solibacter	1	0.0783		
+g__Cylindrospermum	1	0.0800		
+g__Tolypothrix	1	0.0805		
+g__Aulosira	1	0.0875		
+g__Arcticibacterium	1	0.0892		
+g__Catenulispora	1	0.0955		
+g__Anabaenopsis	1	0.1005		
+g__Thermomonospora	1	0.1029		
+g__Xylanimicrobium	1	0.1036		
+g__Agrococcus	1	0.1037		
+g__Microcoleus	1	0.1071		
+g__Rivularia	1	0.1081		
+g__Pimelobacter	1	0.1100		
+g__Microchaete	1	0.1124		
+g__Candidatus_Fukatsuia	1	0.1133		
+g__Chroococcidiopsis	1	0.1140		
+g__Baekduia	1	0.1151		
+g__Chondrocystis	1	0.1240		
+g__Candidatus_Koribacter	1	0.1274		
+g__Limnospira	1	0.1284		
+g__Aquisphaera	1	0.1350		
+g__Sanguibacter	1	0.1364		
+g__Halothece	1	0.1436		
+g__Persephonella	1	0.1451		
+g__Euzebya	1	0.1483		
+g__Nodularia	1	0.1511		
+g__Singulisphaera	1	0.1537		
+g__Thermobifida	1	0.1538		
+g__Desulfomonile	1	0.1538		
+g__Thioploca	1	0.1538		
+g__Stackebrandtia	1	0.1579		
+g__Crinalium	1	0.1580		
+g__Dactylococcopsis	1	0.1587		
+g__Methylovulum	1	0.1625		
+g__Youhaiella	1	0.1715		
+g__Sinomonas	1	0.1723		
+g__Xanthobacter	1	0.1733		
+g__Microterricola	1	0.1735		
+g__Euhalothece	1	0.1743		
+g__Gemmatirosa	1	0.1770		
+g__Cnuibacter	1	0.1773		
+g__Thermovibrio	1	0.1783		
+g__Sandaracinus	1	0.1801		
+g__Roseitalea	1	0.1808		
+g__Mesotoga	1	0.1883		
+g__Microcella	1	0.1924		
+g__Crocosphaera	1	0.1946		
+g__Arthrospira	1	0.1974		
+g__Aquifex	1	0.2063		
+g__Verminephrobacter	1	0.2084		
+g__Xylanimonas	1	0.2084		
+g__Rubrivivax	1	0.2102		
+g__Paludisphaera	1	0.2187		
+g__Chondromyces	1	0.2213		
+g__Raphidiopsis	1	0.2214		
+g__Candidatus_Hamiltonella	1	0.2300		
+g__Desulfurobacterium	1	0.2335		
+g__Arsenicicoccus	1	0.2383		
+g__Aquaspirillum	1	0.2423		
+g__Streptacidiphilus	1	0.2426		
+g__Desulfatibacillum	1	0.2455		
+g__Candidatus_Atelocyanobacterium	1	0.2493		
+g__Minicystis	1	0.2494		
+g__Pseudoflavitalea	1	0.2511		
+g__Kutzneria	1	0.2511		
+g__Acidobacterium	1	0.2520		
+g__Gryllotalpicola	1	0.2522		
+g__Candidatus_Tachikawaea	1	0.2541		
+g__Petrotoga	1	0.2581		
+g__Actinotignum	1	0.2593		
+g__Thermodesulfovibrio	1	0.2595		
+g__Mucinivorans	1	0.2604		
+g__Candidatus_Xiphinematobacter	1	0.2620		
+g__Geodermatophilus	1	0.2630		
+g__Isosphaera	1	0.2631		
+g__Kineococcus	1	0.2688		
+g__Filifactor	1	0.2693		
+g__Candidatus_Riesia	1	0.2786		
+g__Rhodomicrobium	1	0.2840		
+g__Cyanobium	1	0.2932		
+g__Panacibacter	1	0.2967		
+g__Lentzea	1	0.2981		
+g__Bernardetia	1	0.3090		
+g__Parolsenella	1	0.3117		
+g__Pelagibacterium	1	0.3143		
+g__Shinella	1	0.3163		
+g__Candidatus_Ishikawaella	1	0.3219		
+g__Dinoroseobacter	1	0.3272		
+g__Caldimicrobium	1	0.3306		
+g__Acidisarcina	1	0.3431		
+g__Pseudovibrio	1	0.3433		
+g__Acaryochloris	1	0.3444		
+g__Dermacoccus	1	0.3499		
+g__Fimbriimonas	1	0.3517		
+g__Mycetocola	1	0.3543		
+g__Modestobacter	1	0.3551		
+g__Simonsiella	1	0.3563		
+g__Fuerstia	1	0.3587		
+g__Pseudobutyrivibrio	1	0.3633		
+g__Thermogutta	1	0.3742		
+g__Solimonas	1	0.3759		
+g__Oceanicola	1	0.3799		
+g__Candidatus_Phaeomarinobacter	1	0.3806		
+g__Desulfobacca	1	0.3838		
+g__Phycisphaera	1	0.3839		
+g__Novibacillus	1	0.3858		
+g__Haliscomenobacter	1	0.3894		
+g__Tabrizicola	1	0.3915		
+g__Nesterenkonia	1	0.3938		
+g__Miniimonas	1	0.3944		
+g__Egicoccus	1	0.4020		
+g__Immundisolibacter	1	0.4070		
+g__Parvibaculum	1	0.4087		
+g__Acidibrevibacterium	1	0.4095		
+g__Hyphomonas	1	0.4103		
+g__Terribacillus	1	0.4128		
+g__Silicimonas	1	0.4136		
+g__Leptothrix	1	0.4155		
+g__Auritidibacter	1	0.4217		
+g__Thermobispora	1	0.4391		
+g__Psychroflexus	1	0.4396		
+g__Kordia	1	0.4451		
+g__Flagellimonas	1	0.4453		
+g__Defluviimonas	1	0.4474		
+g__Verrucosispora	1	0.4495		
+g__Methylosinus	1	0.4524		
+g__Cyanothece	1	0.4540		
+g__Parascardovia	1	0.4548		
+g__Oerskovia	1	0.4589		
+g__Aureimonas	1	0.4595		
+g__Croceibacter	1	0.4606		
+g__Ignavibacterium	1	0.4755		
+g__Desulfobulbus	1	0.4758		
+g__Duncaniella	1	0.4845		
+g__Thiodictyon	1	0.4856		
+g__Vulgatibacter	1	0.4873		
+g__Chryseolinea	1	0.4902		
+g__Thiocystis	1	0.4903		
+g__Roseateles	1	0.4928		
+g__Mariniblastus	1	0.4931		
+g__Kibdelosporangium	1	0.4932		
+g__Blastococcus	1	0.4964		
+g__Qipengyuania	1	0.4967		
+g__Polymorphum	1	0.4990		
+g__Aureitalea	1	0.5028		
+g__Starkeya	1	0.5037		
+g__Luteimicrobium	1	0.5038		
+g__Aquabacterium	1	0.5141		
+g__Streptosporangium	1	0.5144		
+g__Chelativorans	1	0.5167		
+g__Mitsuaria	1	0.5221		
+g__Variibacter	1	0.5320		
+g__Alloprevotella	1	0.5342		
+g__Sulfuritortus	1	0.5366		
+g__Parasaccharibacter	1	0.5369		
+g__Thiobacillus	1	0.5430		
+g__Saprospira	1	0.5431		
+g__Dysosmobacter	1	0.5481		
+g__Fabibacter	1	0.5491		
+g__Marivirga	1	0.5497		
+g__Austwickia	1	0.5512		
+g__Paenarthrobacter	1	0.5568		
+g__Geitlerinema	1	0.5597		
+g__Kribbella	1	0.5647		
+g__Maribius	1	0.5662		
+g__Oryzomicrobium	1	0.5671		
+g__Boseongicola	1	0.5695		
+g__Changchengzhania	1	0.5713		
+g__Desulfurella	1	0.5725		
+g__Candidatus_Midichloria	1	0.5745		
+g__Ancylobacter	1	0.5803		
+g__Indioceanicola	1	0.5813		
+g__Ichthyobacterium	1	0.5829		
+g__Ruania	1	0.5841		
+g__Thermodesulfatator	1	0.5856		
+g__Salegentibacter	1	0.5873		
+g__Azorhizobium	1	0.5885		
+g__Hoeflea	1	0.5906		
+g__Belliella	1	0.5910		
+g__Aliiarcobacter	1	0.5946		
+g__Rhodobaca	1	0.5950		
+g__Neomicrococcus	1	0.5997		
+g__Muriicola	1	0.5998		
+g__Methylocella	1	0.6039		
+g__Candidatus_Accumulibacter	1	0.6049		
+g__Oceanithermus	1	0.6077		
+g__Candidatus_Cyclonatronum	1	0.6101		
+g__Caldilinea	1	0.6103		
+g__Tateyamaria	1	0.6111		
+g__Heliobacterium	1	0.6113		
+g__Aeribacillus	1	0.6162		
+g__Candidatus_Fonsibacter	1	0.6206		
+g__Allochromatium	1	0.6238		
+g__Georhizobium	1	0.6243		
+g__Sediminicola	1	0.6275		
+g__Kytococcus	1	0.6320		
+g__Conexibacter	1	0.6321		
+g__Xylanibacterium	1	0.6341		
+g__Castellaniella	1	0.6375		
+g__Archangium	1	0.6405		
+g__Paludibacter	1	0.6458		
+g__Candidatus_Methylospira	1	0.6463		
+g__Candidatus_Paracaedibacter	1	0.6478		
+g__Flexistipes	1	0.6491		
+g__Thalassococcus	1	0.6504		
+g__Maritalea	1	0.6509		
+g__Desulfurispirillum	1	0.6557		
+g__Arenibacter	1	0.6560		
+g__Pseudorhodobacter	1	0.6561		
+g__Stella	1	0.6584		
+g__Euzebyella	1	0.6585		
+g__Dichelobacter	1	0.6622		
+g__Labilithrix	1	0.6628		
+g__Muribaculum	1	0.6654		
+g__Desulfoglaeba	1	0.6656		
+g__Yoonia	1	0.6672		
+g__Alkalitalea	1	0.6701		
+g__Gemmobacter	1	0.6713		
+g__Desulfobacula	1	0.6733		
+g__Avibacterium	1	0.6760		
+g__Ahniella	1	0.6765		
+g__Roseimaritima	1	0.6819		
+g__Cystobacter	1	0.6834		
+g__Turneriella	1	0.6843		
+g__Rhizorhabdus	1	0.6843		
+g__Jannaschia	1	0.6855		
+g__Caldisericum	1	0.6932		
+g__Lacunisphaera	1	0.6954		
+g__Syntrophobacter	1	0.6974		
+g__Adlercreutzia	1	0.6987		
+g__Sagittula	1	0.7007		
+g__Siansivirga	1	0.7022		
+g__Haliangium	1	0.7072		
+g__Antarctobacter	1	0.7072		
+g__Slackia	1	0.7077		
+g__Hippea	1	0.7082		
+g__Actinopolyspora	1	0.7094		
+g__Beutenbergia	1	0.7110		
+g__Desulfarculus	1	0.7112		
+g__Rubinisphaera	1	0.7125		
+g__Gilliamella	1	0.7135		
+g__Paraglaciecola	1	0.7241		
+g__Sulfurifustis	1	0.7275		
+g__Sulfuritalea	1	0.7311		
+g__Zunongwangia	1	0.7332		
+g__Saccharopolyspora	1	0.7354		
+g__Aromatoleum	1	0.7355		
+g__Pseudogulbenkiania	1	0.7385		
+g__Mycolicibacter	1	0.7408		
+g__Calditerrivibrio	1	0.7415		
+g__Candidatus_Amoebophilus	1	0.7430		
+g__Empedobacter	1	0.7462		
+g__Syntrophus	1	0.7486		
+g__Mariniflexile	1	0.7492		
+g__Phyllobacterium	1	0.7492		
+g__Thermobacillus	1	0.7512		
+g__Methyloversatilis	1	0.7518		
+g__Flintibacter	1	0.7540		
+g__Frischella	1	0.7577		
+g__Olivibacter	1	0.7599		
+g__Candidatus_Phycorickettsia	1	0.7607		
+g__Caldithrix	1	0.7633		
+g__Iodobacter	1	0.7634		
+g__Methylovirgula	1	0.7640		
+g__Roseibacterium	1	0.7651		
+g__Cloacibacterium	1	0.7682		
+g__Glycocaulis	1	0.7683		
+g__Solitalea	1	0.7689		
+g__Geoalkalibacter	1	0.7711		
+g__Neochlamydia	1	0.7732		
+g__Caproiciproducens	1	0.7739		
+g__Odoribacter	1	0.7741		
+g__Thioflavicoccus	1	0.7805		
+g__Gimesia	1	0.7829		
+g__Pseudarcicella	1	0.7830		
+g__Opitutus	1	0.7856		
+g__Limnochorda	1	0.7860		
+g__Deferribacter	1	0.7877		
+g__Anseongella	1	0.7912		
+g__Melittangium	1	0.7931		
+g__Oceanihabitans	1	0.7941		
+g__Marinovum	1	0.7942		
+g__Acetomicrobium	1	0.7960		
+g__Oceanispirochaeta	1	0.7975		
+g__Citromicrobium	1	0.7979		
+g__Obesumbacterium	1	0.7981		
+g__Thermomonas	1	0.7984		
+g__Seonamhaeicola	1	0.7994		
+g__Kiritimatiella	1	0.8001		
+g__Dokdonella	1	0.8006		
+g__Thermanaerovibrio	1	0.8007		
+g__Pelagibaca	1	0.8007		
+g__Niastella	1	0.8014		
+g__Draconibacterium	1	0.8028		
+g__Fluviicola	1	0.8028		
+g__Methylomusa	1	0.8031		
+g__Sphaerotilus	1	0.8033		
+g__Gallibacterium	1	0.8038		
+g__Barnesiella	1	0.8060		
+g__Desulfallas	1	0.8073		
+g__Desulfobacterium	1	0.8087		
+g__Haematobacter	1	0.8104		
+g__Egibacter	1	0.8108		
+g__Breoghania	1	0.8112		
+g__Sulfurivermis	1	0.8133		
+g__Apibacter	1	0.8138		
+g__Desulfocurvibacter	1	0.8142		
+g__Magnetospira	1	0.8157		
+g__Simplicispira	1	0.8169		
+g__Flavonifractor	1	0.8171		
+g__Diaphorobacter	1	0.8175		
+g__Methylocaldum	1	0.8179		
+g__Acidothermus	1	0.8185		
+g__Marivivens	1	0.8193		
+g__Ferrovibrio	1	0.8207		
+g__Pseudobacter	1	0.8208		
+g__Neoasaia	1	0.8216		
+g__Magnetococcus	1	0.8221		
+g__Rhodopirellula	1	0.8229		
+g__Pseudolabrys	1	0.8235		
+g__Rhodoplanes	1	0.8250		
+g__Sideroxydans	1	0.8257		
+g__Candidatus_Symbiobacter	1	0.8289		
+g__Caminibacter	1	0.8304		
+g__Inhella	1	0.8324		
+g__Confluentimicrobium	1	0.8330		
+g__Salipiger	1	0.8330		
+g__Chromohalobacter	1	0.8332		
+g__Marichromatium	1	0.8362		
+g__Sulfuricaulis	1	0.8378		
+g__Anaerolinea	1	0.8380		
+g__Robiginitalea	1	0.8384		
+g__Ferriphaselus	1	0.8391		
+g__Cytophaga	1	0.8391		
+g__Acetobacterium	1	0.8406		
+g__Parvularcula	1	0.8406		
+g__Pseudopedobacter	1	0.8414		
+g__Faecalibaculum	1	0.8417		
+g__Arcanobacterium	1	0.8459		
+g__Snodgrassella	1	0.8465		
+g__Basfia	1	0.8470		
+g__Leadbetterella	1	0.8474		
+g__Cloacibacillus	1	0.8479		
+g__Wenzhouxiangella	1	0.8489		
+g__Fibrella	1	0.8489		
+g__Thioclava	1	0.8490		
+g__Labilibaculum	1	0.8498		
+g__Psychroserpens	1	0.8519		
+g__Candidatus_Hepatoplasma	1	0.8522		
+g__Zobellella	1	0.8529		
+g__Buttiauxella	1	0.8534		
+g__Dehalobacterium	1	0.8549		
+g__Noviherbaspirillum	1	0.8561		
+g__Salinivirga	1	0.8561		
+g__Ectothiorhodospira	1	0.8563		
+g__Salinispira	1	0.8565		
+g__Epibacterium	1	0.8587		
+g__Thermosulfidibacter	1	0.8587		
+g__Acidiferrobacter	1	0.8592		
+g__Chitinolyticbacter	1	0.8599		
+g__Chthonomonas	1	0.8610		
+g__Algibacter	1	0.8611		
+g__Segniliparus	1	0.8614		
+g__Candidatus_Protochlamydia	1	0.8615		
+g__Nibricoccus	1	0.8625		
+g__Marinithermus	1	0.8638		
+g__Ammonifex	1	0.8642		
+g__Tamlana	1	0.8648		
+g__Nissabacter	1	0.8654		
+g__Jeongeupia	1	0.8657		
+g__Atlantibacter	1	0.8667		
+g__Dyadobacter	1	0.8668		
+g__Candidatus_Saccharimonas	1	0.8680		
+g__Sediminispirochaeta	1	0.8681		
+g__Litoreibacter	1	0.8684		
+g__Flavivirga	1	0.8684		
+g__Sulfuricella	1	0.8688		
+g__Hoyosella	1	0.8694		
+g__Prauserella	1	0.8698		
+g__Pseudorhodoplanes	1	0.8708		
+g__Truepera	1	0.8711		
+g__Syntrophomonas	1	0.8719		
+g__Wolinella	1	0.8719		
+g__Sneathia	1	0.8720		
+g__Peptoclostridium	1	0.8726		
+g__Beijerinckia	1	0.8729		
+g__Candidatus_Izimaplasma	1	0.8729		
+g__Mycoavidus	1	0.8730		
+g__Fastidiosipila	1	0.8735		
+g__Sulfurovum	1	0.8742		
+g__Paucibacter	1	0.8744		
+g__Christensenella	1	0.8756		
+g__Mobiluncus	1	0.8759		
+g__Sulfuriferula	1	0.8759		
+g__Terasakiella	1	0.8767		
+g__Pistricoccus	1	0.8780		
+g__Agarilytica	1	0.8781		
+g__Sedimentitalea	1	0.8784		
+g__Aminobacterium	1	0.8785		
+g__Alkalilimnicola	1	0.8791		
+g__Owenweeksia	1	0.8800		
+g__Pelolinea	1	0.8807		
+g__Denitrobacterium	1	0.8830		
+g__Gallionella	1	0.8854		
+g__Algoriphagus	1	0.8860		
+g__Candidatus_Puniceispirillum	1	0.8861		
+g__Chloroherpeton	1	0.8866		
+g__Halocynthiibacter	1	0.8869		
+g__Wenyingzhuangia	1	0.8871		
+g__Tistrella	1	0.8879		
+g__Bradymonas	1	0.8879		
+g__Coriobacterium	1	0.8886		
+g__Finegoldia	1	0.8901		
+g__Thiohalobacter	1	0.8907		
+g__Denitrovibrio	1	0.8938		
+g__Geovibrio	1	0.8941		
+g__Lacimicrobium	1	0.8952		
+g__Sebaldella	1	0.8962		
+g__Methylophilus	1	0.8964		
+g__Melioribacter	1	0.8969		
+g__Tolumonas	1	0.8988		
+g__Butyricimonas	1	0.9014		
+g__Methylobacillus	1	0.9019		
+g__Mogibacterium	1	0.9032		
+g__Desulfurivibrio	1	0.9039		
+g__Phytobacter	1	0.9043		
+g__Lawsonia	1	0.9056		
+g__Desulfofarcimen	1	0.9064		
+g__Coraliomargarita	1	0.9065		
+g__Salinicoccus	1	0.9070		
+g__Thiolapillus	1	0.9074		
+g__Candidatus_Fokinia	1	0.9076		
+g__Oleispira	1	0.9078		
+g__Sporomusa	1	0.9103		
+g__Hydromonas	1	0.9106		
+g__Thermacetogenium	1	0.9119		
+g__Nitratifractor	1	0.9137		
+g__Syntrophothermus	1	0.9145		
+g__Candidatus_Nitrosoglobus	1	0.9146		
+g__Cryptobacterium	1	0.9148		
+g__Weeksella	1	0.9151		
+g__Nitratiruptor	1	0.9159		
+g__Allofrancisella	1	0.9165		
+g__Sulfuricurvum	1	0.9166		
+g__Soehngenia	1	0.9167		
+g__Reinekea	1	0.9180		
+g__Saccharibacillus	1	0.9182		
+g__Mahella	1	0.9184		
+g__Ilyobacter	1	0.9187		
+g__Undibacterium	1	0.9205		
+g__Frateuria	1	0.9213		
+g__Jeotgalibacillus	1	0.9214		
+g__Paraliobacillus	1	0.9226		
+g__Herminiimonas	1	0.9228		
+g__Oligella	1	0.9238		
+g__Roseburia	1	0.9242		
+g__Zobellia	1	0.9272		
+g__Pseudoclostridium	1	0.9300		
+g__Candidatus_Ruthia	1	0.9304		
+g__Vampirococcus	1	0.9320		
+g__Methylococcus	1	0.9320		
+g__Metakosakonia	1	0.9326		
+g__Chania	1	0.9329		
+g__Gallaecimonas	1	0.9332		
+g__Anaerococcus	1	0.9346		
+g__Thermovirga	1	0.9351		
+g__Candidatus_Nucleicultrix	1	0.9357		
+g__Rickettsiella	1	0.9369		
+g__Hydrocarboniclastica	1	0.9376		
+g__Asaia	1	0.9380		
+g__Sulfuriflexus	1	0.9385		
+g__Stigmatella	1	0.9395		
+g__Sporanaerobacter	1	0.9402		
+g__Salinisphaera	1	0.9416		
+g__Filimonas	1	0.9419		
+g__Lentibacillus	1	0.9434		
+g__Ruminiclostridium	1	0.9438		
+g__Saccharospirillum	1	0.9439		
+g__Cetia	1	0.9442		
+g__Waddlia	1	0.9450		
+g__Simkania	1	0.9454		
+g__Paeniclostridium	1	0.9464		
+g__Oceanicoccus	1	0.9481		
+g__Halotalea	1	0.9482		
+g__Amphibacillus	1	0.9496		
+g__Desulfohalobium	1	0.9496		
+g__Maricaulis	1	0.9499		
+g__Tomitella	1	0.9522		
+g__Zymobacter	1	0.9525		
+g__Oleiphilus	1	0.9531		
+g__Desulfocapsa	1	0.9532		
+g__Symbiobacterium	1	0.9534		
+g__Actinobaculum	1	0.9534		
+g__Lachnoanaerobaculum	1	0.9536		
+g__Hydrogenophilus	1	0.9536		
+g__Hungatella	1	0.9537		
+g__Salinicola	1	0.9541		
+g__Coprothermobacter	1	0.9544		
+g__Woeseia	1	0.9557		
+g__Anoxybacter	1	0.9557		
+g__Lonsdalea	1	0.9563		
+g__Scardovia	1	0.9567		
+g__Psychromicrobium	1	0.9567		
+g__Gynuella	1	0.9574		
+g__Acetoanaerobium	1	0.9575		
+g__Steroidobacter	1	0.9575		
+g__Cobetia	1	0.9578		
+g__Plesiomonas	1	0.9585		
+g__Thermomicrobium	1	0.9586		
+g__Atopobium	1	0.9587		
+g__Gibbsiella	1	0.9588		
+g__Nitrincola	1	0.9590		
+g__Longibaculum	1	0.9592		
+g__Bacterioplanes	1	0.9595		
+g__Aminipila	1	0.9597		
+g__Microvirgula	1	0.9609		
+g__Zhongshania	1	0.9609		
+g__Halothermothrix	1	0.9619		
+g__Aquibacillus	1	0.9625		
+g__Syntrophobotulus	1	0.9628		
+g__Acidihalobacter	1	0.9644		
+g__Caloramator	1	0.9649		
+g__Candidatus_Babela	1	0.9656		
+g__Gottschalkia	1	0.9661		
+g__Natranaerobius	1	0.9667		
+g__Paenalcaligenes	1	0.9671		
+g__Simiduia	1	0.9674		
+g__Marinilactibacillus	1	0.9682		
+g__Limnobaculum	1	0.9683		
+g__Spongiibacter	1	0.9686		
+g__Granulosicoccus	1	0.9687		
+g__Teredinibacter	1	0.9705		
+g__Marinobacterium	1	0.9708		
+g__Halocella	1	0.9713		
+g__Kurthia	1	0.9715		
+g__Crassaminicella	1	0.9715		
+g__Hirschia	1	0.9723		
+g__Izhakiella	1	0.9724		
+g__Mageeibacillus	1	0.9725		
+g__Mycetohabitans	1	0.9727		
+g__Rummeliibacillus	1	0.9730		
+g__Elusimicrobium	1	0.9735		
+g__Ureibacillus	1	0.9747		
+g__Haematospirillum	1	0.9758		
+g__Pradoshia	1	0.9761		
+g__Ketobacter	1	0.9767		
+g__Pontimonas	1	0.9768		
+g__Agarivorans	1	0.9781		
+g__Salimicrobium	1	0.9782		
+g__Dolosigranulum	1	0.9798		
+g__Pseudohongiella	1	0.9805		
+g__Saccharophagus	1	0.9807		
+g__Shimwellia	1	0.9811		
+g__Ferrimonas	1	0.9815		
+g__Caldanaerobacter	1	0.9816		
+g__Litorilituus	1	0.9823		
+g__Acidimicrobium	1	0.9823		
+g__Thermosediminibacter	1	0.9824		
+g__Saliniradius	1	0.9829		
+g__Laceyella	1	0.9839		
+g__Auricoccus	1	0.9852		
+g__Anaerotignum	1	0.9870		
+g__Candidatus_Desulforudis	1	0.9875		
+g__Geosporobacter	1	0.9875		
+g__Acetohalobium	1	0.9880		
+g__Moritella	1	0.9885		
+g__Parachlamydia	1	0.9895		
+g__Oceanimonas	1	0.9902		
+g__Salilacibacter	1	0.9909		
+g__Turicibacter	1	0.9916		
+g__Commensalibacter	1	0.9935		
+g__Kerstersia	1	0.9935		
+g__Phascolarctobacterium	1	0.9941		
+g__Halobacteroides	1	0.9965		
+g__Sedimenticola	1	0.9977		
+g__Carboxydothermus	1	0.9994		
+g__Neptunomonas	1	0.9994		
+g__Basilea	1	1.0000		
+g__Thermincola	1	1.0000		

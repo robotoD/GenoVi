@@ -1,0 +1,15 @@
+GC_analysis/*.pyc
+GC_analysis/test*.wig
+GC_analysis/.pytest_cache
+GC_analysis/*.fasta.wig
+GC_analysis/*.gz
+GC_analysis/bigWigToWig
+GC_analysis/cleanup.sh
+GC_analysis/build
+GC_analysis/dist
+GC_analysis/GC_analysis.egg-info
+GC_analysis/tests/chrom.size
+GC_analysis/tests/generate_tests.sh
+GC_analysis/tests/example1.fasta
+GC_analysis/tests/s.wig
+GC_analysis/tests/GRCh38-Chrom17_frag.fasta

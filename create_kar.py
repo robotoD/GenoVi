@@ -92,7 +92,7 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 			line = [names[i]] + list(map(str, locations[i]))
 			lines.append(line)
 		with open(output_, 'w', newline='') as csvfile:
-			writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+			writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 			writer.writerows(lines)	
 			print(output_,"created succesfully.")
 
@@ -109,6 +109,7 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 		aux_p = []
 		aux_n = []
 		name = record.name
+		size_sum = np.sum(np.array(sizes[:j]))
 		
 		for feature in record.features:
 			if feature.type == "CDS":
@@ -119,16 +120,17 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 					if j == 0:
 						aux_p.append(0)
 					else:
-						aux_p.append(sizes[j-1])
+						aux_p.append(size_sum)
 					names_p.append(name)
 				else:
 					negatives.append(location)
 					if j == 0:
 						aux_n.append(0)
 					else:
-						aux_n.append(sizes[j-1])
+						aux_n.append(size_sum)
 					names_n.append(name)
-					
+				
+				
 		sizes_p = sizes_p + aux_p
 		sizes_n = sizes_n + aux_n
 	

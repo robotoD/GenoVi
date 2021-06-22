@@ -69,9 +69,31 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_posi
 * Hay que editar el gbk que se va a transformar a fna
 
 #### Tareas
-* Andrea: Arreglar creación de CDS. Apoyar a Roberto con lo de los COGs.
+* Andrea: 
+    1. Arreglar creación de CDS. 
+    2. Apoyar a Roberto con lo de los COGs.
 * Roberto: Continuar con el pipeline de anotacion COGs.
 * Andrés: Continuar viendo que se hace con los archivos de salida, juntarlos, etc, para obtener los archivos de configuración de Circos. 
 * Vicente: Modificar los scripts que encontró Andrés para incorporar los números que le faltan para el inicio y el fin, con tal de que el output quede listo para Circos.
 
-### Reunión 15/06
+### Reunión 22/06
+* Andrés hizo nuevas figuras usando los scripts. Le facilitaron la pega pero aún falta agregar cosas.
+* Idea: crear paletas predefinidas que el usuario pueda elegir para usar en sus visualizaciones.
+
+#### Tareas
+* Andrea: 
+    1. Cambiar "chr1" en vez de "chr01". 
+    2. Crear archivos trnas, sería lo mismo que los CDSs, pero buscando "trna"s. 
+    3. Apoyar a Roberto con lo de los COGs.
+* Roberto: Continuar con el pipeline de anotacion COGs.
+* Andrés: 
+    1. Pensar qué otro análisis podemos hacer, tal vez agregar una funcionalidad para graficar genomas cerrados. 
+    2. ¿Cómo agregarle texto a las imágenes generadas por circos?. 
+    3. Si agregas un chr2, ¿lo graficaría igual?. 
+    4. (A futuro) Tomar notas de las cosas que se tienen que hacer manuales cuando se usan los scripts para crear visualizaciones.
+* Vicente: 
+    1. En GC content la primera columna debe decir "chr1" en todas las filas. 
+    2. Eliminar la separación entre contigs en el archivo fna (borrando los ">n"). 
+    3. Buscar mínimo y máximo de los GC content para definir el mínimo y máximo en la visualización.
+
+### Reunión 06/07

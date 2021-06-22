@@ -51,8 +51,7 @@ def create_kar(gbk_filename, output_file):
 	inits.append(init)
 	new_ends.append(end)
 		
-	chrx = 1
-	chrx = str(chrx).zfill(2)
+	chrx = '1'
 	lines = []
 	
 	lines.append("chr - chr"+chrx+" 1 0 "+str(new_ends[-1])+" black\n")
@@ -96,8 +95,7 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 			writer.writerows(lines)	
 			print(output_,"created succesfully.")
 	
-	chrx = 1
-	chrx = str(chrx).zfill(2)
+	chrx = '1'
 	
 	gbk_file = open(gbk_filename,"r")
 	positives = []

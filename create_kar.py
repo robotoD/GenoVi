@@ -85,17 +85,19 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 			new_arr.append([init+sizes_x[i],end+sizes_x[i]])
 		return new_arr
 		
-	def write_lines(locations, sizes_x, names, output_):
+	def write_lines(locations, sizes_x, names, output_, chrx):
 		lines = []
 		for i in range(len(locations)):
 			#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
-			line = [names[i]] + list(map(str, locations[i]))
+			line = ["chr"+chrx] + list(map(str, locations[i]))
 			lines.append(line)
 		with open(output_, 'w', newline='') as csvfile:
 			writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 			writer.writerows(lines)	
 			print(output_,"created succesfully.")
-
+	
+	chrx = 1
+	chrx = str(chrx).zfill(2)
 	
 	gbk_file = open(gbk_filename,"r")
 	positives = []
@@ -137,8 +139,8 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
-	write_lines(new_pos, sizes_p, names_p, cds_p_output)
-	write_lines(new_negs, sizes_n, names_n, cds_n_output)
+	write_lines(new_pos, sizes_p, names_p, cds_p_output, chrx)
+	write_lines(new_negs, sizes_n, names_n, cds_n_output, chrx)
 	
 	return
 				

@@ -18,9 +18,7 @@ A command-line utility for calculating the GC percentage of a genomic sequence.
 
 import argparse as ap
 import sys
-import gzip
 from Bio import SeqIO
-import pyBigWig
 
 
 def get_args():
@@ -51,8 +49,8 @@ def get_args():
     -ot, --omit_tail
     Use if the trailing sequence should be omitted. Default behaviour is to retain the leftover sequence.
 
-    -f {wiggle,bigwig,gzip}, --output_format {wiggle,bigwig,gzip}
-    Choose output formats from wiggle, bigwig or gzip compressed wiggle file.
+    -f {wiggle}, --output_format {wiggle}
+    Choose output formats from [wiggle] file.
 
     :returns: str, str/None, int, int, Bool, str
     """
@@ -63,19 +61,18 @@ def get_args():
     requiredNamed.add_argument("-w", "--window_size", type=int,
                                help="Number of base pairs where the GC percentage is calculated for",
                                required=True)
-    requiredNamed.add_argument("-s", "--shift", type=int, help="The shift increment", required=True)
+    requiredNamed.add_argument("-s", "--shift", type=int, help="The shift increment", default=-1)
     parser.add_argument("-o", "--output_file", type=str, help="Name of the output file")
     parser.add_argument("-ot", "--omit_tail", action="store_true", help="True: if the trailing sequence should be "
                                                                         "omitted. Default behaviour is to retain "
                                                                         "the leftover sequence.",
                         default=False)
-    parser.add_argument("-f", "--output_format", type=str, choices=["wiggle",
-                                                                    "bigwig",
-                                                                    "gzip"],
+    parser.add_argument("-f", "--output_format", type=str, choices=["wiggle"],
                         default="wiggle")
     parser.add_argument("-one", "--one_file", action="store_true", help="Force one file output", default=False)
     args = parser.parse_args()
-
+    if args.shift == -1:
+        args.shift = args.window_size
     return args.input_file, args.output_file, args.window_size, args.shift, args.omit_tail, args.output_format,\
            args.one_file
 
@@ -87,23 +84,12 @@ def open_results_file():
     If output filename is given and output format is "wiggle", a text file called "OUTPUT_FILENAME.wig" will be opened
     with python's textIO wrapper, where OUTPUT_FILENAME is the string given after "-o" option in the commandline.
 
-    If output filename is given and output format is "gzip", a compressed file called "OUTPUT_FILENAME.gz" will be
-    opened with gzip library, where OUTPUT_FILENAME is the string given after "-o" option in the commandline.
-
-    If output filename is given and output format is "bigwig", a binary file called "OUTPUT_FILENAME.bw" will be
-    opened with pyBigWig, where OUTPUT_FILENAME is the string given after "-o" option in the commandline.
-
     If output filename is not specified, the result will be written to stdout following wiggle format.
 
     :return: file object
     """
     if output_file:
-        if output_format == "wiggle":
-            file = open(output_file + ".wig", "w+")
-        elif output_format == "gzip":
-            file = gzip.open(output_file + ".wig.gz", "w+")
-        elif output_format == "bigwig":
-            file = pyBigWig.open(output_file + ".bw", "w+")
+        file = open(output_file + ".wig", "w+")
     else:
         file = sys.stdout
     return file
@@ -119,62 +105,19 @@ def open_results_files():
     opened with python's textIO wrapper, where OUTPUT_FILENAME is the string given after "-o" option in the commandline
     and NUM is the ordinal number of the sequence.
 
-    If output filename is given and output format is "gzip", a compressed file called "OUTPUT_FILENAME_seqNUM.gz" will
-    be opened with gzip library, where OUTPUT_FILENAME is the string given after "-o" option in the commandline
-    and NUM is the ordinal number of the sequence.
-
-    If output filename is given and output format is "bigwig", a binary file called "OUTPUT_FILENAME_seqNUM.bw" will be
-    opened with pyBigWig, where OUTPUT_FILENAME is the string given after "-o" option in the commandline
-    and NUM is the ordinal number of the sequence.
-
     If output filename is not specified, the result will be written to stdout following wiggle format.
 
     :return: file object
     """
     if output_file:
-        if output_format == "wiggle":
-            file = open(output_file + "_seq{}.wig".format(seq_num), "w+")
-        elif output_format == "gzip":
-            file = gzip.open(output_file + "_seq{}.wig.gz".format(seq_num), "w+")
-        elif output_format == "bigwig":
-            file = pyBigWig.open(output_file + "_seq{}.bw".format(seq_num), "w+")
+        file = open(output_file + ".wig", "a+")
     else:
         file = sys.stdout
     return file
 
 
-def write_title():
-    """Write information to the track definition line of the wiggle file.
-    :return: None
-    """
-
-    trackline = "track type=wiggle_0 name=\"GC percentage\" description=\"{}\"\n".format(record.description)
-    variablestep = "variableStep chrom={} span={}\n".format(record.id, str(window_size))
-    if output_format == "wiggle":
-        result.write(trackline)
-        result.write(variablestep)
-    elif output_format == "gzip":
-        result.write(bytes(trackline, "utf-8"))
-        result.write(bytes(variablestep, "utf-8"))
-    elif output_format == "bigwig":
-        result.addHeader([(record.id, len(record))])
-
-
-def generate_write_content():
-    """
-    Generate a write_content function to handle writing results to output file.
-    :return: function
-    """
-    if output_format == "wiggle":
-        def content(loc, final_loc, data):
-            result.write(      str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n")
-    elif output_format == "gzip":
-        def content(loc, final_loc, data):
-            result.write(bytes(str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n", "utf-8"))
-    elif output_format == "bigwig":
-        def content(loc, final_loc, data):
-            result.addEntries(record.id, [loc], values=[float(data)], span=window_size)
-    return content
+def write_content(loc, final_loc, data):
+    result.write("chr1\t" + str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n")
 
 
 def generate_result():
@@ -188,24 +131,25 @@ def generate_result():
         frag = record.seq[i * shift: i * shift + window_size]  # Extract the string for counting
         # Count number of C and G and convert to percentage
         percent = int(round((frag.count("C") + frag.count("G")) / float(window_size) * 100))
-        write_content(i * shift, i * shift + window_size, percent)
+        global max_GC_percentage
+        if(percent > max_GC_percentage): 
+            max_GC_percentage = percent
+        global min_GC_percentage
+        if(percent < min_GC_percentage):
+            min_GC_percentage = percent
+        write_content(sequence_begin + i * shift, sequence_begin + i * shift + window_size, percent)
     if (i + 1) * shift < seq_len and not omit_tail:
         # if trailing sequence exits and omit_tail is False
         frag = record.seq[(i + 1) * shift:]
         percent = int(round((frag.count("C") + frag.count("G")) / float(len(frag)) * 100))
-        write_content((i + 1) * shift, seq_len, percent)
+        write_content(sequence_begin + (i + 1) * shift, sequence_begin + seq_len, percent)
+    return(seq_len)
 
 
 if __name__ == "__main__":
     error = []  # Store generated error message, and write to stderr at the end of stdout output
     input_file, output_file, window_size, shift, omit_tail, output_format, one_file = get_args()[:]
     new_output_format = output_format
-
-    if output_format == "bigwig" and window_size > shift:
-        sys.stderr.write("WARNING! BigWig file does not allow overlapped items. "
-                         "A wiggle file will be generated instead.\n")
-        error.append("WARNING! BigWig file does not allow overlapped items. A wiggle file was generated instead.\n")
-        new_output_format = "wiggle"
 
     if output_format != "wiggle" and output_file is None:
         sys.stderr.write("WARNING! An output filename is needed to save output as {}. "
@@ -218,7 +162,11 @@ if __name__ == "__main__":
 
     records = SeqIO.index(input_file, "fasta")
     records_num = len(records)
-    write_content = generate_write_content()
+    sequence_begin = 0
+    min_GC_percentage = 101
+    max_GC_percentage = -1
+    file = open(output_file + ".wig", "w+")
+    file.close()
     if records_num < 1:
         # No sequence in fasta file, corrupted
         sys.stdout.write("WARNING! {} contains no sequence data.\n".format(input_file))
@@ -227,17 +175,16 @@ if __name__ == "__main__":
         result = open_results_file()
         # one sequence in fasta file or one output file for all sequences
         for record in SeqIO.parse(input_file, "fasta"):
-            write_title()
             generate_result()
         result.close()
     else:
-        seq_num = 0
+        result = open_results_files()
         for record in SeqIO.parse(input_file, "fasta"):
-            seq_num += 1
-            result = open_results_files()
-            write_title()
-            generate_result()
-            result.close()
+            sequence_begin += generate_result()
+        result.close()
+        file = open(output_file + ".maxmin", "w")
+        file.write("max: {}\nmin: {}".format(max_GC_percentage, min_GC_percentage))
+        file.close()
     if output_file is None:
         for err in error:
             sys.stderr.write(err)

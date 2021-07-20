@@ -1,0 +1,5 @@
+chr - chr1 1 0 3708362 black
+chr - chr2 2 3708363 4052644 white
+band chr1 band01 band01 0 3708362 white
+band chr2 band02 band02 3708363 4052644 black
+

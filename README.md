@@ -72,7 +72,7 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_posi
 * Andrea: 
     1. Arreglar creación de CDS. 
     2. Apoyar a Roberto con lo de los COGs.
-* Roberto: Continuar con el pipeline de anotacion COGs.
+* Roberto: Continuar con el pipeline de anotación COGs.
 * Andrés: Continuar viendo que se hace con los archivos de salida, juntarlos, etc, para obtener los archivos de configuración de Circos. 
 * Vicente: Modificar los scripts que encontró Andrés para incorporar los números que le faltan para el inicio y el fin, con tal de que el output quede listo para Circos.
 
@@ -85,7 +85,7 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_posi
     1. Cambiar "chr1" en vez de "chr01". 
     2. Crear archivos trnas, sería lo mismo que los CDSs, pero buscando "trna"s. 
     3. Apoyar a Roberto con lo de los COGs.
-* Roberto: Continuar con el pipeline de anotacion COGs.
+* Roberto: Continuar con el pipeline de anotación COGs.
 * Andrés: 
     1. Pensar qué otro análisis podemos hacer, tal vez agregar una funcionalidad para graficar genomas cerrados. 
     2. ¿Cómo agregarle texto a las imágenes generadas por circos?. 
@@ -96,4 +96,22 @@ python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_posi
     2. Eliminar la separación entre contigs en el archivo fna (borrando los ">n"). 
     3. Buscar mínimo y máximo de los GC content para definir el mínimo y máximo en la visualización.
 
-### Reunión 06/07
+### Reunión 20/07
+* Andrés trabajó en poner texto en la imagen, ver qué pasaba si agrega un segundo cromosoma al visualizador y jugar con los valores de GC content. Roberto sugiere cambiarlo para que tome varios cromosomas y haga la separación. Habría que modificar la creación de kars y CDSs.
+* Vicente hizo sus cambios, faltaría solamente agregar más de un cromosomas.
+* Pensar en cómo agregar paletas de colores para que el usuario pueda elegir.
+
+#### Tareas
+* Andrea: 
+    1. Crear archivos trnas, sería lo mismo que los CDSs, pero buscando "trna"s. 
+    2. Creación de KAR y CDSs debe aceptar más de un cromosoma.
+    3. Apoyar a Roberto con lo de los COGs.
+* Roberto: Continuar con el pipeline de anotación COGs.
+* Andrés:
+    1. Identificar cuáles son los parámetros variables del archivo config de Circos.
+    2. Poner positivo y negativo el GC-skew.
+* Vicente:
+    1. Considerar más de un cromosoma en el GC analysis.
+    2. Ver si se le pueden poner títulos al centro o arriba a los SVG.
+    3. Ver cómo generar múltiples círculos individualmente y ver cómo se pueden juntar pero con tamaños a escala de la cantidad de kb.
+

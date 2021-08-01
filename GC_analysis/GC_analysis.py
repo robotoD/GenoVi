@@ -14,7 +14,7 @@ def get_args():
                                required=True)
     requiredNamed.add_argument("-w", "--window_size", type=int,
                                help="Number of base pairs where the GC percentage is calculated for",
-                               required=True)
+                               default=1000)
     requiredNamed.add_argument("-s", "--shift", type=int, help="The shift increment. Defaults to window size", default=-1)
     parser.add_argument("-o", "--output_file", type=str, help="Name of the output files. Defaults to match input file.", default = " ")
     parser.add_argument("-ot", "--omit_tail", action="store_true", help="True: if the trailing sequence should be "
@@ -33,7 +33,8 @@ def get_args():
            args.one_file
 
 def write_content(loc, final_loc, data, file):
-    file.write("chr1\t" + str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n")
+    file.write("chr" + str(globalIndex)
+               + "\t" + str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n")
 
 def generate_result():
     """
@@ -46,6 +47,7 @@ def generate_result():
     global min_GC_percentage
     global maxSkew
     global minSkew
+    i = -1
     for i in range((seq_len - window_size + shift) // shift):  # Iterate over the total number of shifts
         frag = record.seq[i * shift: i * shift + window_size]  # Extract the string for counting
         # Count number of C and G and convert to percentage
@@ -109,8 +111,10 @@ if __name__ == "__main__":
     else:
         result_content = open(output_file + "_GC_content.wig", "a+")
         result_skew = open(output_file + "_GC_skew.wig", "a+")
+        globalIndex = 1
         for record in SeqIO.parse(input_file, "fasta"):
             sequence_begin += generate_result()
+            globalIndex += 1
         result_content.close()
         result_skew.close()
         file = open(output_file + ".maxmin", "w")

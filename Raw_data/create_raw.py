@@ -7,6 +7,27 @@ from Bio import SeqIO
 import sys
 import numpy as np
 import csv
+import argparse as ap
+
+def get_args():
+    parser = ap.ArgumentParser()
+    parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
+    
+    kar_args = parser.add_argument_group('KAR generation arguments')
+    kar_args.add_argument("-o", "--output_file", type=str, help="Output KAR file path. Default: output.kar", default = "output.kar")
+    
+    cds_args = parser.add_argument_group('CDSs generation arguments')
+    cds_args.add_argument("-cp", "--cds_pos", type=str, help="Positive CDS output file", required = False)
+    cds_args.add_argument("-cn", "--cds_neg", type=str, help="Negative CDS output file", required = False)
+    
+    trna_args = parser.add_argument_group('tRNAs generation arguments')
+    trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False)
+    trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False)
+    
+    args = parser.parse_args()
+        
+    return args.input_file, args.output_file, args.cds_pos, args.cds_neg, args.trna_pos, args.trna_neg
+
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
 ## And finally creates a kar file with original contig order.
@@ -73,7 +94,7 @@ def create_kar(gbk_filename, output_file):
 
 	return ends
 
-def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
+def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 	
 	def new_loc(array, sizes_x):
 		new_arr = []
@@ -112,7 +133,8 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 		size_sum = np.sum(np.array(sizes[:j]))
 		
 		for feature in record.features:
-			if feature.type == "CDS":
+			if feature.type == feat: # "CDS" or "tRNA"
+
 				location = str(feature.location)[:-3]
 				direction = str(feature.location)[-2:-1]
 				if direction == '+':
@@ -137,57 +159,33 @@ def create_CDS(gbk_filename, cds_p_output, cds_n_output, sizes):
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
-	write_lines(new_pos, sizes_p, names_p, cds_p_output, chrx)
-	write_lines(new_negs, sizes_n, names_n, cds_n_output, chrx)
+	write_lines(new_pos, sizes_p, names_p, p_output, chrx)
+	write_lines(new_negs, sizes_n, names_n, n_output, chrx)
 	
 	return
-				
 
-def help():
-	print("Run")
-	print("For only creating KAR file: python create_kar.py -i <input genbank file path> -o <output kar file path>")	
-	print("For creating KAR file and CDS positive and CDS negative files: python create_kar.py -i <input genbank file path> -o <output kar file path> -cp <output_CDS_positives> -cn <output_CDS_negatives>")			
-
+	
+		
 if __name__ == '__main__':
 	
-	if len(sys.argv) == 1:
-		help()
-	elif len(sys.argv) == 2 and sys.argv[1] in ['-h', '--h', '-help', '--help', '-H', '--H']:
-		help()
-	elif len(sys.argv) == 5:
-		if sys.argv[1] == '-i' and sys.argv[3] == '-o':
-			gbk_file = sys.argv[2]
-			output = sys.argv[4]
-		elif sys.argv[3] == '-i' and sys.argv[1] == '-o':
-			gbk_file = sys.argv[4]
-			output = sys.argv[2]
-		
+	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg = get_args()[:]
+	
+	if cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None:
 		sizes = create_kar(gbk_file, output)
-	elif len(sys.argv) == 9:
-		if sys.argv[1] == '-i' and sys.argv[3] == '-o' and sys.argv[5] == '-cp' and sys.argv[7] == '-cn':
-			gbk_file = sys.argv[2]
-			output = sys.argv[4]
-			cds_pos = sys.argv[6]
-			cds_neg = sys.argv[8]
-		elif sys.argv[3] == '-i' and sys.argv[1] == '-o' and sys.argv[5] == '-cp' and sys.argv[7] == '-cn':
-			gbk_file = sys.argv[4]
-			output = sys.argv[2]
-			cds_pos = sys.argv[6]
-			cds_neg = sys.argv[8]
-		elif sys.argv[1] == '-i' and sys.argv[3] == '-o' and sys.argv[7] == '-cp' and sys.argv[5] == '-cn':
-			gbk_file = sys.argv[4]
-			output = sys.argv[2]
-			cds_pos = sys.argv[8]
-			cds_neg = sys.argv[6]
-		elif sys.argv[3] == '-i' and sys.argv[1] == '-o' and sys.argv[7] == '-cp' and sys.argv[5] == '-cn':
-			gbk_file = sys.argv[4]
-			output = sys.argv[2]
-			cds_pos = sys.argv[8]
-			cds_neg = sys.argv[6]
-		
+	elif (cds_pos == None and cds_neg != None) or (cds_neg == None and cds_pos != None):
+		print("Error: Please enter an output file path for both CDS positives and CDS negatives.") 
+	elif (trna_pos == None and trna_neg != None) or (trna_neg == None and trna_pos != None):
+		print("Error: Please enter an output file path for both tRNA positives and tRNA negatives.") 
+	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None:
 		sizes = create_kar(gbk_file, output)
-		create_CDS(gbk_file, cds_pos, cds_neg, sizes)
-	else:
-		help()
+		create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None:
+		sizes = create_kar(gbk_file, output)
+		create_feature(gbk_file, trna_pos, trna_neg, sizes, "CDS")
+	else:	
+		sizes = create_kar(gbk_file, output)
+		create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS")
+		create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+
 	
 	

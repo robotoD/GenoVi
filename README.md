@@ -4,23 +4,23 @@ Genome visualizer software project
 
 ## Execution:
 
-### Create kar file
+### Create raw files
 
 ```python
-python create_kar.py -i <input_genbank_file_path> -o <output_kar_file_path>
+python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path>
 ```
 Example with testing data: 
 ```python
-python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar
+python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar
 ``` 
 ### Create ODS files
 
 ```python
-python create_kar.py -i <input_genbank_file_path> -o <output_kar_file_path> -cp <output_positive_ODS_file> -cn <output_negative_ODS_file>
+python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path> -cp <output_positive_ODS_file> -cn <output_negative_ODS_file>
 ```
 Example with testing data: 
 ```python
-python create_kar.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_positive.ods -cn test_negative.ods
+python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_positive.ods -cn test_negative.ods
 ``` 
 
 ## Meetings journal

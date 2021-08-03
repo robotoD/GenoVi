@@ -13,15 +13,24 @@ Example with testing data:
 ```python
 python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar
 ``` 
-### Create ODS files
+### Create CDS files
 
 ```python
 python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path> -cp <output_positive_ODS_file> -cn <output_negative_ODS_file>
 ```
 Example with testing data: 
 ```python
-python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp test_positive.ods -cn test_negative.ods
-``` 
+python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp cds_positive.ods -cn cds_negative.ods
+```
+
+### Create tRNA files
+
+```python
+python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path> -tp <output_positive_tRNA_file> -tn <output_negative_tRNA_file>
+```
+Example with testing data: 
+```python
+python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp trna_positive.txt -tn trna_negative.ods
 
 ## Meetings journal
 
@@ -115,3 +124,19 @@ python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp 
     2. Ver si se le pueden poner títulos al centro o arriba a los SVG.
     3. Ver cómo generar múltiples círculos individualmente y ver cómo se pueden juntar pero con tamaños a escala de la cantidad de kb.
 
+### Reunión 03/08
+* Roberto encontró un programa basado en machine learning llamado DeepNOG, que predice las categorías de los COGs.
+* Andrés logró hacer que el GC-skew sea de distinto color para positivo y negativo. Debe descubrir cómo cambiar los colores positivo y negativo porque ahora están fijos en celeste y azul. Tal vez se podría hacer que las ventanas sean más anchas. Identificó los parámetros del archivo conf que puede variar de genoma en genoma. 
+* Vicente logró hacer la generación del archivo GC content soporte más de un cromosoma. Además hizo que a las imágenes se les pueda agregar un título. También logró hacer que las imágenes puedan juntarse con diferente tamaño.
+* Una mejora a futuro para la creación de los GC contents es que el script pueda recibir archivos de contigs independientes.
+
+#### Tareas
+* Andrea: 
+    1. Creación de archivos debe soportar más de un cromosoma.
+    2. Dividir archivo final de COGs en positivo-negativo y por categoría (p. ejemplo A_positivo y A_negativo). 
+* Vicente:
+    1. Hacer script en Python que una todo. 
+    2. Hacer que las imágenes juntadas queden proporcional al tamaño de los genomas.
+* Andrés: 
+    1. Averiguar cómo cambiar los colores de los GC-skew positivo y negativo.
+    2. Poner en un word y marcar los parámetros del conf que varían.

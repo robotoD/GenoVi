@@ -31,6 +31,7 @@ python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_p
 Example with testing data: 
 ```python
 python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp trna_positive.txt -tn trna_negative.ods
+```
 
 ## Meetings journal
 

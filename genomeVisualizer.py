@@ -12,24 +12,27 @@ def get_args():
     parser.add_argument("-o", "--output_file", type=str, help="Output image file path. Default: image", default = "image")
     parser.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). Default: no title", default = "")
     parser.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
+    parser.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
 
     args = parser.parse_args()
         
-    return args.input_file, args.output_file, args.title, args.title_position
+    return args.input_file, args.output_file, args.title, args.title_position, args.italic_words
 
 if __name__ == "__main__":
-    gbk_file, output, title, titlePos = get_args()[:]
+    gbk_file, output, title, titlePos, italic = get_args()[:]
 
+    
     sizes = create_raw.create_kar(gbk_file, "temp/output.kar")
     create_raw.create_feature(gbk_file, "temp/cds_pos", "temp/cds_neg", sizes, "CDS")
     create_raw.create_feature(gbk_file, "temp/trna_pos", "temp/trna_neg", sizes, "tRNA")
     gbk2fna.gbkToFna(gbk_file, "temp/gbk_converted.fna")
     maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC")
     createConf.create_conf(maxmins)
+    
     os.system("circos circos.conf")
     os.system("circos -debug_group _all")
     if title != "":
-        addTitle.addTitle(title, position = titlePos, inFile = "circos.svg")
+        addTitle.addTitle(title, position = titlePos, inFile = "circos.svg", italic = italic)
         os.remove("circos.svg")
     
     print("deleting temporary files")

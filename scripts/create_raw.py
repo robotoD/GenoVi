@@ -13,7 +13,8 @@ import re
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
-    
+    parser.add_argument("-c", "--complete_genome", action='store_true', help="Indicating if it is a complete genome")
+        
     kar_args = parser.add_argument_group('KAR generation arguments')
     kar_args.add_argument("-o", "--output_file", type=str, help="Output KAR file path. Default: output.kar", default = "output.kar")
     
@@ -27,7 +28,7 @@ def get_args():
     
     args = parser.parse_args()
         
-    return args.input_file, args.output_file, args.cds_pos, args.cds_neg, args.trna_pos, args.trna_neg
+    return args.input_file, args.output_file, args.cds_pos, args.cds_neg, args.trna_pos, args.trna_neg, args.complete_genome
 
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
@@ -59,6 +60,7 @@ def create_kar(gbk_filename, output_file):
 	#dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
 	
 	#ends_sort = list(dic_sorted.values())
+	
 	
 	new_ends = []
 	
@@ -95,29 +97,59 @@ def create_kar(gbk_filename, output_file):
 
 	return ends
 
+
+def create_kar_complete(gbk_filename, output_file):
+	
+	gbk_file = open(gbk_filename,"r")
+
+	ends = []
+
+	for record in SeqIO.parse(gbk_file, "genbank"):
+		location = record.features[0].location
+		location = str(location)[1:-4].split(":")
+		init = int(location[0])
+		end = int(location[1])
+		ends.append(end)
+		
+	lines = []
+	
+	for i in range(len(ends)):
+		line1 = "chr - chr"+ str(i+1) +" 1 0 "+ str(ends[i]) +" black\n"
+		line2 = "band chr"+ str(i+1)+" band01 band01 0 "+str(ends[i])+" white\n"
+		lines.append(line1)
+		lines.append(line2)
+
+	with open(output_file, 'w') as output:
+		output.writelines(lines)
+		print(output_file+" created succesfully.")
+
+
+	return ends
+
+def new_loc(array, sizes_x):
+	new_arr = []
+	for i, loc_pos in enumerate(array):
+		loc_pos = loc_pos.split(":")
+		init = int(loc_pos[0][1:])
+		end = int(loc_pos[1][:-1])
+		new_arr.append([init+sizes_x[i],end+sizes_x[i]])
+	return new_arr
+	
+def write_lines(locations, sizes_x, names, output_, chrx):
+	lines = []
+	for i in range(len(locations)):
+		#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
+		line = ["chr"+chrx[i]] + list(map(str, locations[i]))
+		lines.append(line)
+	with open(output_, 'w', newline='') as csvfile:
+		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		writer.writerows(lines)	
+		print(output_,"created succesfully.")
+
+
 def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 	
-	def new_loc(array, sizes_x):
-		new_arr = []
-		for i, loc_pos in enumerate(array):
-			loc_pos = loc_pos.split(":")
-			init = int(loc_pos[0][1:])
-			end = int(loc_pos[1][:-1])
-			new_arr.append([init+sizes_x[i],end+sizes_x[i]])
-		return new_arr
-		
-	def write_lines(locations, sizes_x, names, output_, chrx):
-		lines = []
-		for i in range(len(locations)):
-			#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
-			line = ["chr"+chrx] + list(map(str, locations[i]))
-			lines.append(line)
-		with open(output_, 'w', newline='') as csvfile:
-			writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-			writer.writerows(lines)	
-			print(output_,"created succesfully.")
-	
-	chrx = '1'
+	#chrx = '1'
 	
 	gbk_file = open(gbk_filename,"r")
 	positives = []
@@ -126,13 +158,16 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 	sizes_n = []
 	names_p = []
 	names_n = []
+	chrx = '1'
+	chrms_p = []
+	chrms_n = []
 	
 	for j, record in enumerate(SeqIO.parse(gbk_file, "genbank")):
 		aux_p = []
 		aux_n = []
 		name = record.name
 		size_sum = np.sum(np.array(sizes[:j]))
-		
+
 		for feature in record.features:
 			if feature.type == feat: # "CDS" or "tRNA"
 				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
@@ -147,6 +182,7 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 					else:
 						aux_p.append(size_sum)
 					names_p.append(name)
+					chrms_p.append(chrx)
 				else:
 					negatives.append(location)
 					if j == 0:
@@ -154,6 +190,7 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 					else:
 						aux_n.append(size_sum)
 					names_n.append(name)
+					chrms_n.append(chrx)
 				
 				
 		sizes_p = sizes_p + aux_p
@@ -162,8 +199,56 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
-	write_lines(new_pos, sizes_p, names_p, p_output, chrx)
-	write_lines(new_negs, sizes_n, names_n, n_output, chrx)
+	write_lines(new_pos, sizes_p, names_p, p_output, chrms_p)
+	write_lines(new_negs, sizes_n, names_n, n_output, chrms_n)
+	
+	return
+
+def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, flag=False):
+	
+	#chrx = '1'
+	
+	gbk_file = open(gbk_filename,"r")
+	positives = []
+	negatives = []
+	sizes_p = []
+	sizes_n = []
+	names_p = []
+	names_n = []
+	chrms_p = []
+	chrms_n = []
+	
+	for j, record in enumerate(SeqIO.parse(gbk_file, "genbank")):
+		aux_p = []
+		aux_n = []
+		name = record.name
+		size_sum = sizes[j]
+		chrx = str(j+1)
+
+		for feature in record.features:
+			if feature.type == feat: # "CDS" or "tRNA"
+
+				location = str(feature.location)[:-3]
+				direction = str(feature.location)[-2:-1]
+				if direction == '+':
+					positives.append(location)
+					aux_p.append(size_sum)
+					names_p.append(name)
+					chrms_p.append(chrx)
+				else:
+					negatives.append(location)
+					aux_n.append(size_sum)
+					names_n.append(name)
+					chrms_n.append(chrx)
+				
+		sizes_p = sizes_p + aux_p
+		sizes_n = sizes_n + aux_n
+	
+	new_pos = new_loc(positives, sizes_p)
+	new_negs = 	new_loc(negatives, sizes_n)
+	
+	write_lines(new_pos, sizes_p, names_p, p_output, chrms_p)
+	write_lines(new_negs, sizes_n, names_n, n_output, chrms_n)
 	
 	return
 
@@ -171,20 +256,33 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 		
 if __name__ == '__main__':
 	
-	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg = get_args()[:]
+	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, com_gen = get_args()[:]
 	
-	if cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None:
+	if cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None and com_gen == False:
 		sizes = create_kar(gbk_file, output)
+	elif cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None and com_gen == True:
+		sizes = create_kar_complete(gbk_file, output)
 	elif (cds_pos == None and cds_neg != None) or (cds_neg == None and cds_pos != None):
 		print("Error: Please enter an output file path for both CDS positives and CDS negatives.") 
 	elif (trna_pos == None and trna_neg != None) or (trna_neg == None and trna_pos != None):
 		print("Error: Please enter an output file path for both tRNA positives and tRNA negatives.") 
-	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None:
+	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None and com_gen == True:
+		sizes = create_kar_complete(gbk_file, output)
+		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None:
+	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None and com_gen == True:
+		sizes = create_kar_complete(gbk_file, output)
+		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "CDS")
+	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, trna_pos, trna_neg, sizes, "CDS")
+	elif cds_pos != None and cds_neg != None and trna_pos != None and trna_neg != None and com_gen == True:
+		sizes = create_kar_complete(gbk_file, output)
+		create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS")
+		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+
 	else:	
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS")

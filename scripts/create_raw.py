@@ -8,6 +8,7 @@ import sys
 import numpy as np
 import csv
 import argparse as ap
+import re
 
 def get_args():
     parser = ap.ArgumentParser()
@@ -17,12 +18,12 @@ def get_args():
     kar_args.add_argument("-o", "--output_file", type=str, help="Output KAR file path. Default: output.kar", default = "output.kar")
     
     cds_args = parser.add_argument_group('CDSs generation arguments')
-    cds_args.add_argument("-cp", "--cds_pos", type=str, help="Positive CDS output file", required = False)
-    cds_args.add_argument("-cn", "--cds_neg", type=str, help="Negative CDS output file", required = False)
+    cds_args.add_argument("-cp", "--cds_pos", type=str, help="Positive CDS output file", required = False, default = "cds_pos")
+    cds_args.add_argument("-cn", "--cds_neg", type=str, help="Negative CDS output file", required = False, default = "cds_neg")
     
     trna_args = parser.add_argument_group('tRNAs generation arguments')
-    trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False)
-    trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False)
+    trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False, default = "trna_pos")
+    trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False, default = "trna_neg")
     
     args = parser.parse_args()
         
@@ -134,8 +135,10 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat):
 		
 		for feature in record.features:
 			if feature.type == feat: # "CDS" or "tRNA"
-
-				location = str(feature.location)[:-3]
+				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
+				if("join" in str(feature.location)):
+					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?\d+\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
+					location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
 				direction = str(feature.location)[-2:-1]
 				if direction == '+':
 					positives.append(location)

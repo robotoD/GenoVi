@@ -258,31 +258,30 @@ if __name__ == '__main__':
 	
 	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, com_gen = get_args()[:]
 	
-	if cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None and com_gen == False:
+	if cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
-	elif cds_pos == None and cds_neg == None and trna_pos == None and trna_neg == None and com_gen == True:
+	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
 		sizes = create_kar_complete(gbk_file, output)
-	elif (cds_pos == None and cds_neg != None) or (cds_neg == None and cds_pos != None):
+	elif (cds_pos == "cds_pos" and cds_neg != "cds_neg") or (cds_neg == "cds_neg" and cds_pos != "cds_pos"):
 		print("Error: Please enter an output file path for both CDS positives and CDS negatives.") 
-	elif (trna_pos == None and trna_neg != None) or (trna_neg == None and trna_pos != None):
+	elif (trna_pos == "trna_pos" and trna_neg != "trna_neg") or (trna_neg == "trna_neg" and trna_pos != "trna_pos"):
 		print("Error: Please enter an output file path for both tRNA positives and tRNA negatives.") 
-	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None and com_gen == True:
+	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
 		sizes = create_kar_complete(gbk_file, output)
 		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-	elif cds_pos == None and cds_neg == None and trna_pos != None and trna_neg != None and com_gen == False:
+	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None and com_gen == True:
+	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
 		sizes = create_kar_complete(gbk_file, output)
 		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "CDS")
-	elif cds_pos != None and cds_neg != None and trna_pos == None and trna_neg == None and com_gen == False:
+	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, trna_pos, trna_neg, sizes, "CDS")
-	elif cds_pos != None and cds_neg != None and trna_pos != None and trna_neg != None and com_gen == True:
+	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
 		sizes = create_kar_complete(gbk_file, output)
 		create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS")
 		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-
 	else:	
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS")

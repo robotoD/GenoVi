@@ -125,6 +125,49 @@ def create_kar_complete(gbk_filename, output_file):
 
 
 	return ends
+	
+
+def create_kar_plus(gbk_filename, output_file):
+	
+	gbk_file = open(gbk_filename,"r")
+
+	ends = []
+
+	for record in SeqIO.parse(gbk_file, "genbank"):
+		location = record.features[0].location
+		location = str(location)[1:-4].split(":")
+		init = int(location[0])
+		end = int(location[1])
+		ends.append(end)
+		
+	new_ends = []
+	
+	inits = []
+	init = 0
+	end = ends[0]
+	for i in range(len(ends)-1):
+		inits.append(init)
+		new_ends.append(end)
+		init = end + 1
+		end = end + ends[i+1]
+	inits.append(init)
+	new_ends.append(end)
+		
+	lines = []
+	
+	for i in range(len(ends)):
+		line1 = "chr - chr"+ str(i+1) +" 1 0 "+ str(ends[i]) +" black\n"
+		line2 = "band chr"+ str(i+1)+" band01 band01 "+str(inits[i])+" "+str(new_ends[i])+" white\n"
+		lines.append(line1)
+		lines.append(line2)
+
+	with open(output_file, 'w') as output:
+		output.writelines(lines)
+		print(output_file+" created succesfully.")
+
+
+	return ends	
+
 
 def new_loc(array, sizes_x):
 	new_arr = []
@@ -258,28 +301,29 @@ if __name__ == '__main__':
 	
 	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, com_gen = get_args()[:]
 	
+	
 	if cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
-		sizes = create_kar_complete(gbk_file, output)
+		sizes = create_kar_plus(gbk_file, output)
 	elif (cds_pos == "cds_pos" and cds_neg != "cds_neg") or (cds_neg == "cds_neg" and cds_pos != "cds_pos"):
 		print("Error: Please enter an output file path for both CDS positives and CDS negatives.") 
 	elif (trna_pos == "trna_pos" and trna_neg != "trna_neg") or (trna_neg == "trna_neg" and trna_pos != "trna_pos"):
 		print("Error: Please enter an output file path for both tRNA positives and tRNA negatives.") 
 	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
-		sizes = create_kar_complete(gbk_file, output)
+		sizes = create_kar_plus(gbk_file, output)
 		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
 	elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
 		create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
 	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
-		sizes = create_kar_complete(gbk_file, output)
-		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "CDS")
+		sizes = create_kar_plus(gbk_file, output)
+		create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS")
 	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
 		sizes = create_kar(gbk_file, output)
-		create_feature(gbk_file, trna_pos, trna_neg, sizes, "CDS")
+		create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS")
 	elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
-		sizes = create_kar_complete(gbk_file, output)
+		sizes = create_kar_plus(gbk_file, output)
 		create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS")
 		create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
 	else:	

@@ -141,3 +141,24 @@ python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp 
 * Andrés: 
     1. Averiguar cómo cambiar los colores de los GC-skew positivo y negativo.
     2. Poner en un word y marcar los parámetros del conf que varían.
+
+### Reunión 31/08
+* Andrés probó el script completo y se percató de cosas que modificar el los archivos de salida. Entre ellos el kar.file (corregir el inicio y término de cada "chr" y "band", dejar los "chr" siempre en "black" y las bandas intercalarlas en "white" y "black") y los cds_pos cds_neg (rectificar los locations).  
+* Además 
+* Vicente editó el archivo genbank2faa.py para transformar archivos gbk/gbff que tenian problemas. Uno de los problemas detectados era en archivo gbk/gbff de NCBI que incluye anotacion de pseudogenes, estos eran identificados como CDS pero sin feature de translation (al ser pseudogen no se anota). La edicin hace que en estos casos el script se salta el CDS. 
+* Andrea integro DeepNOG al analisis para realizar la clasificacion de COGs a las CDS extraidas del gbk/gbff file. Esto genera 46 archivos de categories 23 de la hebra positiva y 23 de la hebra negativa. Estos deben ser incorporados al highlights.conf para ser graficados por Circos.
+
+#### Tareas
+* Andrea: 
+    * Editar el create_raw.py para incluir las modificaciones: 
+    1. Crear siempre el archivo kar file donde cada contig es un "chr" y "band" independiente 
+    2. Editar el kar file: corregir el inicio y término (locations) de cada "chr" y "band"; dejar los "chr" siempre en "black" y las bandas intercalarlas en "white" y "black"). 
+    3. Editar la creacion de los archivos del cds_pos y cds_neg (rectificar las locations de cada CDS)
+    4. --complete_genome debera separar el archivo original gbk/gbff (1 file) en archivos "n" dependiendo de la cantidad de contigs que posea y realizar el pipeline completo a cada gbk/gbff creado por separado. Luego realizar el ajuste de tamaño realizado por Vicente (mergeImages.py)
+* Vicente:
+    1. Editar genbank2faa.py para que al extraer cada secuencia guarde el locus_tag y el filename del gbk/gbff como identificador de cada secuencia
+    2. Editar el archivo svg para incluir cuadrados con los colores correspondientes a cada clasificacion (CDS, GC-content, GC-skew, COGs) con su leyenda.
+* Andrés: 
+    1. Agregar en el archivo highlight.conf la posicion de los COGs categories
+* Roberto:
+    1. Identificar los RGB para cada uno de los COGs anotados por DeepNOG (colores por macrocategorias)

@@ -1,15 +1,29 @@
 from Bio import GenBank
 from Bio import SeqIO
 import argparse
+import re
 
     
 def genbankToFaa(input, output):
     try:
         input_handle  = open(input, "r")
     except:
-        input_handle  = open(input + ".gbk", "r")
+        input = input + ".gbk"
+        input_handle  = open(input, "r")
     output_handle = open(output, "w")
-
+    
+    if input_handle.readline()[33] != " ":
+        fileContent = re.sub("LOCUS       .*",
+                                "LOCUS       " + input[0:20] + "  308615 bp    DNA     linear       10-JAN-2000",
+                                input_handle.read())
+        input_handle.close()
+        input_handle = open(input, "w")
+        input_handle.write(fileContent)
+        input_handle.close()
+        input_handle = open(input, "r")
+    else:
+        input_handle.seek(0)
+        
     for seq_record in SeqIO.parse(input_handle, "genbank") :
         print("Dealing with GenBank record %s" % seq_record.id)
         for seq_feature in seq_record.features :

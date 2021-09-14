@@ -17,26 +17,28 @@ import pandas as pd
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
-    parser.add_argument("-c", "--complete_genome", action='store_true', help="Indicating if it is a complete genome")
     
+    parser.add_argument("-o", "--output_folder", type=str, help="Output folder path. By default it will take the name of the gbk file", required = False, default="")
+    
+    #cds_args = parser.add_argument_group('CDSs generation arguments')
+    #cds_args.add_argument("-cp", "--cds_pos", type=str, help="Positive CDS output file", required = False, default = "cds_pos")
+    #cds_args.add_argument("-cn", "--cds_neg", type=str, help="Negative CDS output file", required = False, default = "cds_neg")
+    parser.add_argument("-cds", "--cds", action='store_true', help="CDS files (positive and negative) will be created", required = False)
+    
+    #trna_args = parser.add_argument_group('tRNAs generation arguments')
+    #trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False, default = "trna_pos")
+    #trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False, default = "trna_neg")
+    parser.add_argument("-trna", "--trna", action='store_true', help="tRNA files (positive and negative) will be created", required = False)
+        
     pred_args = parser.add_argument_group('Categories prediction arguments')
     pred_args.add_argument("-gc", "--get_categories", action='store_true', help="Indicating if CDS categories must be predicted")
     pred_args.add_argument("-d", "--divided", action='store_true', help="Indicating if CDS categories must be divided in different files")
-        
-    kar_args = parser.add_argument_group('KAR generation arguments')
-    kar_args.add_argument("-o", "--output_file", type=str, help="Output KAR file path. Default: output.kar", default = "output.kar")
     
-    cds_args = parser.add_argument_group('CDSs generation arguments')
-    cds_args.add_argument("-cp", "--cds_pos", type=str, help="Positive CDS output file", required = False, default = "cds_pos")
-    cds_args.add_argument("-cn", "--cds_neg", type=str, help="Negative CDS output file", required = False, default = "cds_neg")
-    
-    trna_args = parser.add_argument_group('tRNAs generation arguments')
-    trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False, default = "trna_pos")
-    trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False, default = "trna_neg")
+    parser.add_argument("-c", "--complete_genome", action='store_true', help="Indicating if it is a complete genome")
     
     args = parser.parse_args()
         
-    return args.input_file, args.output_file, args.cds_pos, args.cds_neg, args.trna_pos, args.trna_neg, args.complete_genome, args.get_categories, args.divided
+    return args.input_file, args.output_folder, args.cds, args.trna, args.get_categories, args.divided, args.complete_genome
 
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
@@ -49,93 +51,7 @@ def ends_sorted(ends):
 	indexes = list(dic_sorted.keys())
 	return ends_sort, indexes
 
-def create_kar(gbk_filename, output_file):
-	
-	gbk_file = open(gbk_filename,"r")
-
-	ends = []
-
-	for record in SeqIO.parse(gbk_file, "genbank"):
-		location = record.features[0].location
-		location = str(location)[1:-4].split(":")
-		init = int(location[0])
-		end = int(location[1])
-		ends.append(end)
-	
-	# Saving original order
-	#dic_ends = {i:ends[i] for i in range(len(ends))}
-	# Sorting by contig size 
-	#dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
-	
-	#ends_sort = list(dic_sorted.values())
-	
-	
-	new_ends = []
-	
-	inits = []
-	init = 0
-	end = ends[0]
-	for i in range(len(ends)-1):
-		inits.append(init)
-		new_ends.append(end)
-		init = end + 1
-		end = end + ends[i+1]
-	inits.append(init)
-	new_ends.append(end)
-		
-	chrx = '1'
-	lines = []
-	
-	lines.append("chr - chr"+chrx+" 1 0 "+str(new_ends[-1])+" black\n")
-	for i in range(len(inits)):
-		if len(inits) == 1:
-			break
-		if i%2 == 0:
-			color = " white\n"
-		else:
-			color = " black\n"
-		band = str(i+1).zfill(2)
-		line = "band chr"+chrx+" band"+band+" band"+band+" "+str(inits[i])+" "+str(new_ends[i])+color
-		lines.append(line)
-
-	with open(output_file, 'w') as output:
-		output.writelines(lines)
-		print(output_file+" created succesfully.")
-
-
-	return ends
-
-
-def create_kar_complete(gbk_filename, output_file):
-	
-	gbk_file = open(gbk_filename,"r")
-
-	ends = []
-
-	for record in SeqIO.parse(gbk_file, "genbank"):
-		location = record.features[0].location
-		location = str(location)[1:-4].split(":")
-		init = int(location[0])
-		end = int(location[1])
-		ends.append(end)
-		
-	lines = []
-	
-	for i in range(len(ends)):
-		line1 = "chr - chr"+ str(i+1) +" 1 0 "+ str(ends[i]) +" black\n"
-		line2 = "band chr"+ str(i+1)+" band01 band01 0 "+str(ends[i])+" white\n"
-		lines.append(line1)
-		lines.append(line2)
-
-	with open(output_file, 'w') as output:
-		output.writelines(lines)
-		print(output_file+" created succesfully.")
-
-
-	return ends
-	
-
-def create_kar_plus(gbk_filename, output_file):
+def create_kar(gbk_filename, output_folder, complete):
 	
 	gbk_file = open(gbk_filename,"r")
 
@@ -163,18 +79,41 @@ def create_kar_plus(gbk_filename, output_file):
 		
 	lines = []
 	
-	for i in range(len(ends)):
-		line1 = "chr - chr"+ str(i+1) +" 1 0 "+ str(ends[i]) +" black\n"
-		line2 = "band chr"+ str(i+1)+" band01 band01 "+str(inits[i])+" "+str(new_ends[i])+" white\n"
-		lines.append(line1)
-		lines.append(line2)
+	if complete == False:
+		for i in range(len(ends)):
+			line1 = "chr - chr"+ str(i+1) +" 1 " +str(inits[i])+" "+str(new_ends[i])+" black\n"
+			if i%2 == 0:
+				color = " white\n"
+			else:
+				color = " black\n"
+			line2 = "band chr"+ str(i+1)+" band01 band01 "+str(inits[i])+" "+str(new_ends[i])+color
+			lines.append(line1)
+			lines.append(line2)
 
+		output_file = output_folder + "_bands.kar"
+		with open(output_file, 'w') as output:
+			output.writelines(lines)
+			print(output_file+" created succesfully.")
+
+
+	return ends, inits, new_ends		
+
+def create_kar_complete(output_folder, k, init, end):
+		
+	lines = []
+	
+	line1 = "chr - chr"+ str(k+1) +" 1 " +str(init)+" "+str(end)+" black\n"
+	line2 = "band chr"+ str(k+1)+" band01 band01 "+str(init)+" "+str(end)+" white\n"
+	lines.append(line1)
+	lines.append(line2)
+
+	output_file = output_folder + "_bands.kar"
 	with open(output_file, 'w') as output:
 		output.writelines(lines)
 		print(output_file+" created succesfully.")
 
 
-	return ends	
+	return
 
 
 def new_loc(array, sizes_x):
@@ -184,10 +123,12 @@ def new_loc(array, sizes_x):
 		init = int(loc_pos[0][1:])
 		end = int(loc_pos[1][:-1])
 		new_arr.append([init+sizes_x[i],end+sizes_x[i]])
+		#new_arr.append([init,end])
 	return new_arr
 	
 def write_lines(locations, output_, chrx, locus, cogs):
-	lines = []		
+	lines = []
+	#print(locations)		
 	for i in range(len(locations)):
 		#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
 		if len(locus) == 0:
@@ -228,7 +169,7 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 	
 
 
-def create_feature(gbk_filename, p_output, n_output, sizes, feat, cogs_dict=None, divided=False):
+def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=False):
 	
 	#chrx = '1'
 	
@@ -239,11 +180,10 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat, cogs_dict=None
 	sizes_n = []
 	names_p = []
 	names_n = []
-	chrx = '1'
 	chrms_p = []
 	chrms_n = []
-	locus_n = []
 	locus_p = []
+	locus_n = []
 	cogs_p = []
 	cogs_n = []
 	
@@ -252,79 +192,6 @@ def create_feature(gbk_filename, p_output, n_output, sizes, feat, cogs_dict=None
 		aux_n = []
 		name = record.name
 		size_sum = np.sum(np.array(sizes[:j]))
-
-		for feature in record.features:
-			if feature.type == feat: # "CDS" or "tRNA"
-				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
-				locus_tag = feature.qualifiers.get("locus_tag")[0]
-				if("join" in str(feature.location)):
-					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?\d+\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
-					location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
-				direction = str(feature.location)[-2:-1]
-				if direction == '+':
-					positives.append(location)
-					if j == 0:
-						aux_p.append(0)
-					else:
-						aux_p.append(size_sum)
-					names_p.append(name)
-					chrms_p.append(chrx)
-					if feature.type == "CDS":
-						locus_p.append(locus_tag)
-						if cogs_dict != None:
-							cogs_p.append(cogs_dict.get(locus_tag))
-				else:
-					negatives.append(location)
-					if j == 0:
-						aux_n.append(0)
-					else:
-						aux_n.append(size_sum)
-					names_n.append(name)
-					chrms_n.append(chrx)
-					if feature.type == "CDS":
-						locus_n.append(locus_tag)
-						if cogs_dict != None:
-							cogs_n.append(cogs_dict.get(locus_tag))
-				
-				
-		sizes_p = sizes_p + aux_p
-		sizes_n = sizes_n + aux_n
-	
-	new_pos = new_loc(positives, sizes_p)
-	new_negs = new_loc(negatives, sizes_n)
-	
-	if divided:
-		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)
-	else:
-		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
-	
-	return
-
-def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, cogs_dict=None, divided=False):
-	
-	#chrx = '1'
-	
-	gbk_file = open(gbk_filename,"r")
-	positives = []
-	negatives = []
-	sizes_p = []
-	sizes_n = []
-	names_p = []
-	names_n = []
-	chrms_p = []
-	chrms_n = []
-	locus_p = []
-	locus_n = []
-	cogs_p = []
-	cogs_n = []
-	
-	for j, record in enumerate(SeqIO.parse(gbk_file, "genbank")):
-		aux_p = []
-		aux_n = []
-		name = record.name
-		size_sum = sizes[j]
 		chrx = str(j+1)
 
 		for feature in record.features:
@@ -334,8 +201,11 @@ def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, cogs_
 				direction = str(feature.location)[-2:-1]
 				locus_tag = feature.qualifiers.get("locus_tag")[0]
 				if direction == '+':
+					if j == 0:
+						aux_p.append(0)
+					else:
+						aux_p.append(size_sum)
 					positives.append(location)
-					aux_p.append(size_sum)
 					names_p.append(name)
 					chrms_p.append(chrx)
 					if feature.type == "CDS":
@@ -343,8 +213,11 @@ def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, cogs_
 						if cogs_dict != None:
 							cogs_p.append(cogs_dict.get(locus_tag))
 				else:
+					if j == 0:
+						aux_n.append(0)
+					else:
+						aux_n.append(size_sum)
 					negatives.append(location)
-					aux_n.append(size_sum)
 					names_n.append(name)
 					chrms_n.append(chrx)
 					if feature.type == "CDS":
@@ -358,6 +231,86 @@ def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, cogs_
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
+	p_output = output + "_" + feat + "_pos.txt"
+	n_output = output + "_" + feat + "_neg.txt"
+	
+	if divided:
+		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
+		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)
+	else:
+		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
+		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
+	
+	return
+	
+	
+
+def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None, divided=False):
+	
+	#chrx = '1'
+	
+	gbk_file = open(gbk_filename,"r")
+	positives = []
+	negatives = []
+	sizes_p = []
+	sizes_n = []
+	names_p = []
+	names_n = []
+	chrms_p = []
+	chrms_n = []
+	locus_p = []
+	locus_n = []
+	cogs_p = []
+	cogs_n = []
+	size_sum = np.sum(np.array(sizes[:j]))
+	
+	for record in SeqIO.parse(gbk_file, "genbank"):
+		aux_p = []
+		aux_n = []
+		name = record.name
+		chrx = str(j+1)
+
+		for feature in record.features:
+			if feature.type == feat: # "CDS" or "tRNA"
+
+				location = str(feature.location)[:-3]
+				direction = str(feature.location)[-2:-1]
+				locus_tag = feature.qualifiers.get("locus_tag")[0]
+				if direction == '+':
+					if j == 0:
+						aux_p.append(0)
+					else:
+						aux_p.append(size_sum)
+					positives.append(location)
+					names_p.append(name)
+					chrms_p.append(chrx)
+					if feature.type == "CDS":
+						locus_p.append(locus_tag)
+						if cogs_dict != None:
+							cogs_p.append(cogs_dict.get(locus_tag))
+				else:
+					if j == 0:
+						aux_n.append(0)
+					else:
+						aux_n.append(size_sum)
+					negatives.append(location)
+					names_n.append(name)
+					chrms_n.append(chrx)
+					if feature.type == "CDS":
+						locus_n.append(locus_tag)
+						if cogs_dict != None:
+							cogs_n.append(cogs_dict.get(locus_tag))
+				
+		sizes_p = sizes_p + aux_p
+		sizes_n = sizes_n + aux_n
+	
+	new_pos = new_loc(positives, sizes_p)
+	new_negs = 	new_loc(negatives, sizes_n)
+	#print(sizes_p)
+	
+	p_output = output + "_" + feat + "_pos.txt"
+	n_output = output + "_" + feat + "_neg.txt"
+	
 	if divided:
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
 		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)
@@ -368,7 +321,7 @@ def create_feature_complete(gbk_filename, p_output, n_output, sizes, feat, cogs_
 	return
 
 
-def get_categories(gbk_file):
+def get_categories(gbk_file, output):
 	
 	
 	# Check if deepnog is installed
@@ -387,13 +340,13 @@ def get_categories(gbk_file):
 		pass
 	faa_name = faa_name.split(".")[0]
 	
-	output_faa = path + "/" + faa_name + ".faa"
+	output_faa = output + ".faa"
 	command1 = "python " + path + "/genbank2faa.py --outputFile " + output_faa + " " + gbk_file
 	
 	try: 
 		print(command1)
 		process = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
-		output, error = process.communicate()
+		output_, error = process.communicate()
 		print()
 		print("GBK file transformed into faa succesfully. File saved as", output_faa)
 	except:
@@ -402,7 +355,7 @@ def get_categories(gbk_file):
 	
 	# Predict from deepnog
 	
-	output_pred = path + "/prediction_deepnog_" + faa_name + ".csv"
+	output_pred = output + "_prediction_deepnog.csv"
 	command2 = "deepnog infer " + output_faa + " --out " + output_pred + " -db cog2020 -t 1"
 	
 	try: 
@@ -411,7 +364,7 @@ def get_categories(gbk_file):
 		print()
 		print(command2)
 		process = subprocess.Popen(command2.split(), stdout=subprocess.PIPE)
-		output, error = process.communicate()
+		output_, error = process.communicate()
 		print()
 		print("Deepnog prediction finished succesfully. Predictions saved as", output_pred)
 		print()
@@ -431,19 +384,16 @@ def get_categories(gbk_file):
 	cogs_dict = merge_df.set_index('id')['category'].to_dict()
 	
 	return cogs_dict
-	
-		
-if __name__ == '__main__':
-	
-	gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, com_gen, get_cats, divided = get_args()[:]
+
+def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, sizes):
 	
 	flag = True
 	
-	if cds_pos == "cds_pos" and cds_neg == "cds_neg" and get_cats == True:
+	if cds == False and get_cats == True:
 		print("Error: Categories can only be predicted for CDS. Please enter output file paths for both CDS.") 
 		flag = False
 	elif get_cats == True:
-		cogs_dict = get_categories(gbk_file)
+		cogs_dict = get_categories(gbk_file, output)
 	else:
 		cogs_dict = None
 		
@@ -452,38 +402,122 @@ if __name__ == '__main__':
 		flag = False
 	
 	if flag == True:
-		if cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
-			sizes = create_kar(gbk_file, output)
-		elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
-			sizes = create_kar_plus(gbk_file, output)
+		
+		create_kar_complete(output, k, init, end)
+			
+		if cds == False and trna == True:
+			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
+			
+		elif cds == True and trna == False and divided == False:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)
+			
+		elif cds == True and trna == False and divided == True:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
+		
+		elif cds == True and trna == True and divided == True:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
+			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
+		
+		elif cds == True and trna == True and divided == False:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)
+			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
+			
 
-		elif (cds_pos == "cds_pos" and cds_neg != "cds_neg") or (cds_neg == "cds_neg" and cds_pos != "cds_pos"):
-			print("Error: Please enter an output file path for both CDS positives and CDS negatives.") 
-		elif (trna_pos == "trna_pos" and trna_neg != "trna_neg") or (trna_neg == "trna_neg" and trna_pos != "trna_pos"):
-			print("Error: Please enter an output file path for both tRNA positives and tRNA negatives.") 
+def base(gbk_file, output, cds, trna, get_cats, divided, complete):
+	
+	flag = True
+	
+	if cds == False and get_cats == True:
+		print("Error: Categories can only be predicted for CDS. Please enter output file paths for both CDS.") 
+		flag = False
+	elif get_cats == True:
+		cogs_dict = get_categories(gbk_file, output)
+	else:
+		cogs_dict = None
+		
+	if divided == True and get_cats == False:
+		print("Error: Division of categories is part of the categories prediction process. Include --get_categories in your command.") 
+		flag = False
+	
+	if flag == True:
+		
+		sizes, _, _ = create_kar(gbk_file, output, complete)
 			
-		elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
-			sizes = create_kar_plus(gbk_file, output)
-			create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-		elif cds_pos == "cds_pos" and cds_neg == "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == False:
-			sizes = create_kar(gbk_file, output)
-			create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+		if cds == False and trna == True:
+			create_feature(gbk_file, output, sizes, "tRNA")
 			
-		elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == True:
-			sizes = create_kar_plus(gbk_file, output)
-			create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS", cogs_dict, divided)
-		elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos == "trna_pos" and trna_neg == "trna_neg" and com_gen == False:
-			sizes = create_kar(gbk_file, output)
-			create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS", cogs_dict, divided)
+		elif cds == True and trna == False and divided == False:
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)	
+		
+		elif cds == True and trna == False and divided == True:
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
 			
-		elif cds_pos != "cds_pos" and cds_neg != "cds_neg" and trna_pos != "trna_pos" and trna_neg != "trna_neg" and com_gen == True:
-			sizes = create_kar_plus(gbk_file, output)
-			create_feature_complete(gbk_file, cds_pos, cds_neg, sizes, "CDS", cogs_dict, divided)
-			create_feature_complete(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
-		else:	
-			sizes = create_kar(gbk_file, output)
-			create_feature(gbk_file, cds_pos, cds_neg, sizes, "CDS", cogs_dict, divided)
-			create_feature(gbk_file, trna_pos, trna_neg, sizes, "tRNA")
+		elif cds == True and trna == True and divided == False:
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)
+			create_feature(gbk_file, output, sizes, "tRNA")
+		
+		elif cds == True and trna == True and divided == True:
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
+			create_feature(gbk_file, output, sizes, "tRNA")
+
+
+
+if __name__ == '__main__':
+	
+	#gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, get_cats, divided, complete = get_args()[:]
+	gbk_file, output, cds, trna, get_cats, divided, complete = get_args()[:]
+
+	
+	try:
+		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]
+	except:
+		gbk_name = gbk_file.split('.g')[-2]
+	
+	if output == "":
+		output = gbk_name + "/"
+	elif output[-1] != "/":
+		output = output + "/"
+	
+	if not os.path.isdir(output):
+		os.mkdir(output)
+	
+	if complete == True:
+		
+		files_gbk = []
+		gbk = open(gbk_file,"r")
+		
+		try:
+			gbk_name = gbk_file.split("/")[-1].split(".")[-2]
+		except:
+			gbk_name = gbk_file.split(".")[-2]	
+			
+		sizes, inits, ends = create_kar(gbk_file, output, complete)
+
+		for k, rec in enumerate(SeqIO.parse(gbk, "genbank")):
+			
+			output_ = output + 'contig_' + str(k+1) + "/"
+			
+			if not os.path.isdir(output_):
+				os.mkdir(output_)
+			
+			filename = output_ + gbk_name + '_' + rec.id + '.gbk'
+			files_gbk.append(filename)
+			SeqIO.write([rec], open(filename, "w"), "genbank")
+			
+			output_ = output_ + gbk_name + '_' + rec.id
+			
+			base_complete(filename, output_, cds, trna, get_cats, divided, k, inits[k], ends[k], sizes)
+	
+	else:
+		
+		output_ = output + gbk_name
+		base(gbk_file, output_, cds, trna, get_cats, divided, complete)
+
+			
+	
 
 	
 	
+### to separate
+#for rec in SeqIO.parse(sys.stdin, "genbank"):
+#   SeqIO.write([rec], open(rec.id + ".gbk", "w"), "genbank")

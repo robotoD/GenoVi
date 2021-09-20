@@ -1,7 +1,7 @@
 import argparse as ap
 def create_conf(maxmins):
     file = open("circos.conf", "w")
-    file.write('''karyotype = temp/output.kar
+    file.write('''karyotype = temp/_bands.kar
 chromosomes_units = 100
 chromosomes_display_default = yes
 

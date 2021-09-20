@@ -2,9 +2,9 @@
 # Input: List of dictionaries, with file name and image desired size (relative)
 # Example: [{"fileName": "img1.svg", "size": 30000},
 #           {"fileName": "img2.svg", "size": 10000}]
-def mergeImages(images, outFile = "merged.svg"):
+def mergeImages(images, outFile = "merged.svg", align = "center"):
     totalWidth = 0
-    images.sort(key=lambda x:x["size"], reverse = True)
+    #images.sort(key=lambda x:x["size"], reverse = True)
     for image in images:
         totalWidth += image["size"]
     
@@ -19,7 +19,10 @@ def mergeImages(images, outFile = "merged.svg"):
         for line in inFile:
             if("<svg " in line):
                 break
-        file.write('<g transform="translate({},0) scale({})\n">'.format(currentX, float(image["size"])/totalWidth))
+        if align == "center":
+            file.write('<g transform="translate({},{}) scale({})\n">'.format(currentX, 3000 * (totalWidth - image["size"]) / (2 * totalWidth), float(image["size"])/totalWidth))
+        else: # if align == "top"
+            file.write('<g transform="translate({},{}) scale({})\n">'.format(currentX, 0, float(image["size"])/totalWidth))
         for line in inFile:
             if("</svg>" in line):
                 break

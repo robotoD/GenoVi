@@ -459,6 +459,7 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete):
 		elif cds == True and trna == True and divided == True:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
 			create_feature(gbk_file, output, sizes, "tRNA")
+	return sizes
 
 
 

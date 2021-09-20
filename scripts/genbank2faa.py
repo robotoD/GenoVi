@@ -15,7 +15,7 @@ def genbankToFaa(input, output):
     if input_handle.readline()[33] != " ":
         fileContent = re.sub("LOCUS       .*",
                                 "LOCUS       " + input[0:20] + "  308615 bp    DNA     linear       10-JAN-2000",
-                                input_handle.read())
+                                input_handle.read()) # Just a random text
         input_handle.close()
         input_handle = open(input, "w")
         input_handle.write(fileContent)

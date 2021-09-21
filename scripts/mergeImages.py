@@ -20,9 +20,12 @@ def mergeImages(images, outFile = "merged.svg", align = "center"):
             if("<svg " in line):
                 break
         if align == "center":
-            file.write('<g transform="translate({},{}) scale({})\n">'.format(currentX, 3000 * (totalWidth - image["size"]) / (2 * totalWidth), float(image["size"])/totalWidth))
+            y= 3000 * (totalWidth - image["size"]) / (2 * totalWidth)
+        elif align == "bottom":
+            y= 3000 * (totalWidth - image["size"]) / (totalWidth)
         else: # if align == "top"
-            file.write('<g transform="translate({},{}) scale({})\n">'.format(currentX, 0, float(image["size"])/totalWidth))
+            y= 0
+        file.write('<g transform="translate({},{}) scale({})\n">'.format(currentX, y, float(image["size"])/totalWidth))
         for line in inFile:
             if("</svg>" in line):
                 break

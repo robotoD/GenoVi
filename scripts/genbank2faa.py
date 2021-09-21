@@ -3,6 +3,41 @@ from Bio import SeqIO
 import argparse
 import re
 
+def modify_locus(input):
+    input_handle  = open(input, "r")
+    line = input_handle.readline()
+    locus = ""
+    locuses = []
+    old = []
+    while line:  
+        if "LOCUS" in line:
+            print(line)
+            locus = line[:-1]
+            old.append(locus)
+            date = input_handle.readline()
+            locus = locus + "   " + date
+        elif "     source" in line:
+            size = line.split("          ")[-1].split("..")[-1][:-1]
+            if size in locus:
+                aux = locus.split(size + " ")
+                new_locus = aux[0] + "  " + size + " " + aux[1]
+                locuses.append(new_locus)
+        line = input_handle.readline()
+    input_handle.close()
+    
+    input_modify  = open(input, "r")
+    for i in range(len(locuses)):
+        if i == 0:
+            fileContent = re.sub(old[i], locuses[i], input_modify.read())
+        else:
+            fileContent = re.sub(old[i], locuses[i], fileContent)
+
+    input_modify.close()
+    input_modify = open(input, "w")
+    input_modify.write(fileContent)
+    input_modify.close()
+    input_modify = open(input, "r")
+        
     
 def genbankToFaa(input, output):
     try:
@@ -11,20 +46,14 @@ def genbankToFaa(input, output):
         input = input + ".gbk"
         input_handle  = open(input, "r")
     output_handle = open(output, "w")
-    
-    if input_handle.readline()[33] != " ":
-        fileContent = re.sub("LOCUS       .*",
-                                "LOCUS       " + input[0:20] + "  308615 bp    DNA     linear       10-JAN-2000",
-                                input_handle.read()) # Just a random text
-        input_handle.close()
-        input_handle = open(input, "w")
-        input_handle.write(fileContent)
-        input_handle.close()
-        input_handle = open(input, "r")
-    else:
-        input_handle.seek(0)
+
+    line = input_handle.readline()
+    input_handle.close()
+    if not line.split(' bp ')[-2].split(' ')[-1].isdecimal():
+        modify_locus(input)
         
-    for seq_record in SeqIO.parse(input_handle, "genbank") :
+      
+    for seq_record in SeqIO.parse(open(input,"r"), "genbank") :
         print("Dealing with GenBank record %s" % seq_record.id)
         for seq_feature in seq_record.features :
             if seq_feature.type=="CDS":

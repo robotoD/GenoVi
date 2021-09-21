@@ -16,7 +16,7 @@ import pandas as pd
 
 def get_args():
     parser = ap.ArgumentParser()
-    parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
+    parser.add_argument("input_file", help="Genbank file path")
     
     parser.add_argument("-o", "--output_folder", type=str, help="Output folder path. By default it will take the name of the gbk file", required = False, default="")
     
@@ -145,6 +145,8 @@ def write_lines(locations, output_, chrx, locus, cogs):
 		
 def write_cog_files(locations, output, chrx, locus, cogs):
 	
+	if len(cogs) == 0:
+		return
 	cogs_df = pd.DataFrame.from_dict(cogs)
 	cogs_df.columns = ["category"]
 	cogs_df["location"] = locations
@@ -313,7 +315,8 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 	
 	if divided:
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)
+		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)		
+			 
 	else:
 		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
 		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
@@ -355,6 +358,7 @@ def get_categories(gbk_file, output):
 	
 	# Predict from deepnog
 	
+	print("output", output)
 	output_pred = output + "_prediction_deepnog.csv"
 	command2 = "deepnog infer " + output_faa + " --out " + output_pred + " -db cog2020 -t 1"
 	
@@ -459,7 +463,6 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete):
 		elif cds == True and trna == True and divided == True:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
 			create_feature(gbk_file, output, sizes, "tRNA")
-	return sizes
 
 
 
@@ -467,7 +470,6 @@ if __name__ == '__main__':
 	
 	#gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, get_cats, divided, complete = get_args()[:]
 	gbk_file, output, cds, trna, get_cats, divided, complete = get_args()[:]
-
 	
 	try:
 		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]
@@ -501,11 +503,13 @@ if __name__ == '__main__':
 			if not os.path.isdir(output_):
 				os.mkdir(output_)
 			
-			filename = output_ + gbk_name + '_' + rec.id + '.gbk'
+			
+			#filename = output_ + gbk_name + '_' + rec.id + '.gbk'
+			filename = output_ + gbk_name + '_' + str(k+1) + '.gbk'
 			files_gbk.append(filename)
 			SeqIO.write([rec], open(filename, "w"), "genbank")
 			
-			output_ = output_ + gbk_name + '_' + rec.id
+			output_ = output_ + gbk_name + '_' + str(k+1)
 			
 			base_complete(filename, output_, cds, trna, get_cats, divided, k, inits[k], ends[k], sizes)
 	

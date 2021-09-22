@@ -2,36 +2,6 @@
 
 Genome visualizer software project
 
-## Execution:
-
-### Create raw files
-
-```python
-python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path>
-```
-Example with testing data: 
-```python
-python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar
-``` 
-### Create CDS files
-
-```python
-python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path> -cp <output_positive_ODS_file> -cn <output_negative_ODS_file>
-```
-Example with testing data: 
-```python
-python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -cp cds_positive.ods -cn cds_negative.ods
-```
-
-### Create tRNA files
-
-```python
-python Raw_data/create_raw.py -i <input_genbank_file_path> -o <output_kar_file_path> -tp <output_positive_tRNA_file> -tn <output_negative_tRNA_file>
-```
-Example with testing data: 
-```python
-python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp trna_positive.txt -tn trna_negative.ods
-```
 
 ## Meetings journal
 

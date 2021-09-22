@@ -29,6 +29,7 @@ def get_args():
     #trna_args.add_argument("-tp", "--trna_pos", type=str, help="Positive tRNA output file", required = False, default = "trna_pos")
     #trna_args.add_argument("-tn", "--trna_neg", type=str, help="Negative tRNA output file", required = False, default = "trna_neg")
     parser.add_argument("-trna", "--trna", action='store_true', help="tRNA files (positive and negative) will be created", required = False)
+    parser.add_argument("-rrna", "--rrna", action='store_true', help="rRNA files (positive and negative) will be created", required = False)    
         
     pred_args = parser.add_argument_group('Categories prediction arguments')
     pred_args.add_argument("-gc", "--get_categories", action='store_true', help="Indicating if CDS categories must be predicted")
@@ -38,7 +39,7 @@ def get_args():
     
     args = parser.parse_args()
         
-    return args.input_file, args.output_folder, args.cds, args.trna, args.get_categories, args.divided, args.complete_genome
+    return args.input_file, args.output_folder, args.cds, args.trna, args.rrna, args.get_categories, args.divided, args.complete_genome
 
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
@@ -409,22 +410,16 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 		
 		create_kar_complete(output, k, init, end)
 			
-		if cds == False and trna == True:
+		if trna == True:
 			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
+		if rrna == True:
+			create_feature_complete(gbk_file, output, sizes, k, "rRNA")
 			
-		elif cds == True and trna == False and divided == False:
-			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)
-			
-		elif cds == True and trna == False and divided == True:
+		if cds == True and divided == False:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)	
+		elif cds == True and divided == True:
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
-		
-		elif cds == True and trna == True and divided == True:
-			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
-			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
-		
-		elif cds == True and trna == True and divided == False:
-			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)
-			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
+
 			
 
 def base(gbk_file, output, cds, trna, get_cats, divided, complete):
@@ -447,29 +442,23 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete):
 		
 		sizes, _, _ = create_kar(gbk_file, output, complete)
 			
-		if cds == False and trna == True:
+		if trna == True:
 			create_feature(gbk_file, output, sizes, "tRNA")
+		if rrna == True:
+			create_feature(gbk_file, output, sizes, "rRNA")
 			
-		elif cds == True and trna == False and divided == False:
+		if cds == True and divided == False:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)	
 		
-		elif cds == True and trna == False and divided == True:
+		elif cds == True and divided == True:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
-			
-		elif cds == True and trna == True and divided == False:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)
-			create_feature(gbk_file, output, sizes, "tRNA")
-		
-		elif cds == True and trna == True and divided == True:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
-			create_feature(gbk_file, output, sizes, "tRNA")
 
 
 
 if __name__ == '__main__':
 	
 	#gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, get_cats, divided, complete = get_args()[:]
-	gbk_file, output, cds, trna, get_cats, divided, complete = get_args()[:]
+	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = get_args()[:]
 	
 	try:
 		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]

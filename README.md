@@ -181,6 +181,6 @@ python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp 
 * Vicente:
     1. Incorporar el pipeline de deepnog en el genomeVisualizer.py para realizar todo inmediatamente
 * Andrés: 
-    1. Editar el archivo highlight.conf para incorporar los archivos de COG.
+    1. Editar el archivo highlight.conf para incorporar: radius length de cada feature (tRNA, rRNA, CDS_pos, CDS_neg, COGs_pos, COGs_neg), pathfile de cada archivo y colores a utilizar.
 * Roberto:
     1. Identificar un valor de corte para la integracion de DeepNOG (hay identificacion de proteinas con un valor de confidence muy bajo)

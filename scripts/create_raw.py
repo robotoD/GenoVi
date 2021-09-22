@@ -414,14 +414,12 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 			create_feature_complete(gbk_file, output, sizes, k, "tRNA")
 		if rrna == True:
 			create_feature_complete(gbk_file, output, sizes, k, "rRNA")
-			
-		if cds == True and divided == False:
-			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)	
-		elif cds == True and divided == True:
+		if cds == True:
+			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict)
+		if divided == True:
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 			
-
 def base(gbk_file, output, cds, trna, get_cats, divided, complete):
 	
 	flag = True
@@ -446,11 +444,9 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete):
 			create_feature(gbk_file, output, sizes, "tRNA")
 		if rrna == True:
 			create_feature(gbk_file, output, sizes, "rRNA")
-			
-		if cds == True and divided == False:
+		if cds == True:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)	
-		
-		elif cds == True and divided == True:
+		if divided == True:
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
 
 
@@ -487,7 +483,7 @@ if __name__ == '__main__':
 
 		for k, rec in enumerate(SeqIO.parse(gbk, "genbank")):
 			
-			output_ = output + 'contig_' + str(k+1) + "/"
+			output_ = output + 'replicon_' + str(k+1) + "/"
 			
 			if not os.path.isdir(output_):
 				os.mkdir(output_)

@@ -162,3 +162,25 @@ python Raw_data/create_raw.py -i input_test/PROKKA_01232018.gbk -o test.kar -tp 
     1. Agregar en el archivo highlight.conf la posicion de los COGs categories
 * Roberto:
     1. Identificar los RGB para cada uno de los COGs anotados por DeepNOG (colores por macrocategorias)
+
+### Reunión 21/09
+* Andrés tuvo problemas con tu PC, sufrio mucho. No pudo utilizar los scripts, en general no identificaba el 1er contigo. Era un problema con algunos gbk que vienen de la anotacion de prokka, donde el ID de cada contigo puede variar y genera conflicto.
+* Vicente editó el genomeVisualizer.py para integrar todas las partes a excepcion del análisis de deepnog. Funciona y genera la visualizacion automatica utilizando circos. Esto sin incorporar el comando (-gc)
+* Andrea modifico el create_kar.py, ahora realiza de forma correcta el archivo ####bands.kar y los cds_pos.txt y cds_neg.txt (esto al usarlo sin el comando -gc).
+* Roberto realizo una escala de color en RGB para tener colores unicos para los COGs a graficar, fueron separados en clases mayores las cuales comparten colores similares.
+
+
+#### Tareas
+* Tod@s: Revisar los colores para ver modificaciones en la escala de colores de COGs.
+* Andrea: 
+    * Editar el create_raw.py para incluir las modificaciones: 
+    1. Modificar la identificacion del nombre de cada contig (ID_contig) para no tener problemas con algunos archivos (especialmente PROKKA) 
+    2. Revisar que el create_kar.py para que no elimine la primera linea de cada gbk luego de correr.
+    3. Crear los archivos cds_pos.txt y cds_neg.txt al usarlo utilizando el comando -gc --get_categories
+    4. Integrar la creacion de los archivos rrna (features).
+* Vicente:
+    1. Incorporar el pipeline de deepnog en el genomeVisualizer.py para realizar todo inmediatamente
+* Andrés: 
+    1. Editar el archivo highlight.conf para incorporar los archivos de COG.
+* Roberto:
+    1. Identificar un valor de corte para la integracion de DeepNOG (hay identificacion de proteinas con un valor de confidence muy bajo)

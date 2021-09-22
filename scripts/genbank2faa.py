@@ -11,7 +11,6 @@ def modify_locus(input):
     old = []
     while line:  
         if "LOCUS" in line:
-            print(line)
             locus = line[:-1]
             old.append(locus)
             date = input_handle.readline()

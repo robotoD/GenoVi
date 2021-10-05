@@ -13,6 +13,7 @@ import subprocess
 import os
 from shutil import which
 import pandas as pd
+import scripts.genbank2faa as genbank2faa
 
 def get_args():
     parser = ap.ArgumentParser()
@@ -135,9 +136,9 @@ def write_lines(locations, output_, chrx, locus, cogs):
 		if len(locus) == 0:
 			line = ["chr"+chrx[i]] + list(map(str, locations[i]))
 		elif len(cogs) == 0:
-			line = ["chr"+chrx[i]] + list(map(str, locations[i])) + [locus[i]]
+			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]]
 		else:
-			line = ["chr"+chrx[i]] + list(map(str, locations[i])) + [locus[i]] + [cogs[i]]
+			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]] + [cogs[i]]
 		lines.append(line)
 	with open(output_, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -162,7 +163,7 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 		subset = cogs_df.loc[cogs_df["main"] == c]
 		subset = subset.sort_values(["chr", "loc_init"], ascending=[True, True])
 		for index, row in subset.iterrows():
-			line = ["chr"+row["chr"]] + list(map(str, row["location"])) + [row["locus"]] + [row["category"]]
+			line = ["chr"+row["chr"]] + list(map(str, row["location"]))
 			lines.append(line)
 		filename = output.split(".")[-2]+"_"+c+"."+output.split(".")[-1]
 		with open(filename, 'w', newline='') as csvfile:
@@ -244,7 +245,7 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
 		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
 	
-	return
+	return(cogs_p, cogs_n)
 	
 	
 
@@ -345,12 +346,13 @@ def get_categories(gbk_file, output):
 	faa_name = faa_name.split(".")[0]
 	
 	output_faa = output + ".faa"
-	command1 = "python " + path + "/genbank2faa.py --outputFile " + output_faa + " " + gbk_file
+	# command1 = "python " + path + "/genbank2faa.py --outputFile " + output_faa + " " + gbk_file
 	
 	try: 
-		print(command1)
-		process = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
-		output_, error = process.communicate()
+		#print(command1)
+		genbank2faa.genbankToFaa(gbk_file, output_faa)
+		#process = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
+		#output_, error = process.communicate()
 		print()
 		print("GBK file transformed into faa succesfully. File saved as", output_faa)
 	except:
@@ -380,9 +382,11 @@ def get_categories(gbk_file, output):
 	# Cross files 
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
-	tab_file = path + "/dataset/cog-20.def.tab"
+	tab_file = "./dataset/cog-20.def.tab"
 	cogs_df.columns = ['id', 'cog']
-	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1])
+	print(tab_file)
+	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why deepnog generates different outputs if it's running on Windows. (Maybe it works on Linux too?)
+	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form
 	tab_df.columns = ['cog', 'category']
 	merge_df = pd.merge(cogs_df, tab_df, on=["cog"])
 	
@@ -420,35 +424,38 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 			
-def base(gbk_file, output, cds, trna, get_cats, divided, complete):
+def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False):
 	
 	flag = True
+
+	cogs_p = set()
+	cogs_n = set()
 	
-	if cds == False and get_cats == True:
+	if not cds and get_cats:
 		print("Error: Categories can only be predicted for CDS. Please enter output file paths for both CDS.") 
 		flag = False
-	elif get_cats == True:
+	elif get_cats:
 		cogs_dict = get_categories(gbk_file, output)
 	else:
 		cogs_dict = None
 		
-	if divided == True and get_cats == False:
+	if divided and not get_cats:
 		print("Error: Division of categories is part of the categories prediction process. Include --get_categories in your command.") 
 		flag = False
 	
-	if flag == True:
+	if flag:
 		
 		sizes, _, _ = create_kar(gbk_file, output, complete)
 			
-		if trna == True:
+		if trna:
 			create_feature(gbk_file, output, sizes, "tRNA")
-		if rrna == True:
+		if rrna:
 			create_feature(gbk_file, output, sizes, "rRNA")
-		if cds == True:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)	
-		if divided == True:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
-
+		if cds:
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)
+		if divided:
+			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
+	return ((sizes, cogs_p, cogs_n))
 
 
 if __name__ == '__main__':
@@ -501,7 +508,7 @@ if __name__ == '__main__':
 	else:
 		
 		output_ = output + gbk_name
-		base(gbk_file, output_, cds, trna, get_cats, divided, complete)
+		base(gbk_file, output_, cds, trna, get_cats, divided, complete, rrna)
 
 			
 	

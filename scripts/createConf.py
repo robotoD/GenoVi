@@ -5,7 +5,11 @@ def create_conf(maxmins,
                 GC_content_color = "23, 0, 115",
                 GC_skew_color = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))',
                 CDS_positive_color = '180, 205, 222',
-                CDS_negative_color = '53, 176, 42'):
+                CDS_negative_color = '53, 176, 42',
+                tRNA_color = '150, 5, 50',
+                cogs = True,
+                cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"},
+                cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}):
     file = open("circos.conf", "w")
     file.write('''karyotype = temp/_bands.kar
 chromosomes_units = 100
@@ -54,8 +58,8 @@ color      = black
 fill_under = yes
 thickness  = 1
 file = temp/GC_GC_content.wig
-r0   = 0.67r
-r1   = 0.75r
+r0   = 0.62r
+r1   = 0.7r
 min  = {GC_min}
 max  = {GC_max}
 <rules>
@@ -75,7 +79,7 @@ fill_under = no
 thickness  = 0.5
 file = temp/GC_GC_skew.wig
 r0   = 0.3r
-r1   = 0.65r
+r1   = 0.6r
 min  = {skew_min}
 max  = {skew_max}
 <rules>
@@ -117,8 +121,8 @@ r0               = 1r
 init_counter = highlight:1
 file = temp/_CDS_pos.txt
 fill_color = {CDS_positive}
-r1 = 0.91r
-r0 = 0.96r
+r1 = 0.85r
+r0 = 0.89r
 </highlight>
 
 #Negative
@@ -126,13 +130,87 @@ r0 = 0.96r
 
 file = temp/_CDS_neg.txt
 fill_color = {CDS_negative}
-r1 = 0.84r
+r1 = 0.8r
+r0 = 0.84r
+</highlight>
+
+<highlight>
+
+#Positive band tRNAs
+file = temp/_tRNA_pos.txt
+fill_color = {tRNA_positive}
+r1 = 0.85r
 r0 = 0.89r
 </highlight>
 
-</highlights>
+#Negative
+<highlight>
+
+file = temp/_tRNA_neg.txt
+fill_color = {tRNA_negative}
+r1 = 0.8r
+r0 = 0.84r
+</highlight>
+
 '''.format(CDS_positive = CDS_positive_color,
-           CDS_negative = CDS_negative_color))
+           CDS_negative = CDS_negative_color,
+           tRNA_positive = tRNA_color,
+           tRNA_negative = tRNA_color))
+    if cogs:
+        for COG in [{"name": "D", "color": "99, 123, 183"},
+                    {"name": "M", "color": "38, 89, 168"},
+                    {"name": "N", "color": "100, 151, 176"},
+                    {"name": "O", "color": "32, 132, 174"},
+                    {"name": "T", "color": "66, 169, 179"},
+                    {"name": "U", "color": "18, 105, 116"},
+                    {"name": "V", "color": "97, 195, 166"},
+                    {"name": "W", "color": "37, 151, 117"},
+                    {"name": "Y", "color": "70, 185, 109"},
+                    {"name": "Z", "color": "21, 121, 60"},
+
+                    {"name": "A", "color": "231, 82, 81"},
+                    {"name": "B", "color": "208, 36, 41"},
+                    {"name": "J", "color": "166, 96, 167"},
+                    {"name": "K", "color": "157, 63, 151"},
+                    {"name": "L", "color": "133, 116, 181"},
+                    {"name": "X", "color": "79, 72, 158"},
+                    
+                    {"name": "C", "color": "170, 211, 130"},
+                    {"name": "E", "color": "125, 176, 64"},
+                    {"name": "F", "color": "178, 179, 109"},
+                    {"name": "G", "color": "143, 138, 47"},
+                    {"name": "H", "color": "235, 188, 134"},
+                    {"name": "I", "color": "175, 126, 53"},
+                    {"name": "P", "color": "219, 136, 86"},
+                    {"name": "Q", "color": "196, 100, 38"},
+                    
+                    {"name": "R", "color": "98, 98, 98"},
+                    {"name": "S", "color": "144, 144, 144"},
+                    # {"name": "Unclassified", "color": "234, 234, 234"},
+                    ]:
+            if COG["name"] in cogs_p:
+                file.write('''
+#positive {name}
+<highlight>
+
+file = temp/_CDS_pos_{name}.txt
+fill_color = {color}
+r1 = 0.9r
+r0 = 0.94r
+</highlight>
+'''.format(name = COG["name"], color = COG["color"]))
+            if COG["name"] in cogs_n:
+                file.write('''
+#negative {name}
+<highlight>
+
+file = temp/_CDS_neg_{name}.txt
+fill_color = {color}
+r1 = 0.75r
+r0 = 0.79r
+</highlight>
+'''.format(name = COG["name"], color = COG["color"]))
+    file.write("</highlights>")
     file.close()
 
     file = open("conf/colors_fonts_patterns.conf", "w")

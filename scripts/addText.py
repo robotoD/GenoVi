@@ -31,10 +31,40 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
             if text != "":
                 destiny.write(textElement)
             if legend:
-                COGs = ["1- COG", "A- COG", "A- COG", "A- COG", "5- COG", "A- COG", "A- COG", "A- COG", "9- COG",
-                "10- COG", "A- COG", "A- COG", "A- COG", "A- COG", "15- COG", "16- COG", "17- COG", "18- COG", "19- COG", "20- COG"]
-                colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#FFAA00", "#FF00AA", "#FFAAAA", "#AAFF00",
-                "#AA00FF", "#AAFFAA", "#00FFAA", "#AA00FF", "#00AAFF", "#AAAAFF", "#AAAAAA", "#AA0000", "#00AA00", "#0000AA"]
+                COGs = ["[D] Cell cycle control, adivision, chromosome partitioning",
+                "[M] Cell wall/membrane/envelope biogenesis",
+                "[N] Cell motility",
+                "[O] Post translational mmodification, protein turnover, chaperones",
+                "[T] Signal transduction mechanism",
+                "[U] Intracellular trafficking, secretion and vesicular transport",
+                "[V] Defense mechanism",
+                "[W] Extracellular structures",
+                "[Y] Nuclear structure",
+                "[Z] Cytoskeleton",
+                
+                "[A] RNA processing and modification",
+                "[B] Chromatin structure and dynamics",
+                "[J] Translation, ribosomal structure and biogenesis",
+                "[K] Transcription",
+                "[L] Replication, recombination and repair",
+                "[X] Mobilome: prophages, transposons",
+                
+                "[C] Energy production and conversion",
+                "[E] Amino acid transport and metabolism",
+                "[F] Nucleotide transport and metabolism",
+                "[G] Carbohydrate transport and metabolism",
+                "[H] Coenzyme transport and metabolism",
+                "[I] Lipid transport and metabolism",
+                "[P] Inorganic ion transport and metabolism",
+                "[Q] Secondary metabolities biosynthesis, transport and metabolism",
+                
+                "[R] General function prediction only",
+                "[S] Function unknown",
+                "Unclassified"]
+                colors = ["#697BB7", "#304E9D", "#6A9AB5", "#1D82B0", "#4CA9B5", "#1C6875", "#6DBFA4", "#1A936F", "#4EB160", "#1C7633",
+                "#E34949", "#CD1B1B", "#AD5B9F", "#A3378C", "#8F76B4", "#533D91",
+                "#B5D27B", "#83AD29", "#BCB868", "#988F1C", "#EDC28A", "#B7822A", "#DD8950", "#C65F17",
+                "#696969", "#999999", "EAEAEA"]
                 legendElement = '<g>'
                 index = 0
                 for i in range(len(COGs)):

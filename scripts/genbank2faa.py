@@ -1,4 +1,3 @@
-from Bio import GenBank
 from Bio import SeqIO
 import argparse
 import re

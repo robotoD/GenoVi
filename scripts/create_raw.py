@@ -382,10 +382,10 @@ def get_categories(gbk_file, output):
 	# Cross files 
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
-	tab_file = "./dataset/cog-20.def.tab"
+	tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
 	cogs_df.columns = ['id', 'cog']
 	print(tab_file)
-	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why deepnog generates different outputs if it's running on Windows. (Maybe it works on Linux too?)
+	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form
 	tab_df.columns = ['cog', 'category']
 	merge_df = pd.merge(cogs_df, tab_df, on=["cog"])

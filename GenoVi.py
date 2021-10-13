@@ -15,7 +15,7 @@ def visualizeGenome(gbk_file, output = "circos",
                     GC_content = "23, 0, 115", GC_skew ='eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))', tRNA = '150, 5, 50', CDS_positive = '180, 205, 222', CDS_negative = '53, 176, 42'):
     if not os.path.exists("temp"):
         os.mkdir("temp")
-    legend = legend and not cogs
+    legend = legend and cogs
     if separate:
         file = open(gbk_file)
         contigs = file.read().split("\n//\n")
@@ -36,32 +36,39 @@ def visualizeGenome(gbk_file, output = "circos",
             gbk2fna.gbkToFna(file, "temp/gbk_converted.fna")
             maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC")
             createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, cogs, cogs_p, cogs_n)
-    
-            os.system("circos circos.conf")
-            os.system("circos -debug_group _all")
+            
+            os.system("circos circos.conf >/dev/null 2>&1")
+            os.system("circos -debug_group _all >/dev/null 2>&1")
             os.rename("circos.svg", str(i) + ".svg")
             os.rename("circos.png", str(i) + ".png")
+            if cogs:
+                os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
             os.remove(file)
             i += 1
         merge.mergeImages(images, outFile = "circos.svg", align = circles_alignment)
+        if legend or title != "":
+            legendPosition = "top-right" if circles_alignment == "bottom" else "bottom-right"
+            addText.addText(title, position = titlePos, inFile = "circos.svg", italic = italic, legend = legend, legendPosition = legendPosition)
+            os.remove("circos.svg")
+            os.rename("titled_circos.svg", "circos.svg")
     else:
         sizes, cogs_p, cogs_n = create_raw.base(gbk_file, "temp/", True, True, cogs, cogs, False)
         
-        cogs_p = set(map(lambda x : x[0], cogs_p))
-        cogs_n = set(map(lambda x : x[0], cogs_n))
+        cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
+        cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
         gbk2fna.gbkToFna(gbk_file, "temp/gbk_converted.fna")
         maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC")
         createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, cogs, cogs_p=cogs_p, cogs_n=cogs_n)
 
-        os.system("circos circos.conf")
-        os.system("circos -debug_group _all")
+        os.system("circos circos.conf >/dev/null 2>&1")
+        os.system("circos -debug_group _all >/dev/null 2>&1")
         if legend or title != "":
-            addText.addText(title, position = titlePos, inFile = "circos.svg", italic = italic)
+            addText.addText(title, position = titlePos, inFile = "circos.svg", italic = italic, legend = legend, legendPosition = "bottom-right")
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
-        os.rename("circos.png", output + ".png")
     try:
+        print("Converting to png...")
         from cairosvg import svg2png
         file = open("circos.svg")
         svg2png(bytestring = file.read(), write_to = output + ".png")
@@ -90,10 +97,10 @@ def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
     parser.add_argument("-o", "--output_file", type=str, help="Output image file path. Default: circos", default = "circos")
-    parser.add_argument("-c", "--cogs_unclassified", action='store_false', help="Do not clasify each coding sequence and draw them by color.", required = False)
+    parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not clasify each coding sequence and draw them by color.", required = False)
     parser.add_argument("-l", "--legend_not_included", action='store_false', help="Do not include color explanation.", required = False)
-    parser.add_argument("-s", "--separate_circles", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
-    parser.add_argument("-a", "--circles_alignment", type=str, choices=["center", "top", "bottom"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top bottom", default = "center")
+    parser.add_argument("-c", "-s", "--separate_circles", "--complete_genome", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
+    parser.add_argument("-a", "--circles_alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below)", default = "auto")
     parser.add_argument("-k", "--keep_temporal_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     title_group = parser.add_argument_group("title")
     title_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
@@ -101,7 +108,7 @@ def get_args():
     title_group.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
     color_group = parser.add_argument_group("colors")
     color_group.add_argument("-pc", "--CDS_positive_color", type=str, help="Color for positive CDSs, in R, G, B format. Default: '180, 205, 222'", default = '180, 205, 222')
-    color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = '53, 176, 42')
+    color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = '180, 222, 205')
     color_group.add_argument("-tc", "--tRNA_color", type=str, help="Color for tRNAs, in R, G, B format. Default: '150, 5, 50'", default = '150, 5, 50')
     color_group.add_argument("-cc", "--GC_content_color", type=str, help="Color for GC content, in R, G, B format. Default: '23, 0, 115'", default = "23, 0, 115")
     color_group.add_argument("-sc", "--GC_skew_color", type=str, help="Color scheme for GC skew. For details on this, please read CIRCOS documentation. Default: 'eval(sprintf(\"rdbu-7-div-%%d\",remap_int(var(value),0,0,7,5)))'", default = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))')

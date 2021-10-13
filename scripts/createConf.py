@@ -8,8 +8,8 @@ def create_conf(maxmins,
                 CDS_negative_color = '53, 176, 42',
                 tRNA_color = '150, 5, 50',
                 cogs = True,
-                cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"},
-                cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}):
+                cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
+                cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
     file = open("circos.conf", "w")
     file.write('''karyotype = temp/_bands.kar
 chromosomes_units = 100
@@ -186,7 +186,7 @@ r0 = 0.84r
                     
                     {"name": "R", "color": "98, 98, 98"},
                     {"name": "S", "color": "144, 144, 144"},
-                    # {"name": "Unclassified", "color": "234, 234, 234"},
+                    {"name": "None", "color": "234, 234, 234"},
                     ]:
             if COG["name"] in cogs_p:
                 file.write('''

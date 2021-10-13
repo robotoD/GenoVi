@@ -156,7 +156,7 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 	cogs_df["chr"] = chrx
 	cogs_df["locus"] = locus
 	cogs_df["main"] = cogs_df["category"].str[0]
-	categories = cogs_df["main"].unique()
+	categories = map(str, cogs_df["main"].unique())
 	
 	for c in categories:
 		lines = []	
@@ -201,7 +201,10 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 		for feature in record.features:
 			if feature.type == feat: # "CDS" or "tRNA"
 
-				location = str(feature.location)[:-3]
+				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
+				if("join" in str(feature.location)):
+					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?\d+\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
+					location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
 				direction = str(feature.location)[-2:-1]
 				locus_tag = feature.qualifiers.get("locus_tag")[0]
 				if direction == '+':
@@ -277,7 +280,10 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 		for feature in record.features:
 			if feature.type == feat: # "CDS" or "tRNA"
 
-				location = str(feature.location)[:-3]
+				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
+				if("join" in str(feature.location)):
+					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?\d+\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
+					location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
 				direction = str(feature.location)[-2:-1]
 				locus_tag = feature.qualifiers.get("locus_tag")[0]
 				if direction == '+':
@@ -384,7 +390,6 @@ def get_categories(gbk_file, output):
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
 	tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
 	cogs_df.columns = ['id', 'cog']
-	print(tab_file)
 	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form
 	tab_df.columns = ['cog', 'category']

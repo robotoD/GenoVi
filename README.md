@@ -154,3 +154,26 @@ Genome visualizer software project
     1. Editar el archivo highlight.conf para incorporar: radius length de cada feature (tRNA, rRNA, CDS_pos, CDS_neg, COGs_pos, COGs_neg), pathfile de cada archivo y colores a utilizar.
 * Roberto:
     1. Identificar un valor de corte para la integracion de DeepNOG (hay identificacion de proteinas con un valor de confidence muy bajo)
+
+### Reunión 19/Octubre
+* Andrés empezó a escribir el manuscrito del paper, esta en el drive junto a los demas articulos asociados.
+* Vicente reescalo los plasmidos pequeños para que estuvieran abajo de la un cromosoma grande, para que no estén todos en linea. Se probaron algunos ejemplos de genomas completos (problematicos, un cromosoma grande y plasmidos muy pequeños), donde los plasmidos son muy pequeños. Se hablo de reescalarlos para que siempre ocupen el 75% del diametro y se explicite la re-escala.
+* Andrea busco informacion sobre como hacer el paquete de conda, tenemos que tener el github publico con todo ordenado, luego crear un proyecto de Pypi y hacer el paquete de conda. Se podria crear un ambiente que instalte DeepNog y la version previa de Circos.
+* Roberto aun no realiza determina el valor de corte de DeepNog, tengo que hacerlo.
+
+#### Tareas
+* Tod@s: 
+    1. Arreglar el github para que este listo. (Mover esto al drive)
+    2. Trabajar en el manuscrito
+    3. Trabajar en las figuras finales y algunos ejemplos de uso
+* Andrea: Nada tiene que hacer su propuesta de candidatura, esperamos que le vaya bacan :)
+* Vicente:
+    1. Re-escalar los plasmidos pequeños para que siempre ocupen el 75% del diametro del mas grande.
+    2. Agregar los colores asociados a: CDS +; CDS -; tRNA; rRNA ; GC content; GC Skew +; GC Skew - 
+    3. Cambiar el window gap del GC-Skew a 5000 bp.
+* Andrés: 
+    1. Avanzar en figuras y el manuscrito
+* Roberto:
+    1. Identificar un valor de corte para la integracion de DeepNOG (hay identificacion de proteinas con un valor de confidence muy bajo)
+    2. Avanzar en el figuras y manuscrito
+

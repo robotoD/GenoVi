@@ -85,7 +85,7 @@ def generate_result():
         write_content(sequence_begin + (i + 1) * shift, sequence_begin + seq_len, new_calc, result_skew)
     return(seq_len)
 
-def makeGC(input_file, output_file = " ", w_size = 1000, s = -1, o_t = False, o_f = "wiggle"):
+def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_f = "wiggle"):
     if(output_file == " "):
         output_file = input_file
     global window_size, shift, omit_tail, output_format, sequence_begin, result_skew, result_content, record, globalIndex, max_GC_percentage, min_GC_percentage, minSkew, maxSkew

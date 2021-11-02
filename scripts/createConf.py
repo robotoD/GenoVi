@@ -7,6 +7,7 @@ def create_conf(maxmins,
                 CDS_positive_color = '180, 205, 222',
                 CDS_negative_color = '53, 176, 42',
                 tRNA_color = '150, 5, 50',
+                rRNA_color = '150, 150, 50',
                 cogs = True,
                 cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
                 cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
@@ -134,9 +135,8 @@ r1 = 0.8r
 r0 = 0.84r
 </highlight>
 
-<highlight>
-
 #Positive band tRNAs
+<highlight>
 file = temp/_tRNA_pos.txt
 fill_color = {tRNA_positive}
 r1 = 0.85r
@@ -145,9 +145,24 @@ r0 = 0.89r
 
 #Negative
 <highlight>
-
 file = temp/_tRNA_neg.txt
 fill_color = {tRNA_negative}
+r1 = 0.8r
+r0 = 0.84r
+</highlight>
+
+#Positive band rRNAs
+<highlight>
+file = temp/_rRNA_pos.txt
+fill_color = {rRNA_positive}
+r1 = 0.85r
+r0 = 0.89r
+</highlight>
+
+#Negative
+<highlight>
+file = temp/_rRNA_neg.txt
+fill_color = {rRNA_negative}
 r1 = 0.8r
 r0 = 0.84r
 </highlight>
@@ -155,7 +170,9 @@ r0 = 0.84r
 '''.format(CDS_positive = CDS_positive_color,
            CDS_negative = CDS_negative_color,
            tRNA_positive = tRNA_color,
-           tRNA_negative = tRNA_color))
+           tRNA_negative = tRNA_color,
+           rRNA_positive = rRNA_color,
+           rRNA_negative = rRNA_color))
     if cogs:
         for COG in [{"name": "D", "color": "99, 123, 183"},
                     {"name": "M", "color": "38, 89, 168"},

@@ -31,7 +31,7 @@ Type `GenoVi.py -h`
 | prediction_deepnog.csv | COG prediction using the COG 2020 database by DeepNOG|
 
 
-## Citation and License (CC BY-NC-SA? CC BY-NC? CC BY-NC-ND?)
+## Citation and License
 
 GenoVi is under a BY-NC-SA Creative Commons License, Please cite.
 Cumsille et al., 2021 

@@ -8,6 +8,7 @@ def create_conf(maxmins,
                 CDS_negative_color = '53, 176, 42',
                 tRNA_color = '150, 5, 50',
                 rRNA_color = '150, 150, 50',
+                GC_skew_line_color = '0, 0, 0',
                 cogs = True,
                 cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
                 cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
@@ -75,7 +76,7 @@ fill_color = {content_fill}
 <plot>
 type       = line
 extend_bin = no
-color      = black
+color      = {skew_line}
 fill_under = no
 thickness  = 0.5
 file = temp/GC_GC_skew.wig
@@ -102,7 +103,8 @@ background_stroke_thickness = 1
             skew_min = maxmins["min_skew"],
             skew_max = maxmins["max_skew"],
             content_fill = GC_content_color,
-            skew_fill = GC_skew_color))
+            skew_fill = GC_skew_color,
+            skew_line = GC_skew_line_color))
     file.close()
     if not os.path.exists("conf"):
         os.mkdir("conf")
@@ -527,9 +529,8 @@ auto_eval = no
     file.write('''# TICKS
 show_ticks          = yes
 show_tick_labels    = yes
-
 <ticks>
-skip_first_label     = yes
+skip_first_label     = no
 skip_last_label      = no
 radius           = dims(ideogram,radius_outer)
 thickness        = 2p
@@ -539,18 +540,15 @@ label_separation = 5p
 label_offset     = 5p
 multiplier = 0.000001
 color = black
-
-
 <tick>
-size     = 1p
+size     = 7p
 thickness      = 1p
-spacing        = 250u
+spacing        = 1000u
 show_label     = no
 </tick>
-
 <tick>
-size     = 2p
-thickness      = 2p
+size     = 10p
+thickness      = 3p
 spacing        = 5000u
 show_label     = yes
 suffix = " Mb"

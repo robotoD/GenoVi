@@ -2,6 +2,8 @@
 # Input: List of dictionaries, with file name and image desired size (relative)
 # Example: [{"fileName": "img1.svg", "size": 30000},
 #           {"fileName": "img2.svg", "size": 10000}]
+
+from math import sqrt
 def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable"):
     print(align)
     totalWidth = 0
@@ -11,6 +13,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
         totalWidth += image["size"]
     if scale == "variable":
         totalVariableWidth = 0
+        rectangleSize = 600 # Must be in range [0-3000]
         rectIsDrawn = False
         for i in range(len(images)):
             images[i]["scale"] = "fixed"
@@ -22,6 +25,11 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                     totalWidth -= image["size"]
                 totalWidth += totalWidth/4
                 break
+    elif scale == "sqrt":
+        totalWidth = 0
+        for i in range(len(images)):
+            images[i]["size"] =  sqrt((images[i]["size"] * images[0]["size"]))
+            totalWidth += images[i]["size"]
                 
     
     file = open(outFile, "w")
@@ -59,11 +67,12 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
-                        extraElments = '''<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'''.format(currentX, 3000*firstSize, 600, 35 + max([x["size"] for x in images[imageIndex:]])*550/totalVariableWidth)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*firstSize + max([x["size"] for x in images[imageIndex:]])*550/totalVariableWidth + 30, round(totalWidth/(5*totalVariableWidth)))
+                        rectangleSize = (2950 - firstSize*3000) * totalVariableWidth / max([x["size"] for x in images[imageIndex:]])
+                        extraElments = '''<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'''.format(currentX, 3000*firstSize, rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*firstSize + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth), 1))
                         rectIsDrawn = True
-                    file.write(beginGroup.format(currentX, 3000*firstSize, float(image["size"])/(5*totalVariableWidth)))
-                    image["size"] = image["size"]*totalWidth/(5*totalVariableWidth)
+                    file.write(beginGroup.format(currentX, 3000*firstSize, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
+                    image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
                 else:
                     file.write(beginGroup.format(currentX, 3000*firstSize, float(image["size"])/totalWidth))
         elif align == "<":
@@ -74,11 +83,11 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
-                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(3000*firstSize, currentX, 35 + max([x["size"] for x in images[imageIndex:]])*550/totalVariableWidth, 600)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(3000*firstSize,currentX + 635, round(totalWidth/(5*totalVariableWidth)))
+                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(3000*firstSize, currentX, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth, rectangleSize)
+                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(3000*firstSize,currentX + (rectangleSize + 35), round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
                         rectIsDrawn = True
-                    file.write(beginGroup.format(3000*firstSize, currentX, float(image["size"])/(5*totalVariableWidth)))
-                    image["size"] = image["size"]*totalWidth/(5*totalVariableWidth)
+                    file.write(beginGroup.format(3000*firstSize, currentX, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
+                    image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
                 else:
                     file.write(beginGroup.format(3000*firstSize, currentX, float(image["size"])/totalWidth))
         elif align == "U":
@@ -93,11 +102,11 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
-                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, 3000*max([firstSize, secondSize]), 600, 35 + max([x["size"] for x in images[imageIndex:]])*550/totalVariableWidth)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*max([firstSize, secondSize]) + max([x["size"] for x in images[imageIndex:]])*550/totalVariableWidth + 30, round(totalWidth/(5*totalVariableWidth)))
+                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, 3000*max([firstSize, secondSize]), rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*max([firstSize, secondSize]) + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
                         rectIsDrawn = True
-                    file.write(beginGroup.format(currentX, 3000*max([firstSize, secondSize]), float(image["size"])/(5*totalVariableWidth)))
-                    image["size"] = image["size"]*totalWidth/(5*totalVariableWidth)
+                    file.write(beginGroup.format(currentX, 3000*max([firstSize, secondSize]), float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
+                    image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
                 else:
                     file.write(beginGroup.format(currentX, 3000*max([firstSize, secondSize]), float(image["size"])/totalWidth))
         for line in inFile:

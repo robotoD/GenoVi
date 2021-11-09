@@ -6,11 +6,11 @@ import scripts.genbank2fna as gbk2fna
 import scripts.createConf as createConf
 import scripts.addText as addText
 import scripts.mergeImages as merge
-import glob
+from shutil import which
 #from cairosvg import svg2png # The import is actually lower in the script and it is not always strictly necessary, so this should stay commented.
 
 def visualizeGenome(gbk_file, output = "circos", 
-                    cogs = True, legend = True, separate = False, circles_alignment = "center", scale = "variable", keep_temp_files = False, window = 5000,
+                    cogs = True, deepnog_bound = 0, legend = True, separate = False, circles_alignment = "center", scale = "variable", keep_temp_files = False, window = 5000,
                     title = "", titlePos = "center", italic = 2,
                     color_scheme = "auto", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
@@ -91,7 +91,7 @@ def visualizeGenome(gbk_file, output = "circos",
         full_cogs = set([])
         for contig in contigs:
             file = "temp/" + str(i) + ".gbk"
-            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs, cogs, False, True)
+            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs, cogs, False, True, deepnog_bound)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": str(i) + ".svg"})
             gbk2fna.gbkToFna(file, "temp/gbk_converted.fna")
@@ -99,7 +99,9 @@ def visualizeGenome(gbk_file, output = "circos",
             createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, cogs, cogs_p, cogs_n)
             
             print("Drawing {}...".format(i))
-            
+            if which("circos") == None:
+                print("Circos is not installed. please install for using this program.")
+                raise(Exception)
             os.system("circos circos.conf >/dev/null 2>&1")
             os.system("circos -debug_group _all >/dev/null 2>&1")
             os.rename("circos.svg", str(i) + ".svg")
@@ -116,7 +118,7 @@ def visualizeGenome(gbk_file, output = "circos",
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
     else:
-        sizes, cogs_p, cogs_n = create_raw.base(gbk_file, "temp/", True, True, cogs, cogs, False, True)
+        sizes, cogs_p, cogs_n = create_raw.base(gbk_file, "temp/", True, True, cogs, cogs, False, True, deepnog_bound)
         
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
@@ -126,6 +128,9 @@ def visualizeGenome(gbk_file, output = "circos",
         createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, skew_line_color, cogs, cogs_p=cogs_p, cogs_n=cogs_n)
 
         print("Drawing...")
+        if which("circos") == None:
+            print("Circos is not installed. please install for using this program.")
+            raise(Exception)
         os.system("circos circos.conf >/dev/null 2>&1")
         os.system("circos -debug_group _all >/dev/null 2>&1")
         if legend or title != "":
@@ -140,7 +145,7 @@ def visualizeGenome(gbk_file, output = "circos",
         svg2png(bytestring = file.read(), write_to = output + ".png")
         file.close()
     except:
-        print("There's been an error transforming to PNG, so the image might be incomplete or not exist. Please use the SVG instead.")
+        print("There's been an error transforming to PNG, so the image might be incomplete or not exist. Please use the SVG instead. Did you install CairoSVG?")
     os.rename("circos.svg", output + ".svg")
 
     if not keep_temp_files:
@@ -182,8 +187,8 @@ def get_args():
 
     args = parser.parse_args()
 
-    if args.output_file[-4:] == ".svg":
-        args.output_file[:-4]
+    if args.output_file[-4:] == ".svg" or args.output_file[-4:] == ".png":
+        args.output_file = args.output_file[:-4]
     if args.scale == "auto":
         args.scale = "variable"
     if args.deepnog_lower_bound > 1 or args.deepnog_lower_bound < 0:
@@ -191,7 +196,7 @@ def get_args():
         raise Exception()
 
     return (args.input_file, args.output_file,
-    args.cogs_unclassified, args.legend_not_included, args.separate_circles, args.circles_alignment, args.scale, args.keep_temporal_files, args.window,
+    args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.circles_alignment, args.scale, args.keep_temporal_files, args.window,
     args.title, args.title_position, args.italic_words, 
     args.color_scheme, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 

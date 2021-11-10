@@ -22,6 +22,10 @@ conda create -n genovi python=3.7 deepnog circos
 
 Type `GenoVi.py -h`
 
+ 
+![Acinetobacter radioresistens DD78](https://github.com/robotoD/GenoVi/blob/main/scripts/output_test/Acinetobacter_radioresistens_DD78.svg "Acinetobacter_radioresistens_DD78")
+
+
 ## Output files 
 | Extension| Description|
 | :-------------: |-------------:|

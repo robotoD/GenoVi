@@ -4,7 +4,7 @@
 #           {"fileName": "img2.svg", "size": 10000}]
 
 from math import sqrt
-def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable"):
+def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none"):
     print(align)
     totalWidth = 0
     extraElments = ""
@@ -37,6 +37,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                 <svg width="3000px" height="3000px"
                 version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n\n''')
+    file.write('<rect x="0" y="0" width="3000px" height="3000px" style="fill:{};"/>'.format(background_color))
     currentX = 0
     beginGroup = '<g transform="translate({},{}) scale({})\n">'
     if align == "auto":

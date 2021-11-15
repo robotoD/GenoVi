@@ -24,7 +24,7 @@ def change_background(color):
 
 def visualizeGenome(gbk_file, output = "circos", 
                     cogs = True, deepnog_bound = 0, legend = True, separate = False, circles_alignment = "center", scale = "variable", keep_temp_files = False, window = 5000,
-                    title = "", titlePos = "center", italic = 2,
+                    title = "", titlePos = "center", italic = 2, size = False,
                     color_scheme = "auto", background_color = "none", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
     if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
@@ -102,9 +102,8 @@ def visualizeGenome(gbk_file, output = "circos",
             contigFile.close()
         
         images = []
-        i = 1
         full_cogs = set([])
-        for contig in contigs:
+        for i in range(1, len(contigs) + 1):
             file = "temp/" + str(i) + ".gbk"
             sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs, cogs, False, True, deepnog_bound)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
@@ -120,12 +119,15 @@ def visualizeGenome(gbk_file, output = "circos",
             os.system("circos circos.conf >/dev/null 2>&1")
             os.system("circos -debug_group _all >/dev/null 2>&1")
             change_background("none")
-            os.rename("circos.svg", str(i) + ".svg")
+            if size:
+                addText.addText("", "center", "circos.svg", "circ_v.svg", legend = False, cogs_legend = False, size = sizes[0])
+                os.rename("circ_v.svg", str(i) + ".svg")
+            else:
+                os.rename("circos.svg", str(i) + ".svg")
             os.rename("circos.png", str(i) + ".png")
             if cogs:
                 os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
             os.remove(file)
-            i += 1
         merge.mergeImages(images, outFile = "circos.svg", align = circles_alignment, scale = scale, background_color = background_color)
         if legend or title != "":
             legendPosition = "top-right" if circles_alignment == "bottom" else "bottom-right"
@@ -191,8 +193,9 @@ def get_args():
     title_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
     title_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
     title_group.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
+    title_group.add_argument("--size", action='store_true', help="Whether the size (in base pairs) should be written in each circle.", required = False)
     color_group = parser.add_argument_group("colors")
-    color_group.add_argument("-cs", "--color_scheme", "--color", type=str, choices=["auto", "blue", "purple", "soil", "greyscale", "velvet", "pastel"], help="Color scheme to use. Individual colors may be overriden wih other arguments. COGs coloring can't be changed.", default = 'auto')
+    color_group.add_argument("-cs", "--color_scheme", "--color", type=str, choices=["auto", "blue", "purple", "soil", "greyscale", "velvet", "pastel", "experimental"], help="Color scheme to use. Individual colors may be overriden wih other arguments. COGs coloring can't be changed.", default = 'auto')
     color_group.add_argument("-bc", "--background", "--background_color", type=str, help="Color for background. Default: none", default = 'none')
     color_group.add_argument("-pc", "--CDS_positive_color", type=str, help="Color for positive CDSs, in R, G, B format. Default: '180, 205, 222'", default = 'auto')
     color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = 'auto')
@@ -213,7 +216,7 @@ def get_args():
 
     return (args.input_file, args.output_file,
     args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.circles_alignment, args.scale, args.keep_temporal_files, args.window,
-    args.title, args.title_position, args.italic_words, 
+    args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 
 if __name__ == "__main__":

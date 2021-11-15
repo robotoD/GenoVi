@@ -2,7 +2,7 @@ import re
 
 def addText(text, position = "center", inFile="circos.svg", outFile="default", italic=2,
             legend=True, cogs_legend=True, legendPosition = "botom-right", cogs = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"},
-            pCDS_color = "180, 205, 222", nCDS_color = "150, 200, 150", tRNA_color = "150, 5, 50", rRNA_color = "150, 150, 50", GC_content_color = "23, 0, 115"):
+            pCDS_color = "180, 205, 222", nCDS_color = "150, 200, 150", tRNA_color = "150, 5, 50", rRNA_color = "150, 150, 50", GC_content_color = "23, 0, 115", size = ""):
     if(outFile == "default"):
         outFile = "titled_" + inFile
     if text != "":
@@ -21,17 +21,23 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                 italicText = " ".join(textList[:italic])
                 nonItalicText = " ".join(textList[italic:])
                 center = (len(italicText) - len(nonItalicText)) * (5*float(textSize)/len(text)) + 1500
-                print(center)
                 textElement = '<text x="{4}" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="end" font-style="italic">{2}</text>\n<text x="{5}" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="start">  {3}</text>'.format(verticalPosition, textSize, italicText, nonItalicText, center-4, center+4)
             else:
                 textElement = '<text x="1500" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="middle" font-style="italic">{2}</text>\n'.format(verticalPosition, textSize, text)
-
+    if size != "":
+        if size > 1000000:
+            size = str(round(size / 1000000, 2)) + " Mb"
+        elif size > 1000:
+            size = str(round(size / 1000, 2)) + " kb"
+        sizeElement = '<text x="1500" y="1540" font-size="64" font-family="CMUBright-Roman" text-anchor="middle">{0}</text>\n'.format(size)
     source = open(inFile)
     destiny = open(outFile, "w")
     for line in source:
         if('</svg>' in line):
             if text != "":
                 destiny.write(textElement)
+            if size != "":
+                destiny.write(sizeElement)
             if legend:
                 legendElement = '<g>'
                 index = 0

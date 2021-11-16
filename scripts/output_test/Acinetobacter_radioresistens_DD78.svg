@@ -3,7 +3,7 @@
                 <svg width="3000px" height="3000px"
                 version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
-<g transform="translate(490.82951323209,0) scale(0.67278032451194)
+<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/><g transform="translate(490.82951323209,0) scale(0.67278032451194)
 "><g id="bg">
 <rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/></g>
 <g id="ideograms">
@@ -8595,12 +8595,12 @@
 <line x1='1493.2' y1='1023.0' x2='1497.9' y2='1034.0' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
 <pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 </defs>
 </g>
 <g transform="translate(692.6636105856721,2018.34097353582) scale(0.11542896232056672)
@@ -8643,7 +8643,7 @@
 <path d="M1226.288,504.545 A1032.400,1032.400 40.000 0,1 1242.917,500.121 L1254.472,545.059 A986.000,986.000 0.000 0,0 1238.589,549.284 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
 </g>
 <g id="highlighttrack_1">
-<path d="M1500.000,525.600 A974.400,974.400 40.000 1,1 1499.824,525.600 L1499.832,572.000 A928.000,928.000 0.000 1,0 1500.000,572.000 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
+<path d="M1500.000,525.600 A974.400,974.400 40.000 0,1 1587.586,529.544 L1583.416,575.757 A928.000,928.000 0.000 0,0 1500.000,572.000 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1587.311,529.520 A974.400,974.400 40.000 0,1 1719.470,550.638 L1709.019,595.846 A928.000,928.000 0.000 0,0 1583.153,575.733 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1719.403,550.622 A974.400,974.400 40.000 0,1 1947.299,634.333 L1926.000,675.556 A928.000,928.000 0.000 0,0 1708.955,595.831 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1950.122,635.798 A974.400,974.400 40.000 0,1 2157.946,781.277 L2126.616,815.502 A928.000,928.000 0.000 0,0 1928.687,676.950 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
@@ -8910,12 +8910,12 @@
 <line x1='1219.5' y1='890.9' x2='1455.9' y2='1154.8' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
-<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 </defs>
 </g>
 <g transform="translate(1038.9504975473724,2018.34097353582) scale(0.10202630533653978)
@@ -9212,12 +9212,12 @@
 <line x1='1174.9' y1='1033.7' x2='1383.3' y2='896.3' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
-<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
 </defs>
 </g>
 <g transform="translate(1345.0294135569916,2018.34097353582) scale(0.1097644078309534)
@@ -9265,7 +9265,7 @@
 <path d="M1104.047,546.548 A1032.400,1032.400 40.000 0,1 1115.292,541.955 L1132.583,585.013 A986.000,986.000 0.000 0,0 1121.843,589.400 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
 </g>
 <g id="highlighttrack_1">
-<path d="M1500.000,525.600 A974.400,974.400 40.000 1,1 1499.824,525.600 L1499.832,572.000 A928.000,928.000 0.000 1,0 1500.000,572.000 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
+<path d="M1500.000,525.600 A974.400,974.400 40.000 0,1 1535.074,526.231 L1533.404,572.601 A928.000,928.000 0.000 0,0 1500.000,572.000 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1542.100,526.510 A974.400,974.400 40.000 0,1 1562.477,527.605 L1559.502,573.910 A928.000,928.000 0.000 0,0 1540.095,572.867 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1563.316,527.659 A974.400,974.400 40.000 0,1 1639.691,535.665 L1633.039,581.586 A928.000,928.000 0.000 0,0 1560.301,573.961 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
 <path d="M1641.128,535.874 A974.400,974.400 40.000 0,1 1663.322,539.385 L1655.545,585.129 A928.000,928.000 0.000 0,0 1634.408,581.785 Z" style="stroke-linecap:round;fill:rgb(181,255,214);" />
@@ -9530,12 +9530,12 @@
 <line x1='1409.5' y1='1062.8' x2='1498.4' y2='1098.6' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
-<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
 </defs>
 </g>
 <g><rect x="1800" y="2730" width="15" height="15" fill="rgb(105, 123, 183)"/>

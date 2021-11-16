@@ -6,6 +6,7 @@ import scripts.genbank2fna as gbk2fna
 import scripts.createConf as createConf
 import scripts.addText as addText
 import scripts.mergeImages as merge
+import scripts.colors as colors
 from shutil import which
 import re
 #from cairosvg import svg2png # The import is actually lower in the script and it is not always strictly necessary, so this should stay commented.
@@ -31,62 +32,7 @@ def visualizeGenome(gbk_file, output = "circos",
         background_color = "rgb(" + background_color + ")"
 
     color_scheme = color_scheme.lower()
-    if color_scheme == "auto" or color_scheme == "neutral":
-        GC_content = "94, 120, 145" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("bupu-7-seq-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
-        tRNA = "67, 14, 110" if tRNA == "auto" else tRNA
-        rRNA = "67, 110, 14" if rRNA == "auto" else rRNA
-        CDS_positive = "186, 186, 186" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "140, 140, 140" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "171, 171, 171" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "blue" or color_scheme == "blues":
-        GC_content = "14, 29, 130" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
-        tRNA = "99, 103, 186" if tRNA == "auto" else tRNA
-        rRNA = "89, 123, 186" if rRNA == "auto" else rRNA
-        CDS_positive = "191, 204, 217" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "171, 178, 217" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "163, 191, 217" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "purple" or color_scheme == "purples":
-        GC_content = "57, 1, 120" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("puor-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
-        tRNA = "108, 95, 156" if tRNA == "auto" else tRNA
-        rRNA = "128, 85, 156" if rRNA == "auto" else rRNA
-        CDS_positive = "196, 187, 237" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "151, 143, 191" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "163, 163, 217" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "soil":
-        GC_content = "89, 60, 6" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("brbg-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
-        tRNA = "0, 112, 11" if tRNA == "auto" else tRNA
-        rRNA = "20, 112, 1" if rRNA == "auto" else rRNA
-        CDS_positive = "185, 199, 186" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "175, 201, 178" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "89, 194, 115" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "greyscale" or color_scheme == "grayscale" or color_scheme == "grey" or color_scheme == "gray":
-        GC_content = "87, 87, 87" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("rdgy-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
-        tRNA = "115, 115, 115" if tRNA == "auto" else tRNA
-        rRNA = "115, 115, 115" if rRNA == "auto" else rRNA
-        CDS_positive = "209, 209, 209" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "184, 184, 184" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "171, 171, 171" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "velvet" or color_scheme == "pink" or color_scheme == "red":
-        GC_content = "82, 1, 30" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("purd-7-seq-%d",remap_int(var(value),0,0,7,4)))' if GC_skew == "auto" else GC_skew
-        tRNA = "130, 1, 49" if tRNA == "auto" else tRNA
-        rRNA = "130, 21, 69" if rRNA == "auto" else rRNA
-        CDS_positive = "217, 195, 205" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "196, 187, 193" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "230, 200, 211" if skew_line_color == "auto" else skew_line_color
-    elif color_scheme == "pastel":
-        GC_content = "196, 227, 255" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("pastel1-7-qual-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
-        tRNA = "143, 143, 143" if tRNA == "auto" else tRNA
-        rRNA = "143, 143, 143" if rRNA == "auto" else rRNA
-        CDS_positive = "255, 222, 235" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "181, 255, 214" if CDS_negative == "auto" else CDS_negative
-        skew_line_color = "150, 150, 150" if skew_line_color == "auto" else skew_line_color
+    color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = colors.parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
     
     if not os.path.exists("temp"):
         os.mkdir("temp")
@@ -143,7 +89,7 @@ def visualizeGenome(gbk_file, output = "circos",
         
         gbk2fna.gbkToFna(gbk_file, "temp/gbk_converted.fna")
         maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
-        createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, skew_line_color, cogs, cogs_p=cogs_p, cogs_n=cogs_n)
+        createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, cogs, cogs_p, cogs_n)
 
         print("Drawing...")
         if which("circos") == None:
@@ -195,7 +141,7 @@ def get_args():
     title_group.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
     title_group.add_argument("--size", action='store_true', help="Whether the size (in base pairs) should be written in each circle.", required = False)
     color_group = parser.add_argument_group("colors")
-    color_group.add_argument("-cs", "--color_scheme", "--color", type=str, choices=["auto", "blue", "purple", "soil", "greyscale", "velvet", "pastel", "experimental"], help="Color scheme to use. Individual colors may be overriden wih other arguments. COGs coloring can't be changed.", default = 'auto')
+    color_group.add_argument("-cs", "--color_scheme", "--color", type=str, help="Color scheme to use. Individual colors may be overriden wih other arguments. COGs coloring can't be changed.", default = 'auto')
     color_group.add_argument("-bc", "--background", "--background_color", type=str, help="Color for background. Default: none", default = 'none')
     color_group.add_argument("-pc", "--CDS_positive_color", type=str, help="Color for positive CDSs, in R, G, B format. Default: '180, 205, 222'", default = 'auto')
     color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = 'auto')

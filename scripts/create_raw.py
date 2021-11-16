@@ -202,8 +202,11 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 
 				location = str(feature.location)[:-3].replace("<", "").replace(">", "")
 				if("join" in str(feature.location)):
-					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?\d+\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
-					location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
+					locationMatch = re.match(r"join\{\[<?>?(\d+):<?>?(\d+)\]\(.\),\s(?:\[<?>?\d+:<?>?\d+\]\(.\),\s)*\[<?>?\d+:<?>?(\d+)\]\(.\)\}", str(feature.location)) # Sacamos el primer y ultimo numero que encontremos
+					if 0 in feature.location:
+						location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[1])
+					else:
+						location = "[{}:{}]".format(locationMatch.groups()[0], locationMatch.groups()[2])
 				direction = str(feature.location)[-2:-1]
 				locus_tag = feature.qualifiers.get("locus_tag")[0]
 				if direction == '+':

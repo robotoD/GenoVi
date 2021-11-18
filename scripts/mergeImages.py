@@ -1,14 +1,26 @@
-# Generates an image including all the others
-# Input: List of dictionaries, with file name and image desired size (relative)
-# Example: [{"fileName": "img1.svg", "size": 30000},
-#           {"fileName": "img2.svg", "size": 10000}]
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# 
 
 from math import sqrt
-def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none"):
+
+# Generates an image including all the others (Circos-generated SVGs)
+# Input: List of dictionaries, with filename and image desired size (relative)
+# Example: [{"fileName": "img1.svg", "size": 30000},
+#           {"fileName": "img2.svg", "size": 10000}]
+def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False):
     print(align)
     totalWidth = 0
     extraElments = ""
-    #images.sort(key=lambda x:x["size"], reverse = True)
+    if sort:
+        images.sort(key=lambda x:x["size"], reverse = True)
     for image in images:
         totalWidth += image["size"]
     if scale == "variable":
@@ -64,7 +76,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             if imageIndex == 0:
                 firstSize = float(image["size"])/totalWidth
                 file.write(beginGroup.format(1500 - (3000*firstSize/2.0), 0, firstSize))
-                currentX += 1500 - 1200*firstSize - 3000*float(image["size"])/totalWidth
+                currentX += 1500 - 1500*(1-firstSize) - 3000*float(image["size"])/totalWidth
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:

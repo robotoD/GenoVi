@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Genome Visualizer project
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# 
 
 from Bio import SeqIO
 import numpy as np
@@ -44,7 +53,6 @@ def get_args():
 
 ## Function to obtain contig sizes from gbk file, then computes contig locations
 ## And finally creates a kar file with original contig order.
-
 def ends_sorted(ends):
 	dic_ends = {i:ends[i] for i in range(len(ends))}
 	dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}

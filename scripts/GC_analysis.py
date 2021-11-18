@@ -85,6 +85,8 @@ def generate_result():
         write_content(sequence_begin + (i + 1) * shift, sequence_begin + seq_len, new_calc, result_skew)
     return(seq_len)
 
+# Starting from a .fna FASTA file, generates files with GC content and GC skew.
+# Input: FASTA filename
 def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_f = "wiggle"):
     if(output_file == " "):
         output_file = input_file

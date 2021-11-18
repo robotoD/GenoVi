@@ -1,5 +1,18 @@
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# 
+
 import re
 
+# Adds text elements to Circos-generated SVG image.
+# May include title, contig size and color legend.
 def addText(text, position = "center", inFile="circos.svg", outFile="default", italic=2,
             legend=True, cogs_legend=True, legendPosition = "botom-right", cogs = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"},
             pCDS_color = "180, 205, 222", nCDS_color = "150, 200, 150", tRNA_color = "150, 5, 50", rRNA_color = "150, 150, 50", GC_content_color = "23, 0, 115", size = ""):
@@ -41,10 +54,10 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
             if legend:
                 legendElement = '<g>'
                 index = 0
-                legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})"/>
-                                <text x="{5}" y="{1}" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">{2}</text>'''
+                legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="black"/>
+                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;">{2}</text>'''
                 otherLegendPiece = '''<path d="M{4} {0} m0 10 h3 l2 -5 5 10 2-5 3 0" fill="{3}" stroke="black"/>
-                                <text x="{5}" y="{1}" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">{2}</text>'''
+                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;">{2}</text>'''
 
                 features = [{"description":"positive CDS", "color": pCDS_color},
                     {"description":"negative CDS", "color": nCDS_color},
@@ -86,28 +99,28 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                     
 
                     
-                    for COG in COGs1:
+                    for COG in COGs1[::-1]:
                         if COG["symbol"] in cogs:
                             if legendPosition == "top-right":
-                                legendElement += legendPiece.format(50 + index*35, 68 + index*35, COG["description"], COG["color"], 1800, 1830)
+                                legendElement += legendPiece.format(50 + index*35, 62 + index*35, COG["description"], COG["color"], 1800, 1830)
                             elif legendPosition == "bottom-right":
-                                legendElement += legendPiece.format(2730 + index*25, 2748 + index*25, COG["description"], COG["color"], 1800, 1830)
+                                legendElement += legendPiece.format(2980 - index*25, 2992 - index*25, COG["description"], COG["color"], 1800, 1830)
                             elif legendPosition == "top-left":
-                                legendElement += legendPiece.format(50 + index*25, 68 + index*25, COG["description"], COG["color"], 650, 680)
+                                legendElement += legendPiece.format(50 + index*25, 62 + index*25, COG["description"], COG["color"], 650, 680)
                             else:
-                                legendElement += legendPiece.format(2730 + index*25, 2748 + index*25, COG["description"], COG["color"], 650, 680)
+                                legendElement += legendPiece.format(2980 - index*25, 2992 - index*25, COG["description"], COG["color"], 650, 680)
                             index += 1
-                    index = 4
-                    for COG in COGs2:
+                    index = 0
+                    for COG in COGs2[::-1]:
                         if COG["symbol"] in cogs:
                             if legendPosition == "top-right":
-                                legendElement += legendPiece.format(50 + index*35, 68 + index*35, COG["description"], COG["color"], 2400, 2430)
+                                legendElement += legendPiece.format(50 + index*35, 62 + index*35, COG["description"], COG["color"], 2400, 2430)
                             elif legendPosition == "bottom-right":
-                                legendElement += legendPiece.format(2430 + index*25, 2448 + index*25, COG["description"], COG["color"], 2400, 2430)
+                                legendElement += legendPiece.format(2980 - index*25, 2992 - index*25, COG["description"], COG["color"], 2400, 2430)
                             elif legendPosition == "top-left":
-                                legendElement += legendPiece.format(50 + index*25, 68 + index*25, COG["description"], COG["color"], 50, 80)
+                                legendElement += legendPiece.format(50 + index*25, 62 + index*25, COG["description"], COG["color"], 50, 80)
                             else:
-                                legendElement += legendPiece.format(2430 + index*25, 2448 + index*25, COG["description"], COG["color"], 50, 80)
+                                legendElement += legendPiece.format(2980 - index*25, 2992 - index*25, COG["description"], COG["color"], 50, 80)
                             index += 1
                         elif COG["symbol"] == "space":
                             index += 1
@@ -117,13 +130,13 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             legendPiece = otherLegendPiece
                             feature["color"] = "none"
                         if legendPosition == "top-right":
-                            legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 1600, 1630)
+                            legendElement += legendPiece.format(50 + index*25, 62 + index*25, feature["description"], feature["color"], 1600, 1630)
                         elif legendPosition == "bottom-right":
-                            legendElement += legendPiece.format(2805 + index*25, 2823 + index*25, feature["description"], feature["color"], 1600, 1630)
+                            legendElement += legendPiece.format(2855 + index*25, 2862 + index*25, feature["description"], feature["color"], 1600, 1630)
                         elif legendPosition == "top-left":
-                            legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 450, 480)
+                            legendElement += legendPiece.format(50 + index*25, 62 + index*25, feature["description"], feature["color"], 450, 480)
                         else:
-                            legendElement += legendPiece.format(2805 + index*25, 2823 + index*25, feature["description"], feature["color"], 450, 480)
+                            legendElement += legendPiece.format(2855 + index*25, 2862 + index*25, feature["description"], feature["color"], 450, 480)
                         index += 1
                 else: # if not cogs_legend
                     index = 0

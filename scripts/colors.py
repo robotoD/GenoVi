@@ -1,3 +1,15 @@
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# 
+
+# This function is for parsing color schemes
 def parseColors(color_scheme = "auto", background_color = "none", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
     if color_scheme == "blue" or color_scheme == "blues":
         GC_content = "14, 29, 130" if GC_content == "auto" else GC_content

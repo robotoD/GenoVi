@@ -1,3 +1,6 @@
+# Utility for transforming GenBank flat files into .faa FASTA files.
+# Intended for GenoVi usage, might not work in other cases.
+
 from Bio import SeqIO
 import argparse
 import re

@@ -9,6 +9,7 @@ def create_conf(maxmins,
                 tRNA_color = '150, 5, 50',
                 rRNA_color = '150, 150, 50',
                 GC_skew_line_color = '0, 0, 0',
+                background_color = "transparent",
                 cogs = True,
                 cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
                 cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
@@ -27,7 +28,7 @@ chromosomes_display_default = yes
 
 # IMAGE
 <image>
-<<include image.conf>>
+<<include conf/image.conf>>
 </image>
 
 # IDEOGRAM
@@ -521,8 +522,8 @@ auto_eval = no
 
     file = open("conf/image.conf", "w")
     file.write('''<<include image.generic.conf>>
-<<include background.white.conf>>
-''')
+background = {}
+'''.format(background_color))
     file.close()
 
     file = open("conf/ticks.conf", "w")

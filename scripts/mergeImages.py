@@ -92,7 +92,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             if currentX == 0:
                 firstSize = float(image["size"])/totalWidth
                 file.write(beginGroup.format(0, 1500 - (3000*firstSize/2.0), firstSize))
-                currentX -= 2700*firstSize + 1 - 3000*float(image["size"])/totalWidth
+                currentX += 1500 - 1500*(1-firstSize) - 3000*float(image["size"])/totalWidth
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:

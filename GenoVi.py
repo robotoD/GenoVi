@@ -160,8 +160,8 @@ def get_args():
     parser.add_argument("-b", "--deepnog_lower_bound", type=float, help="Lower bound for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
     parser.add_argument("-l", "--legend_not_included", action='store_false', help="Do not include color explanation.", required = False)
     parser.add_argument("-c", "-s", "--separate_circles", "--complete_genome", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
-    parser.add_argument("-a", "--circles_alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below)", default = "auto")
-    parser.add_argument("--scale", type=str, choices=["variable", "fixed", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, fixed, sqrt", default = "sqrt")
+    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below)", default = "auto")
+    parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-w", "--window", "--step", type=int, help="base pair window for CG plotting. Default: 5000", default = 5000)
 
@@ -193,7 +193,7 @@ def get_args():
         raise Exception()
 
     return (args.input_file, args.output_file,
-    args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.circles_alignment, args.scale, args.keep_temporary_files, args.window,
+    args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window,
     args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 

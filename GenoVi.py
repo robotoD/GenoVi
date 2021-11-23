@@ -7,7 +7,7 @@
 # you credit this work and license your new creations under the identical terms.
 # 
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
-# 
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
 import argparse as ap
 import scripts.create_raw as create_raw
@@ -151,7 +151,7 @@ def visualizeGenome(gbk_file, output = "circos",
         os.rmdir("temp")
         os.rmdir("conf")
     
-
+# Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)

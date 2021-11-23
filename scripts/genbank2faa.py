@@ -1,10 +1,23 @@
-# Utility for transforming GenBank flat files into .faa FASTA files.
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+#
+# This file defines an utility for transforming GenBank flat files into .faa FASTA files.
 # Intended for GenoVi usage, might not work in other cases.
 
 from Bio import SeqIO
 import argparse
 import re
 
+# Modifies locus description in case that input file was generated
+# with Prokka.
 def modify_locus(input):
     input_handle  = open(input, "r")
     line = input_handle.readline()
@@ -39,7 +52,7 @@ def modify_locus(input):
     input_modify.close()
     input_modify = open(input, "r")
         
-    
+# Function that transforms genbank file to faa file.   
 def genbankToFaa(input, output):
     try:
         input_handle  = open(input, "r")

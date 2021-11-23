@@ -7,14 +7,17 @@
 # you credit this work and license your new creations under the identical terms.
 # 
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
-# 
-
-from math import sqrt
-
-# Generates an image including all the others (Circos-generated SVGs)
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+#
+# This script generates an image including all the others (Circos-generated SVGs)
 # Input: List of dictionaries, with filename and image desired size (relative)
 # Example: [{"fileName": "img1.svg", "size": 30000},
 #           {"fileName": "img2.svg", "size": 10000}]
+
+
+from math import sqrt
+
+
 def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False):
     print(align)
     totalWidth = 0

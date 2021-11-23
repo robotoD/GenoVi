@@ -10,7 +10,8 @@
 # you credit this work and license your new creations under the identical terms.
 # 
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
-# 
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+
 
 from Bio import SeqIO
 import numpy as np
@@ -23,6 +24,7 @@ from shutil import which
 import pandas as pd
 import scripts.genbank2faa as genbank2faa
 
+# Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("input_file", help="Genbank file path")
@@ -51,8 +53,8 @@ def get_args():
     return args.input_file, args.output_folder, args.cds, args.trna, args.rrna, args.get_categories, args.divided, args.complete_genome
 
 
-## Function to obtain contig sizes from gbk file, then computes contig locations
-## And finally creates a kar file with original contig order.
+# Function to obtain contig sizes from gbk file, then computes contig locations
+# And finally creates a kar file with original contig order.
 def ends_sorted(ends):
 	dic_ends = {i:ends[i] for i in range(len(ends))}
 	dic_sorted = {k: v for k, v in sorted(dic_ends.items(), key=lambda item: item[1])}
@@ -60,6 +62,8 @@ def ends_sorted(ends):
 	indexes = list(dic_sorted.keys())
 	return ends_sort, indexes
 
+# Fuction for creating base KAR file that defines contig bands.
+# It considers that the genome is not complete.
 def create_kar(gbk_filename, output_folder, complete):
 	
 	gbk_file = open(gbk_filename,"r")
@@ -107,6 +111,8 @@ def create_kar(gbk_filename, output_folder, complete):
 
 	return ends, inits, new_ends		
 
+# Fuction for creating base KAR file that defines contig bands.
+# It considers that the genome is complete.
 def create_kar_complete(output_folder, k, init, end):
 		
 	lines = []
@@ -124,7 +130,7 @@ def create_kar_complete(output_folder, k, init, end):
 
 	return
 
-
+# Calculating locations of contigs.
 def new_loc(array, sizes_x):
 	new_arr = []
 	for i, loc_pos in enumerate(array):
@@ -135,6 +141,7 @@ def new_loc(array, sizes_x):
 		#new_arr.append([init,end])
 	return new_arr
 	
+# Writting locations to file.
 def write_lines(locations, output_, chrx, locus, cogs):
 	lines = []
 	#print(locations)		
@@ -151,7 +158,7 @@ def write_lines(locations, output_, chrx, locus, cogs):
 		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		writer.writerows(lines)	
 		print(output_,"created succesfully.")
-		
+
 def write_cog_files(locations, output, chrx, locus, cogs):
 	
 	if len(cogs) == 0:
@@ -179,7 +186,8 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 			print(filename, "created succesfully.")		
 	
 
-
+# Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
+# It considers that the genome is not complete.
 def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=False):
 	
 	#chrx = '1'
@@ -260,8 +268,9 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 	
 	return(cogs_p, cogs_n)
 	
-	
 
+# Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
+# It considers that the genome is complete.
 def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None, divided=False):
 	
 	#chrx = '1'
@@ -342,6 +351,7 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 	return
 
 
+# Function to predict COG categories with DeepNOG
 def get_categories(gbk_file, output, lower_bound = 0):
 	
 	
@@ -411,6 +421,8 @@ def get_categories(gbk_file, output, lower_bound = 0):
 	
 	return cogs_dict
 
+
+# Base pipeline for complete genome.
 def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, sizes):
 	
 	flag = True
@@ -440,7 +452,7 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 		if divided == True:
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
-			
+# Base pipeline for non-complete genome.	
 def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_bound = 0):
 	
 	flag = True

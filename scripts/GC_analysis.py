@@ -1,12 +1,22 @@
-"""
-A command-line utility for calculating the GC percentage and GC skew of a genomic sequence.
-Based on Jennifer Lu's (jennifer.lu717@gmail.com) SkewIt and GC_analysis utility.
-"""
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+#
+# This file contains a command-line utility for calculating the GC percentage and GC skew of a genomic
+# sequence. Based on Jennifer Lu's (jennifer.lu717@gmail.com) SkewIt and GC_analysis utility.
 
 import argparse as ap
 import sys
 from Bio import SeqIO
 
+# Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
     requiredNamed = parser.add_argument_group('required named arguments')
@@ -27,10 +37,12 @@ def get_args():
     
     return args.input_file, args.output_file, args.window_size, args.shift, args.omit_tail, args.output_format
 
+# Writes final locations to output file
 def write_content(loc, final_loc, data, file):
     file.write("chr" + str(globalIndex)
                + "\t" + str(loc + 1) + "\t" + str(final_loc) + "\t" + str(data) + "\n")
 
+# Calculating GC content and GC skew
 def generate_result():
     """
     Calculate GC percentage and write to output file.

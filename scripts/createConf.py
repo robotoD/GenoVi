@@ -1,6 +1,21 @@
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+
+
 import argparse as ap
 import os
 
+
+# Function that writes base CIRCOS configuration files
+# circos.conf, highlight.conf, colors_fonts_patterns.conf, housekeeping.conf, image.conf, and ticks.conf.
 def create_conf(maxmins,
                 GC_content_color = "23, 0, 115",
                 GC_skew_color = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))',

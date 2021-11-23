@@ -1,5 +1,19 @@
-#See my webpage:
-#http://www.warwick.ac.uk/go/peter_cock/python/genbank2fasta/
+# GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
+# genomes using Circos software. It also allows the user to annotate COG classifications
+# through DeepNOG predictions.
+# 
+# GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
+# You may remix, tweak, and build upon this work even for commercial purposes, as long as
+# you credit this work and license your new creations under the identical terms.
+# 
+# Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
+# For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
+#
+# This file defines an utility for transforming GenBank flat files into .fna FASTA files.
+# Intended for GenoVi usage, might not work in other cases.
+# Based on Peter Cock pipeline: http://www.warwick.ac.uk/go/peter_cock/python/genbank2fasta/
+
+
 from Bio import SeqIO
 import argparse
 

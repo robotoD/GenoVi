@@ -17,6 +17,7 @@ import os
 # Function that writes base CIRCOS configuration files
 # circos.conf, highlight.conf, colors_fonts_patterns.conf, housekeeping.conf, image.conf, and ticks.conf.
 def create_conf(maxmins,
+                font_color = "0, 0, 0",
                 GC_content_color = "23, 0, 115",
                 GC_skew_color = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))',
                 CDS_positive_color = '180, 205, 222',
@@ -54,7 +55,7 @@ default = 0.001r
 radius           = 0.8r
 thickness        = 40p
 fill             = yes
-stroke_color     = black
+stroke_color     = {font_color}
 stroke_thickness = 2p
 show_label       = no
 label_radius     = dims(image,radius) - 250p
@@ -72,7 +73,7 @@ fill_bands = yes
 <plot>
 type       = line
 extend_bin = no
-color      = black
+color      = {font_color}
 fill_under = yes
 thickness  = 1
 file = temp/GC_GC_content.wig
@@ -110,7 +111,7 @@ fill_color = {skew_fill}
 
 # BACKGROUND
 background                  = yes
-background_stroke_color     = black
+background_stroke_color     = {font_color}
 background_stroke_thickness = 1
 
 </plots>
@@ -120,14 +121,15 @@ background_stroke_thickness = 1
             skew_max = maxmins["max_skew"],
             content_fill = GC_content_color,
             skew_fill = GC_skew_color,
-            skew_line = GC_skew_line_color))
+            skew_line = GC_skew_line_color,
+            font_color = font_color))
     file.close()
     if not os.path.exists("conf"):
         os.mkdir("conf")
     
     file = open("conf/highlight.conf", "w")
     file.write('''fill_color       = grey
-color            = black
+color            = {font_color}
 stroke_thickness = 1
 r1               = 0.5r
 r0               = 1r
@@ -190,7 +192,8 @@ r0 = 0.84r
            tRNA_positive = tRNA_color,
            tRNA_negative = tRNA_color,
            rRNA_positive = rRNA_color,
-           rRNA_negative = rRNA_color))
+           rRNA_negative = rRNA_color,
+           font_color = font_color))
     if cogs:
         for COG in [{"name": "D", "color": "99, 123, 183"},
                     {"name": "M", "color": "38, 89, 168"},
@@ -332,10 +335,10 @@ default_font   = default
 # the font definition does not include a name
 # see etc/fonts.conf for details
 default_font_name  = Arial
-default_font_color = black
+default_font_color = {font_color}
 
 # default color for cases when color is not specified
-default_color  = black
+default_color  = {font_color}
 
 <guides>
 thickness      = 1
@@ -435,14 +438,14 @@ calculate_track_statistics = yes
 # CWD is the current directory (where the 'circos' command was executed).
 # All paths under CWD will be scanned first, then under SCRIPTPATH.
 #
-# {CWD,SCRIPTPATH}/.
-# {CWD,SCRIPTPATH}/..
-# {CWD,SCRIPTPATH}/etc/
-# {CWD,SCRIPTPATH}/../etc
-# {CWD,SCRIPTPATH}/../../etc
-# {CWD,SCRIPTPATH}/data
-# {CWD,SCRIPTPATH}/../data
-# {CWD,SCRIPTPATH}/../../data
+# [CWD,SCRIPTPATH]/.
+# [CWD,SCRIPTPATH]/..
+# [CWD,SCRIPTPATH]/etc/
+# [CWD,SCRIPTPATH]/../etc
+# [CWD,SCRIPTPATH]/../../etc
+# [CWD,SCRIPTPATH]/data
+# [CWD,SCRIPTPATH]/../data
+# [CWD,SCRIPTPATH]/../../data
 #
 # If you would like to prepend this list with custom directories for
 # data files, enter them as a CSV list here
@@ -532,7 +535,7 @@ housekeeping = yes
 # allows you to avoid eval() in expressions. However, this is
 # dangerous because it does not return errors.
 auto_eval = no
-''')
+'''.format(font_color = font_color))
     file.close()
 
     file = open("conf/image.conf", "w")
@@ -555,7 +558,7 @@ min_label_distance_to_edge = 0p
 label_separation = 5p
 label_offset     = 5p
 multiplier = 0.000001
-color = black
+color = {font_color}
 <tick>
 size     = 7p
 thickness      = 1p
@@ -572,7 +575,7 @@ label_size     = 20p
 #format         = %s
 </tick>
 </ticks>
-''')
+'''.format(font_color = font_color))
     file.close()
     return
 

@@ -42,10 +42,10 @@ def change_background(color, fileName = "circos.svg"):
 
 # Full pipeline
 # input: anotated genome filename.
-def visualizeGenome(gbk_file, output = "circos", 
-                    cogs = True, deepnog_bound = 0, legend = True, separate = False, circles_alignment = "center", scale = "variable", keep_temp_files = False, window = 5000,
-                    title = "", titlePos = "center", italic = 2, size = False,
-                    color_scheme = "auto", background_color = "transparent", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
+def visualizeGenome(input_file, output_file = "circos", 
+                    cogs_unclassified = True, deepnog_lower_bound = 0, legend = True, separate_circles = False, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000,
+                    title = "", title_position = "center", italic_words = 2, size = False,
+                    color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
     if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
         background_color = "rgb(" + background_color + ")"
@@ -59,8 +59,8 @@ def visualizeGenome(gbk_file, output = "circos",
     
     if not os.path.exists("temp"):
         os.mkdir("temp")
-    if separate:
-        file = open(gbk_file)
+    if separate_circles:
+        file = open(input_file)
         contigs = file.read().split("\n//\n")
         file.close()
         if len(contigs[-1]) < 20:   # If file ends with "//"
@@ -74,12 +74,12 @@ def visualizeGenome(gbk_file, output = "circos",
         full_cogs = set([])
         for i in range(1, len(contigs) + 1):
             file = "temp/" + str(i) + ".gbk"
-            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs, cogs, False, True, deepnog_bound)
+            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": str(i) + ".svg"})
             gbk2fna.gbkToFna(file, "temp/gbk_converted.fna")
             maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
-            createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs, cogs_p, cogs_n)
+            createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
             
             print("Drawing {}...".format(i))
             if which("circos") == None:
@@ -92,34 +92,42 @@ def visualizeGenome(gbk_file, output = "circos",
                 if cairo:
                     print("Converting to png...")
                     svgFile = open("circos.svg")
-                    svg2png(bytestring = svgFile.read(), write_to = output + ".png")
+                    svg2png(bytestring = svgFile.read(), write_to = output_file + ".png")
                     svgFile.close()
 
             if size:
-                addText.addText("", "center", "circos.svg", "circ_v.svg", legend = False, cogs_legend = False, size = sizes[0])
+                addText.addText("", "center", "circos.svg", "circ_v.svg", legend = False, cogs_legend = False, size = sizes[0], font_color = font_color)
                 os.rename("circ_v.svg", str(i) + ".svg")
             else:
                 os.rename("circos.svg", str(i) + ".svg")
             os.rename("circos.png", str(i) + ".png")
-            if cogs:
+            if cogs_unclassified:
                 os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
             os.remove(file)
-        merge.mergeImages(images, outFile = "circos.svg", align = circles_alignment, scale = scale, background_color = "none" if delete_background else background_color)
+        merge.mergeImages(images, outFile = "circos.svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
         if legend or title != "":
-            legendPosition = "top-right" if circles_alignment == "bottom" else "bottom-right"
-            addText.addText(title, position = titlePos, inFile = "circos.svg", italic = italic, legend = legend, cogs_legend = cogs, legendPosition = legendPosition, cogs = full_cogs,
-                            pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content)
+            legendPosition = "top-right" if alignment == "bottom" else "bottom-right"
+            if title_position == "center":
+                addText.addText(title, position = title_position, inFile = "1.svg", italic = italic_words, legend = False, font_color = font_color)
+                os.remove("1.svg")
+                os.rename("titled_1.svg", "1.svg")
+                merge.mergeImages(images, outFile = "circos.svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                addText.addText("", inFile = "circos.svg", legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
+                                pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
+            else:
+                addText.addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
+                                pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
     else:
-        sizes, cogs_p, cogs_n = create_raw.base(gbk_file, "temp/", True, True, cogs, cogs, False, True, deepnog_bound)
+        sizes, cogs_p, cogs_n = create_raw.base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
         
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
-        gbk2fna.gbkToFna(gbk_file, "temp/gbk_converted.fna")
+        gbk2fna.gbkToFna(input_file, "temp/gbk_converted.fna")
         maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
-        createConf.create_conf(maxmins, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs, cogs_p, cogs_n)
+        createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
 
         print("Drawing...")
         if which("circos") == None:
@@ -130,18 +138,18 @@ def visualizeGenome(gbk_file, output = "circos",
         if delete_background:
             change_background("none")
         if legend or title != "":
-            addText.addText(title, position = titlePos, inFile = "circos.svg", italic = italic, legend = legend, cogs_legend = cogs, legendPosition = "bottom-right", cogs = cogs_p.union(cogs_n),
-            pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content)
+            addText.addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, legend = legend, cogs_legend = cogs_unclassified, legendPosition = "bottom-right", cogs = cogs_p.union(cogs_n),
+            pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
     if cairo:
         print("Converting to png...")
         file = open("circos.svg")
-        svg2png(bytestring = file.read(), write_to = output + ".png")
+        svg2png(bytestring = file.read(), write_to = output_file + ".png")
         file.close()
-    os.rename("circos.svg", output + ".svg")
+    os.rename("circos.svg", output_file + ".svg")
 
-    if not keep_temp_files:
+    if not keep_temporary_files:
         print("deleting temporary files")
         os.remove("circos.conf")
         for file in os.listdir("temp/"):
@@ -159,22 +167,23 @@ def get_args():
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not clasify each coding sequence and draw them by color.", required = False)
     parser.add_argument("-b", "--deepnog_lower_bound", type=float, help="Lower bound for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
     parser.add_argument("-l", "--legend_not_included", action='store_false', help="Do not include color explanation.", required = False)
-    parser.add_argument("-c", "-s", "--separate_circles", "--complete_genome", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
-    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below)", default = "auto")
-    parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt", default = "sqrt")
+    parser.add_argument("-s", "--separate_circles", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
+    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes", default = "auto")
+    parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-w", "--window", "--step", type=int, help="base pair window for CG plotting. Default: 5000", default = 5000)
 
     title_group = parser.add_argument_group("title")
     title_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
-    title_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
+    title_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "auto")
     title_group.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
-    title_group.add_argument("--size", action='store_true', help="Whether the size (in base pairs) should be written in each circle.", required = False)
+    title_group.add_argument("--size", action='store_true', help="To write the size (in base pairs) in each circle.", required = False)
 
     color_group = parser.add_argument_group("colors")
     color_group.add_argument("-cs", "--color_scheme", "--color", type=str, help='''Color scheme to use. Individual colors may be overriden wih other arguments. COGs' coloring can't be changed.
                                 Options: neutral, blue, purple, soil, grayscale, velvet, pastel, ocean, wood, beach, desert, ice, island, forest, toxic, fire, spring''', default = 'auto')
     color_group.add_argument("-bc", "--background", "--background_color", type=str, help="Color for background. Default: transparent", default = 'transparent')
+    color_group.add_argument("-fc", "--font_color", type=str, help="Color for ticks and legend texts. Default: black", default = '0, 0, 0')
     color_group.add_argument("-pc", "--CDS_positive_color", type=str, help="Color for positive CDSs, in R, G, B format. Default: '180, 205, 222'", default = 'auto')
     color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = 'auto')
     color_group.add_argument("-tc", "--tRNA_color", type=str, help="Color for tRNAs, in R, G, B format. Default: '150, 5, 50'", default = 'auto')
@@ -191,11 +200,13 @@ def get_args():
     if args.deepnog_lower_bound > 1 or args.deepnog_lower_bound < 0:
         print("DeepNOG lower bound must be between 0 and 1")
         raise Exception()
+    if args.title_position == "auto":
+        args.title_position = "top" if args.separate_circles else "center"
 
     return (args.input_file, args.output_file,
     args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window,
     args.title, args.title_position, args.italic_words, args.size, 
-    args.color_scheme, args.background, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
+    args.color_scheme, args.background, args.font_color, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 
 if __name__ == "__main__":
     visualizeGenome(*get_args())

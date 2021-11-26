@@ -131,6 +131,8 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                         if feature["color"] == "line":
                             legendPiece = otherLegendPiece
                             feature["color"] = "none"
+                        if "eval" in feature["color"]:
+                            feature["color"] = "100,100,100"
                         if legendPosition == "top-right":
                             legendElement += legendPiece.format(50 + index*25, 62 + index*25, feature["description"], feature["color"], 1600, 1630, font_color)
                         elif legendPosition == "bottom-right":
@@ -146,6 +148,8 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                         if feature["color"] == "line":
                             legendPiece = otherLegendPiece
                             feature["color"] = "none"
+                        if "eval" in feature["color"]:
+                            feature["color"] = "100,100,100"
                         if legendPosition == "top-right":
                             legendElement += legendPiece.format(50 + index*35, 68 + index*35, feature["description"], feature["color"], 2700, 2730, font_color)
                         elif legendPosition == "bottom-right":

@@ -47,10 +47,10 @@ def visualizeGenome(input_file, output_file = "circos",
                     title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
-    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
-        background_color = "rgb(" + background_color + ")"
+    if which("circos") == None:
+        print("Circos is not installed. please install for using GenoVi.")
+        raise(Exception)
     
-    color_scheme = color_scheme.lower()
     color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = colors.parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
     delete_background = False
     if background_color == "transparent" or background_color == "none" or background_color == "auto":
@@ -76,15 +76,12 @@ def visualizeGenome(input_file, output_file = "circos",
             file = "temp/" + str(i) + ".gbk"
             sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
-            images.append({"size": sizes[0], "fileName": str(i) + ".svg"})
+            images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
             gbk2fna.gbkToFna(file, "temp/gbk_converted.fna")
             maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
             createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
             
             print("Drawing {}...".format(i))
-            if which("circos") == None:
-                print("Circos is not installed. please install for using this program.")
-                raise(Exception)
             os.system("circos circos.conf >/dev/null 2>&1")
             os.system("circos -debug_group _all >/dev/null 2>&1")
             if delete_background:
@@ -97,10 +94,10 @@ def visualizeGenome(input_file, output_file = "circos",
 
             if size:
                 addText.addText("", "center", "circos.svg", "circ_v.svg", legend = False, cogs_legend = False, size = sizes[0], font_color = font_color)
-                os.rename("circ_v.svg", str(i) + ".svg")
+                os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
             else:
-                os.rename("circos.svg", str(i) + ".svg")
-            os.rename("circos.png", str(i) + ".png")
+                os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
+            os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
             if cogs_unclassified:
                 os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
             os.remove(file)
@@ -175,7 +172,7 @@ def get_args():
 
     title_group = parser.add_argument_group("title")
     title_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
-    title_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "auto")
+    title_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
     title_group.add_argument("--italic_words", type=int, help="How many of the title's words should be written in italics. Default: 2", default = 2)
     title_group.add_argument("--size", action='store_true', help="To write the size (in base pairs) in each circle.", required = False)
 
@@ -189,7 +186,7 @@ def get_args():
     color_group.add_argument("-tc", "--tRNA_color", type=str, help="Color for tRNAs, in R, G, B format. Default: '150, 5, 50'", default = 'auto')
     color_group.add_argument("-rc", "--rRNA_color", type=str, help="Color for rRNAs, in R, G, B format. Default: '150, 150, 50'", default = 'auto')
     color_group.add_argument("-cc", "--GC_content_color", type=str, help="Color for GC content, in R, G, B format. Default: '23, 0, 115'", default = "auto")
-    color_group.add_argument("-sc", "--GC_skew_color", type=str, help="Color scheme for GC skew. For details on this, please read CIRCOS documentation. Default: 'eval(sprintf(\"rdbu-7-div-%%d\",remap_int(var(value),0,0,7,5)))'", default = 'auto')
+    color_group.add_argument("-sc", "--GC_skew_color", type=str, help="Color scheme for GC skew. Might be a pair of RGB colors or Circos-understandable code. For details on this, please read CIRCOS documentation. Default: '140, 150, 198 - 158, 188, 218'", default = 'auto')
     color_group.add_argument("-sl", "--GC_skew_line_color", type=str, help="Color for GC skew line. Default: black", default = 'auto')
     
 
@@ -200,8 +197,6 @@ def get_args():
     if args.deepnog_lower_bound > 1 or args.deepnog_lower_bound < 0:
         print("DeepNOG lower bound must be between 0 and 1")
         raise Exception()
-    if args.title_position == "auto":
-        args.title_position = "top" if args.separate_circles else "center"
 
     return (args.input_file, args.output_file,
     args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window,

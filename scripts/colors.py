@@ -9,9 +9,23 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl
 
+import re
 
 # This function is for parsing color schemes
 def parseColors(color_scheme = "auto", background_color = "none", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
+    color_scheme = color_scheme.lower()
+    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
+        background_color = "rgb(" + background_color + ")"
+    gc_skew_original_argument = re.match("^\s*(?P<red1>[012]?\d?\d)\s*,\s*(?P<green1>[012]?\d?\d)\s*,\s*(?P<blue1>[012]?\d?\d)\s*[,;-]\s*(?P<red2>[012]?\d?\d)\s*,\s*(?P<green2>[012]?\d?\d)\s*,\s*(?P<blue2>[012]?\d?\d)\s*$", GC_skew)
+    if gc_skew_original_argument:
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,{},{}),remap_int(var(value),0,0,{},{}),remap_int(var(value),0,0,{},{})))'.format(
+            gc_skew_original_argument.group("red1"),
+            gc_skew_original_argument.group("red2"),
+            gc_skew_original_argument.group("green1"),
+            gc_skew_original_argument.group("green2"),
+            gc_skew_original_argument.group("blue1"),
+            gc_skew_original_argument.group("blue2"))
+    
     if color_scheme == "blue" or color_scheme == "blues":
         GC_content = "14, 29, 130" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
@@ -140,6 +154,30 @@ def parseColors(color_scheme = "auto", background_color = "none", GC_content = "
         CDS_positive = "186,240,163" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "246,240,163" if CDS_negative == "auto" else CDS_negative
         skew_line_color = "159,244,223" if skew_line_color == "auto" else skew_line_color
+    elif color_scheme == "electric":
+        GC_content = "22,48,190" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,255,160),remap_int(var(value),0,0,255,220),remap_int(var(value),0,0,0,205)))' if GC_skew == "auto" else GC_skew
+        tRNA = "130,130,140" if tRNA == "auto" else tRNA
+        rRNA = "2,4,100" if rRNA == "auto" else rRNA
+        CDS_positive = "220,220,230" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "255,255,155" if CDS_negative == "auto" else CDS_negative
+        skew_line_color = "159,244,223" if skew_line_color == "auto" else skew_line_color
+    elif color_scheme == "stone":
+        GC_content = 'eval(sprintf("hsv(200,0.38,0.%d)", 56+rand(10)))' if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,159,45),remap_int(var(value),0,0,181,39),remap_int(var(value),0,0,184,39)))' if GC_skew == "auto" else GC_skew
+        tRNA = "60,48,48" if tRNA == "auto" else tRNA
+        rRNA = "45,39,39" if rRNA == "auto" else rRNA
+        CDS_positive = "159,181,184" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "184,169,159" if CDS_negative == "auto" else CDS_negative
+        skew_line_color = "100,100,100" if skew_line_color == "auto" else skew_line_color
+    elif color_scheme == "skin":
+        GC_content = '224,172,105' if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,241,141),remap_int(var(value),0,0,194,85),remap_int(var(value),0,0,125,36)))' if GC_skew == "auto" else GC_skew
+        tRNA = "141,85,36" if tRNA == "auto" else tRNA
+        rRNA = "141,95,66" if rRNA == "auto" else rRNA
+        CDS_positive = "255,219,172" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "241,194,125" if CDS_negative == "auto" else CDS_negative
+        skew_line_color = "224,172,105" if skew_line_color == "auto" else skew_line_color
     else: # auto or neutral
         GC_content = "94, 120, 145" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("bupu-7-seq-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
@@ -148,4 +186,5 @@ def parseColors(color_scheme = "auto", background_color = "none", GC_content = "
         CDS_positive = "186, 186, 186" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "140, 140, 140" if CDS_negative == "auto" else CDS_negative
         skew_line_color = "171, 171, 171" if skew_line_color == "auto" else skew_line_color
+    
     return color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color

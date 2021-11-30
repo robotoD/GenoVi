@@ -101,21 +101,23 @@ def visualizeGenome(input_file, output_file = "circos",
             if cogs_unclassified:
                 os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
             os.remove(file)
-        merge.mergeImages(images, outFile = "circos.svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
         if legend or title != "":
             legendPosition = "top-right" if alignment == "bottom" else "bottom-right"
             if title_position == "center":
-                addText.addText(title, position = title_position, inFile = "1.svg", italic = italic_words, legend = False, font_color = font_color)
-                os.remove("1.svg")
-                os.rename("titled_1.svg", "1.svg")
-                merge.mergeImages(images, outFile = "circos.svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
-                addText.addText("", inFile = "circos.svg", legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
+                addText.addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, legend = False, font_color = font_color)
+                os.remove(output_file + "-contig_" + "1.svg")
+                os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
+                merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                addText.addText("", inFile = output_file + ".svg", legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             else:
-                addText.addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
+                merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                addText.addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, legend = legend, cogs_legend = cogs_unclassified, legendPosition = legendPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
-            os.remove("circos.svg")
-            os.rename("titled_circos.svg", "circos.svg")
+            os.remove(output_file + ".svg")
+            os.rename("titled_" + output_file + ".svg", output_file + ".svg")
+        else:
+            merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
     else:
         sizes, cogs_p, cogs_n = create_raw.base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
         

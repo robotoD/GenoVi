@@ -21,7 +21,7 @@ from math import sqrt
 def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False):
     print(align)
     totalWidth = 0
-    extraElments = ""
+    extraElements = ""
     if sort:
         images.sort(key=lambda x:x["size"], reverse = True)
     for image in images:
@@ -84,8 +84,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
                         rectangleSize = (2950 - firstSize*3000) * totalVariableWidth / max([x["size"] for x in images[imageIndex:]])
-                        extraElments = '''<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'''.format(currentX, 3000*firstSize, rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*firstSize + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth), 1))
+                        extraElements = '''<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'''.format(currentX, 3000*firstSize, rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                        extraElements += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*firstSize + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth), 1))
                         rectIsDrawn = True
                     file.write(beginGroup.format(currentX, 3000*firstSize, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
                     image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
@@ -99,8 +99,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
-                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(3000*firstSize, currentX, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth, rectangleSize)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(3000*firstSize,currentX + (rectangleSize + 35), round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
+                        extraElements = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(3000*firstSize, currentX, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth, rectangleSize)
+                        extraElements += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(3000*firstSize,currentX + (rectangleSize + 35), round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
                         rectIsDrawn = True
                     file.write(beginGroup.format(3000*firstSize, currentX, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
                     image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
@@ -118,8 +118,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
-                        extraElments = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, 3000*max([firstSize, secondSize]), rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
-                        extraElments += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*max([firstSize, secondSize]) + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
+                        extraElements = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, 3000*max([firstSize, secondSize]), rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                        extraElements += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, 3000*max([firstSize, secondSize]) + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
                         rectIsDrawn = True
                     file.write(beginGroup.format(currentX, 3000*max([firstSize, secondSize]), float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
                     image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
@@ -133,7 +133,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
         inFile.close()
         currentX += 3000*float(image["size"])/totalWidth
         imageIndex += 1
-    file.write(extraElments)
+    file.write(extraElements)
     file.write('</svg>')
     file.close()
     

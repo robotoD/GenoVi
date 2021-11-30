@@ -36,7 +36,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
             if len(textList) > italic:
                 italicText = " ".join(textList[:italic])
                 nonItalicText = " ".join(textList[italic:])
-                textElement = '<text x="1500" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="middle" fill="{4}"><tspan font-style="italic">{2} </tspan>{3}</text>'.format(verticalPosition, textSize, italicText, nonItalicText, font_color)
+                textElement = '<text x="1500" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="middle" fill="{4}"><tspan font-style="italic">{2} </tspan>{3}</text>\n'.format(verticalPosition, textSize, italicText, nonItalicText, font_color)
             else:
                 textElement = '<text x="1500" y="{0}" font-size="{1}" font-family="CMUBright-Roman" text-anchor="middle" font-style="italic" fill = "{3}">{2}</text>\n'.format(verticalPosition, textSize, text, font_color)
     if size != "":
@@ -57,9 +57,9 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                 legendElement = '<g>'
                 index = 0
                 legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
-                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>'''
+                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
                 otherLegendPiece = '''<path d="M{4} {0} m0 10 h3 l2 -5 5 10 2-5 3 0" fill="{3}" stroke="{6}"/>
-                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>'''
+                                <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
 
                 features = [{"description":"positive CDS", "color": pCDS_color},
                     {"description":"negative CDS", "color": nCDS_color},

@@ -17,6 +17,10 @@ conda create -n genovi python=3.7 deepnog circos
 * [DeepNOG](https://github.com/univieCUBE/deepnog "DeepNOG")
 * Python 3.6.2 or later
 * Perl
+* NumPy 1.20.2
+* Pandas 1.2.4 
+* Biopython 1.79
+* CairoSVG 2.5.2 
 
 ## Usage
 

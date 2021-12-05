@@ -53,7 +53,7 @@ def modify_locus(input):
     input_modify = open(input, "r")
         
 # Function that transforms genbank file to faa file.   
-def genbankToFaa(input, output):
+def genbankToFaa(input, output, verbose = False):
     try:
         input_handle  = open(input, "r")
     except:
@@ -67,8 +67,9 @@ def genbankToFaa(input, output):
         modify_locus(input)
         
       
-    for seq_record in SeqIO.parse(open(input,"r"), "genbank") :
-        print("Dealing with GenBank record %s" % seq_record.id)
+    for seq_record in SeqIO.parse(open(input,"r"), "genbank"):
+        if verbose:
+            print("Dealing with GenBank record %s" % seq_record.id)
         for seq_feature in seq_record.features :
             if seq_feature.type=="CDS":
                 if "translation" in seq_feature.qualifiers and len(seq_feature.qualifiers['translation'])==1:
@@ -80,7 +81,8 @@ def genbankToFaa(input, output):
 
     output_handle.close()
     input_handle.close()
-    print("Done")
+    if verbose:
+        print("Done")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")

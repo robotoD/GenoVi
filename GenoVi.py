@@ -19,13 +19,12 @@ import scripts.addText as addText
 import scripts.mergeImages as merge
 import scripts.colors as colors
 from shutil import which
-import re
 try:
     from cairosvg import svg2png
     cairo = True
 except:
     cairo = False
-    print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
+    # print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
 
 # Changes background color to a white Circos-generated svg image (modifies original file)
 # input: Final color
@@ -43,12 +42,13 @@ def change_background(color, fileName = "circos.svg"):
 # Full pipeline
 # input: anotated genome filename.
 def visualizeGenome(input_file, output_file = "circos", 
-                    cogs_unclassified = True, deepnog_lower_bound = 0, legend = True, separate_circles = False, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000,
+                    cogs_unclassified = True, deepnog_lower_bound = 0, legend = True, separate_circles = False, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000, verbose = False,
                     title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
     if which("circos") == None:
-        print("Circos is not installed. please install for using GenoVi.")
+        if verbose:
+            print("Circos is not installed. please install for using GenoVi.")
         raise(Exception)
     
     color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = colors.parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
@@ -74,20 +74,22 @@ def visualizeGenome(input_file, output_file = "circos",
         full_cogs = set([])
         for i in range(1, len(contigs) + 1):
             file = "temp/" + str(i) + ".gbk"
-            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
+            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound, verbose)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
-            gbk2fna.gbkToFna(file, "temp/gbk_converted.fna")
+            gbk2fna.gbkToFna(file, "temp/gbk_converted.fna", verbose)
             maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
             createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
             
-            print("Drawing {}...".format(i))
+            if verbose:
+                print("Drawing {}...".format(i))
             os.system("circos circos.conf >/dev/null 2>&1")
             os.system("circos -debug_group _all >/dev/null 2>&1")
             if delete_background:
                 change_background("none")
                 if cairo:
-                    print("Converting to png...")
+                    if verbose:
+                        print("Converting to png...")
                     svgFile = open("circos.svg")
                     svg2png(bytestring = svgFile.read(), write_to = output_file + ".png")
                     svgFile.close()
@@ -119,18 +121,20 @@ def visualizeGenome(input_file, output_file = "circos",
         else:
             merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
     else:
-        sizes, cogs_p, cogs_n = create_raw.base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound)
+        sizes, cogs_p, cogs_n = create_raw.base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_lower_bound, verbose)
         
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
-        gbk2fna.gbkToFna(input_file, "temp/gbk_converted.fna")
+        gbk2fna.gbkToFna(input_file, "temp/gbk_converted.fna", verbose)
         maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
         createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
 
-        print("Drawing...")
+        if verbose:
+            print("Drawing...")
         if which("circos") == None:
-            print("Circos is not installed. please install for using this program.")
+            if verbose:
+                print("Circos is not installed. please install for using this program.")
             raise(Exception)
         os.system("circos circos.conf >/dev/null 2>&1")
         os.system("circos -debug_group _all >/dev/null 2>&1")
@@ -142,14 +146,16 @@ def visualizeGenome(input_file, output_file = "circos",
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
     if cairo:
-        print("Converting to png...")
+        if verbose:
+            print("Converting to png...")
         file = open("circos.svg")
         svg2png(bytestring = file.read(), write_to = output_file + ".png")
         file.close()
     os.rename("circos.svg", output_file + ".svg")
 
     if not keep_temporary_files:
-        print("deleting temporary files")
+        if verbose:
+            print("deleting temporary files")
         os.remove("circos.conf")
         for file in os.listdir("temp/"):
             os.remove("temp/" + file)
@@ -171,6 +177,7 @@ def get_args():
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-w", "--window", "--step", type=int, help="base pair window for CG plotting. Default: 5000", default = 5000)
+    parser.add_argument("-v", "--verbose", type=bool, help="Wether to print progress logs.", default = True)
 
     title_group = parser.add_argument_group("title")
     title_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
@@ -198,10 +205,10 @@ def get_args():
         args.output_file = args.output_file[:-4]
     if args.deepnog_lower_bound > 1 or args.deepnog_lower_bound < 0:
         print("DeepNOG lower bound must be between 0 and 1")
-        raise Exception()
+        raise Exception("DeepNOG lower bound must be between 0 and 1")
 
     return (args.input_file, args.output_file,
-    args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window,
+    args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,
     args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.font_color, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 

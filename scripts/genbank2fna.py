@@ -18,7 +18,7 @@ from Bio import SeqIO
 import argparse
 
 
-def gbkToFna(input, output = None):
+def gbkToFna(input, output = None, verbose = False):
     if output is None:
         output = input + "_converted.fna"
     try:
@@ -31,8 +31,9 @@ def gbkToFna(input, output = None):
     #SeqIO.write(SeqIO.parse(input_handle, "genbank"), output_handle, "fasta")
 
     #Long version, allows full control of fasta output
-    for seq_record in SeqIO.parse(input_handle, "genbank") :
-        print("Dealing with GenBank record %s" % seq_record.id)
+    for seq_record in SeqIO.parse(input_handle, "genbank"):
+        if verbose:
+            print("Dealing with GenBank record %s" % seq_record.id)
         try: # The old way, removed in Biopython 1.73
             fasta = seq_record.seq.tostring()
         except AttributeError: # The new way, needs Biopython 1.45 or later.
@@ -45,7 +46,8 @@ def gbkToFna(input, output = None):
 
     output_handle.close()
     input_handle.close()
-    print("Done")
+    if verbose:
+        print("Done")
 
 
 if __name__ == "__main__":

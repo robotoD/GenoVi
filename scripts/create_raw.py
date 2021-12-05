@@ -142,7 +142,7 @@ def new_loc(array, sizes_x):
 	return new_arr
 	
 # Writting locations to file.
-def write_lines(locations, output_, chrx, locus, cogs):
+def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	lines = []
 	#print(locations)		
 	for i in range(len(locations)):
@@ -156,10 +156,11 @@ def write_lines(locations, output_, chrx, locus, cogs):
 		lines.append(line)
 	with open(output_, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-		writer.writerows(lines)	
-		print(output_,"created succesfully.")
+		writer.writerows(lines)
+		if verbose:
+			print(output_,"created succesfully.")
 
-def write_cog_files(locations, output, chrx, locus, cogs):
+def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 	
 	if len(cogs) == 0:
 		return
@@ -173,7 +174,7 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 	categories = map(str, cogs_df["main"].unique())
 	
 	for c in categories:
-		lines = []	
+		lines = []
 		subset = cogs_df.loc[cogs_df["main"] == c]
 		subset = subset.sort_values(["chr", "loc_init"], ascending=[True, True])
 		for index, row in subset.iterrows():
@@ -182,13 +183,14 @@ def write_cog_files(locations, output, chrx, locus, cogs):
 		filename = output.split(".")[-2]+"_"+c+"."+output.split(".")[-1]
 		with open(filename, 'w', newline='') as csvfile:
 			writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-			writer.writerows(lines)	
-			print(filename, "created succesfully.")		
+			writer.writerows(lines)
+			if verbose:
+				print(filename, "created succesfully.")
 	
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is not complete.
-def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=False):
+def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=False, verbose = False):
 	
 	#chrx = '1'
 	
@@ -260,11 +262,11 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 	n_output = output + "_" + feat + "_neg.txt"
 	
 	if divided:
-		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)
+		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
+		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
 	else:
-		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
+		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
+		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
 	
 	return(cogs_p, cogs_n)
 	
@@ -453,7 +455,7 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 # Base pipeline for non-complete genome.	
-def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_bound = 0):
+def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_bound = 0, verbose = False):
 	
 	flag = True
 
@@ -477,13 +479,13 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False,
 		sizes, _, _ = create_kar(gbk_file, output, complete)
 			
 		if trna:
-			create_feature(gbk_file, output, sizes, "tRNA")
+			create_feature(gbk_file, output, sizes, "tRNA", verbose = verbose)
 		if rrna:
-			create_feature(gbk_file, output, sizes, "rRNA")
+			create_feature(gbk_file, output, sizes, "rRNA", verbose = verbose)
 		if cds:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict)
+			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, verbose = verbose)
 		if divided:
-			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided)
+			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
 	return ((sizes, cogs_p, cogs_n))
 
 

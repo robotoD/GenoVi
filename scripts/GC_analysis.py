@@ -107,7 +107,6 @@ def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_
     shift = s if s!= -1 else window_size
     omit_tail = o_t
     output_format = o_f
-    print(input_file)
     records = SeqIO.index(input_file, "fasta")
     records_num = len(records)
     sequence_begin = 0

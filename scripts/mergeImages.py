@@ -19,7 +19,6 @@ from math import sqrt
 
 
 def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False):
-    print(align)
     totalWidth = 0
     extraElements = ""
     if sort:

@@ -10,14 +10,14 @@
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
 import argparse as ap
-import scripts.create_raw as create_raw
-import scripts.GC_analysis as GC_analysis
+import create_raw as create_raw
+import GC_analysis as GC_analysis
+import genbank2fna as gbk2fna
+import createConf as createConf
+import addText as addText
+import mergeImages as merge
+import colors as colors
 import os
-import scripts.genbank2fna as gbk2fna
-import scripts.createConf as createConf
-import scripts.addText as addText
-import scripts.mergeImages as merge
-import scripts.colors as colors
 from shutil import which
 try:
     from cairosvg import svg2png
@@ -46,10 +46,17 @@ def visualizeGenome(input_file, output_file = "circos",
                     title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
+    if output_file[-4:] == ".svg" or output_file[-4:] == ".png":
+        output_file = output_file[:-4]
+    if deepnog_lower_bound > 1 or deepnog_lower_bound < 0:
+        if verbose:
+            print("DeepNOG lower bound must be between 0 and 1")
+        raise Exception("DeepNOG lower bound must be between 0 and 1")
+
     if which("circos") == None:
         if verbose:
             print("Circos is not installed. please install for using GenoVi.")
-        raise(Exception)
+        raise Exception("Circos is not installed. please install for using GenoVi.")
     
     color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = colors.parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
     delete_background = False
@@ -200,12 +207,6 @@ def get_args():
     
 
     args = parser.parse_args()
-
-    if args.output_file[-4:] == ".svg" or args.output_file[-4:] == ".png":
-        args.output_file = args.output_file[:-4]
-    if args.deepnog_lower_bound > 1 or args.deepnog_lower_bound < 0:
-        print("DeepNOG lower bound must be between 0 and 1")
-        raise Exception("DeepNOG lower bound must be between 0 and 1")
 
     return (args.input_file, args.output_file,
     args.cogs_unclassified, args.deepnog_lower_bound, args.legend_not_included, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,

@@ -6,7 +6,7 @@ setup(
   license='BY-NC-SA Creative Commons License',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Generates full genome images from a gbff file',   # Give a short description about your library
   author = 'Cumsille A. et al.',                   # Type in your name
-  author_email = 'vicente.saona@sansano.usm.cl',      # Type in your E-Mail
+  author_email = 'andrea.rodriguez.12@sansano.usm.cl',      # Type in your E-Mail
   url = 'https://github.com/robotoD/GenoVi',   # Provide either the link to your github or to your website
   download_url = 'https://github.com/robotoD/GenoVi/archive/refs/tags/0.1.6.tar.gz',    # I explain this later on
   keywords = ['bioinformatics', 'genomics', 'CIRCOS'],   # Keywords that define your package best

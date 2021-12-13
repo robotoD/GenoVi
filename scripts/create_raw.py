@@ -22,7 +22,8 @@ import subprocess
 import os
 from shutil import which
 import pandas as pd
-import genbank2faa as genbank2faa
+#from genbank2faa import genbankToFaa
+
 
 # Parse user arguments
 def get_args():

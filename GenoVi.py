@@ -9,14 +9,23 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
+import scripts.create_raw as create_raw
+import scripts.GC_analysis as GC_analysis
+import scripts.genbank2fna as gbk2fna
+import scripts.genbank2faa as genbank2faa
+import scripts.createConf as createConf
+import scripts.addText as addText
+import scripts.mergeImages as merge
+import scripts.colors as colors
+
 import argparse as ap
-import create_raw as create_raw
-import GC_analysis as GC_analysis
-import genbank2fna as gbk2fna
-import createConf as createConf
-import addText as addText
-import mergeImages as merge
-import colors as colors
+#import scripts.create_raw as create_raw
+#import scripts.GC_analysis as GC_analysis
+#import scripts.genbank2fna as gbk2fna
+#import scripts.createConf as createConf
+#import scripts.addText as addText
+#import scripts.mergeImages as merge
+#import scripts.colors as colors
 import os
 from shutil import which
 try:

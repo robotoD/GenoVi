@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 setup(
-  name = 'GenoVi',         # How you named your package folder (MyLib)
+  name = 'genovi',         # How you named your package folder (MyLib)
+  scripts = ['genovi'],
   packages = find_packages(),   # Chose the same as "name"
   version = '0.1.6',      # Start with a small number and increase it with every change you make
   license='BY-NC-SA Creative Commons License',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
@@ -28,4 +29,9 @@ setup(
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
   ],
+  entry_points = {
+              'console_scripts': [
+                  'command-name = package.module:GenoVi.py',                  
+              ],              
+          },
 )

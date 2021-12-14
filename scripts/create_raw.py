@@ -22,7 +22,7 @@ import subprocess
 import os
 from shutil import which
 import pandas as pd
-#from genbank2faa import genbankToFaa
+import scripts.genbank2faa as genbank2faa
 
 
 # Parse user arguments
@@ -384,7 +384,8 @@ def get_categories(gbk_file, output, lower_bound = 0):
 		#output_, error = process.communicate()
 		print()
 		print("GBK file transformed into faa succesfully. File saved as", output_faa)
-	except:
+	except Exception as e:
+		print(e)
 		print("Error when transforming gbk to faa.")
 		return
 	
@@ -413,7 +414,8 @@ def get_categories(gbk_file, output, lower_bound = 0):
 	# Cross files 
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
-	tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
+	#tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
+	tab_file =  os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)) + "/dataset/cog-20.def.tab"
 	cogs_df.columns = ['id', 'cog']
 	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form

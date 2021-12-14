@@ -23,6 +23,7 @@ import os
 from shutil import which
 import pandas as pd
 import scripts.genbank2faa as genbank2faa
+global seek
 
 
 # Parse user arguments
@@ -53,6 +54,26 @@ def get_args():
         
     return args.input_file, args.output_folder, args.cds, args.trna, args.rrna, args.get_categories, args.divided, args.complete_genome
 
+# Recursive function that looks for genovi folder
+def listdir_r(dirpath, folder, seek):
+	for path in os.listdir(dirpath):
+		rpath = os.path.join(dirpath, path)
+		if "genovi" in rpath:
+			if os.path.isdir(rpath):
+				subdirs = listdir_r(rpath, folder, seek)
+				
+			else:
+				split = rpath.split('/')
+				if split[-1] == "genovi":
+					direct = '/'.join(split[:-1])
+					if os.path.isdir(direct + "/input_test"):
+						seek.append(direct)
+		else:
+			if os.path.isdir(rpath):
+				subdirs = listdir_r(rpath, folder, seek)		
+		
+	return seek
+	
 
 # Function to obtain contig sizes from gbk file, then computes contig locations
 # And finally creates a kar file with original contig order.
@@ -415,7 +436,16 @@ def get_categories(gbk_file, output, lower_bound = 0):
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
 	#tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
-	tab_file =  os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)) + "/dataset/cog-20.def.tab"
+	seek = []
+	main = os.path.expanduser('~')
+	dirs = list(map(str, listdir_r(main, "folder", seek)))
+	if dirs == []:
+		print("GenoVi folder not found")
+		return
+	dirs.sort(key=len)
+	genovi_dir = dirs[0]
+
+	tab_file =  genovi_dir + "/dataset/cog-20.def.tab"
 	cogs_df.columns = ['id', 'cog']
 	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form

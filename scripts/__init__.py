@@ -1,4 +1,4 @@
-from GenoVi import *
+#from . import genovi
 #from addText import *
 #from colors import *
 #from create_raw import *

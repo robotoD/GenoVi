@@ -18,7 +18,7 @@
 from math import sqrt
 
 
-def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False):
+def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False, captions_position = "normal"):
     totalWidth = 0
     extraElements = ""
     if sort:
@@ -48,10 +48,15 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
     
     file = open(outFile, "w")
     file.write('''<?xml version="1.0" encoding="utf-8" standalone="no"?>
-                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-                <svg width="3000px" height="3000px"
-                version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n\n''')
-    file.write('<rect x="0" y="0" width="3000px" height="3000px" style="fill:{};"/>'.format(background_color))
+                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">''')
+    if captions_position == "right":
+        file.write('''<svg width="4000px" height="3000px"''')
+    elif captions_position == "left":
+        file.write('''<svg width=viewBox="-1000 0 4000 3000"''')
+    else:
+        file.write('''<svg width="3000px" height="3000px"''')
+    file.write('''version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n\n''')
+    file.write('<rect x="-1000" y="0" width="5000px" height="3000px" style="fill:{};"/>'.format(background_color))
     currentX = 0
     beginGroup = '<g transform="translate({},{}) scale({})\n">'
     if align == "auto":

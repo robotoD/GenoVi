@@ -376,7 +376,7 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 
 
 # Function to predict COG categories with DeepNOG
-def get_categories(gbk_file, output, lower_bound = 0):
+def get_categories(gbk_file, output, deepnog_confidence = 0):
 	
 	
 	# Check if deepnog is installed
@@ -415,8 +415,8 @@ def get_categories(gbk_file, output, lower_bound = 0):
 	print("output", output)
 	output_pred = output + "_prediction_deepnog.csv"
 	command2 = "deepnog infer " + output_faa + " --out " + output_pred + " -db cog2020 -t 1"
-	if lower_bound > 0:
-		command2 += " -c " + str(lower_bound)
+	if deepnog_confidence > 0:
+		command2 += " -c " + str(deepnog_confidence)
 	
 	try: 
 		print()
@@ -488,7 +488,7 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 # Base pipeline for non-complete genome.	
-def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_bound = 0, verbose = False):
+def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_confidence = 0, verbose = False):
 	
 	flag = True
 
@@ -499,7 +499,7 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False,
 		print("Error: Categories can only be predicted for CDS. Please enter output file paths for both CDS.") 
 		flag = False
 	elif get_cats:
-		cogs_dict = get_categories(gbk_file, output, deepnog_bound)
+		cogs_dict = get_categories(gbk_file, output, deepnog_confidence)
 	else:
 		cogs_dict = None
 		

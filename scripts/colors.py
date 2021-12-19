@@ -14,8 +14,8 @@ import re
 # This function is for parsing color schemes
 def parseColors(color_scheme = "auto", background_color = "none", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
     color_scheme = color_scheme.lower()
-    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
-        background_color = "rgb(" + background_color + ")"
+    # if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
+    #     background_color = "rgb(" + background_color + ")"
     gc_skew_original_argument = re.match("^\s*(?P<red1>[012]?\d?\d)\s*,\s*(?P<green1>[012]?\d?\d)\s*,\s*(?P<blue1>[012]?\d?\d)\s*[,;-]\s*(?P<red2>[012]?\d?\d)\s*,\s*(?P<green2>[012]?\d?\d)\s*,\s*(?P<blue2>[012]?\d?\d)\s*$", GC_skew)
     if gc_skew_original_argument:
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,{},{}),remap_int(var(value),0,0,{},{}),remap_int(var(value),0,0,{},{})))'.format(

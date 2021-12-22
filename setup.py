@@ -26,12 +26,15 @@ setup(
   download_url = 'https://github.com/robotoD/GenoVi/archive/refs/tags/0.1.6.tar.gz',    # I explain this later on
   keywords = ['bioinformatics', 'genomics', 'CIRCOS'],   # Keywords that define your package best
   install_requires=[            # I get to this in a second
-          'cairosvg',
-          'numpy',
-          'pandas',
-          'BioPython',
+          'cairosvg>=2.5.2',
+          'numpy>=1.20.2',
+          'pandas>=1.2.4',
+          'BioPython>=1.79',
           'argparse',
-          'deepnog==1.2.3'
+          'deepnog>=1.2.3'
+          'scikit-learn',
+          'torch>=1.2.0',
+          'tqdm>=4.35.0'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package

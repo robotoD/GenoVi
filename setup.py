@@ -1,4 +1,7 @@
 from setuptools import setup, find_packages
+import codecs
+from os import path
+import re
 
 extra_test = [
   'pytest>=4',
@@ -14,10 +17,28 @@ extra_ci = [
   'python-coveralls',
 ]
 
+here = path.abspath(path.dirname(__file__))
+
+# Single-sourcing the package version: Read from init
+def read(*parts):
+    with codecs.open(path.join(here, *parts), 'r') as fp:
+        return fp.read()
+
+
+def find_version(*file_paths):
+    print(*file_paths)
+    version_file = read(*file_paths)
+    print(version_file)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
 setup(
   name = 'genovi',         # How you named your package folder (MyLib)
-  packages = find_packages(),   # Chose the same as "name"
-  version = '0.1.11',      # Start with a small number and increase it with every change you make
+  packages = find_packages(where='.'),   # Chose the same as "name"
+  version = find_version('scripts', '__init__.py'),      # Start with a small number and increase it with every change you make
   license='BY-NC-SA Creative Commons License',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Generates full genome images from a gbff file',   # Give a short description about your library
   author = 'Cumsille A. et al.',                   # Type in your name
@@ -31,10 +52,11 @@ setup(
           'pandas>=1.2.4',
           'BioPython>=1.79',
           'argparse',
-          'deepnog>=1.2.3'
+          'deepnog>=1.2.3',
           'scikit-learn',
           'torch>=1.2.0',
-          'tqdm>=4.35.0'
+          'tqdm>=4.35.0',
+          'Pillow'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
@@ -61,5 +83,6 @@ setup(
     'dev': extra_dev,
   },
 
-
+  package_data = {'genovi': ['scripts/dataset/cog-20.def.tab']},
+  include_package_data = True,
 )

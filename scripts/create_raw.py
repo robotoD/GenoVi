@@ -24,6 +24,7 @@ from shutil import which
 import pandas as pd
 import scripts.genbank2faa as genbank2faa
 global seek
+import pkg_resources
 
 
 __all__ = ['getArgs', 'listdir_r', 'ends_sorted', 'create_kar', 'create_feature', 'base_complete', 'base', 'get_categories', 'create_kar_complete', 'create_feature_complete',
@@ -440,17 +441,19 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
 	#tab_file = os.path.abspath(os.path.dirname(__file__)) + "/dataset/cog-20.def.tab" # To do: order this
-	seek = []
-	main = os.path.expanduser('~')
-	dirs = list(map(str, listdir_r(main, "folder", seek)))
-	if dirs == []:
-		print("GenoVi folder not found")
-		return
-	dirs.sort(key=len)
-	genovi_dir = dirs[0]
-
-	tab_file =  genovi_dir + "/dataset/cog-20.def.tab"
+	#seek = []
+	#main = os.path.expanduser('~')
+	#dirs = list(map(str, listdir_r(main, "folder", seek)))
+	#if dirs == []:
+	#	print("GenoVi folder not found")
+	#	return
+	#dirs.sort(key=len)
+	#genovi_dir = dirs[0]
+	#print(genovi_dir)
+	#tab_file =  genovi_dir + "/dataset/cog-20.def.tab"
 	cogs_df.columns = ['id', 'cog']
+	parent = '.'.join(__name__.split('.')[:-1])
+	tab_file = pkg_resources.resource_stream(parent, "dataset/cog-20.def.tab")
 	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form
 	tab_df.columns = ['cog', 'category']

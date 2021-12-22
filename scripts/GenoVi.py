@@ -28,11 +28,13 @@ from .GC_analysis import get_args_, write_content, generate_result, makeGC, crea
 from .genbank2faa import modify_locus, genbankToFaa, mainFaa
 from .genbank2fna import gbkToFna, mainFna
 from .mergeImages import mergeImages
+from scripts import __version__
 
 import re
 import argparse as ap
 import os
 from shutil import which
+
 
 __all__ = ['change_background', 'visualizeGenome', 'get_args', 'main',
            ]
@@ -207,6 +209,23 @@ def visualizeGenome(input_file, output_file = "circos",
         os.rmdir("temp")
         os.rmdir("conf")
     
+def get_version():
+	try:
+		_dist = get_distribution('genovi')
+		# Normalize case for Windows systems
+		dist_loc = os.path.normcase(_dist.location)
+		here = os.path.normcase(__file__)
+		if not here.startswith(os.path.join(dist_loc, 'genovi')):
+			# not installed, but there is another version that *is*
+			raise DistributionNotFound
+	except DistributionNotFound:
+		__version__ = 'Please install this project with\n pip install genovi'
+	else:
+		__version__ = _dist.version
+		
+	return __version__
+   
+    
 # Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
@@ -243,7 +262,8 @@ def get_args():
     color_group.add_argument("-sc", "--GC_skew_color", type=str, help="Color scheme for GC skew. Might be a pair of RGB colors or Circos-understandable code. For details on this, please read CIRCOS documentation. Default: '140, 150, 198 - 158, 188, 218'", default = 'auto')
     color_group.add_argument("-sl", "--GC_skew_line_color", type=str, help="Color for GC skew line. Default: black", default = 'auto')
     
-
+    parser.add_argument("--version", action="version", version=f'%(prog)s {__version__}')
+    
     args = parser.parse_args()
 
     return (args.input_file, args.output_file,

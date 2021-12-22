@@ -16,6 +16,9 @@ from Bio import SeqIO
 import argparse
 import re
 
+__all__ = ['modify_locus', 'genbankToFaa', 'mainFaa',
+           ]
+
 # Modifies locus description in case that input file was generated
 # with Prokka.
 def modify_locus(input):
@@ -83,6 +86,20 @@ def genbankToFaa(input, output, verbose = False):
     input_handle.close()
     if verbose:
         print("Done")
+
+def mainFaa():
+    parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")
+    parser.add_argument("inputFile", help="flat file to be translated")
+    parser.add_argument("--outputFile", help="output file name" )
+    args = parser.parse_args()
+    if ".gb" in args.inputFile:
+        if args.inputFile[-4] == ".":
+            args.inputFile = args.inputFile[:-4]
+        elif args.inputFile[-3] == ".":
+            args.inputFile = args.inputFile[:-3]
+    if args.outputFile is None:
+        args.outputFile = args.inputFile + "_converted.faa"
+    genbankToFaa(args.inputFile, args.outputFile)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")

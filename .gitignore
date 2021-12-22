@@ -6,3 +6,5 @@ GenoVi.egg-info
 GenoVi.egg-info/*
 dist
 dist/*
+.pytest_cache/
+.coverage

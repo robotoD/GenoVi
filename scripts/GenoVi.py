@@ -11,19 +11,31 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
-import scripts.create_raw as create_raw
-import scripts.GC_analysis as GC_analysis
-import scripts.genbank2fna as gbk2fna
-import scripts.genbank2faa as genbank2faa
-import scripts.createConf as createConf
-import scripts.addText as addText
-import scripts.mergeImages as merge
-import scripts.colors as colors
+#import create_raw as create_raw
+#import GC_analysis as GC_analysis
+#import genbank2fna as gbk2fna
+#import genbank2faa as genbank2faa
+#import createConf as createConf
+#import addText as addText
+#import mergeImages as merge
+#import colors as colors
+
+from .addText import addText
+from .colors import parseColors
+from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base_complete, base, get_categories, create_kar_complete, create_feature_complete, new_loc, write_cog_files, write_lines, createRaw
+from .createConf import create_conf, create_conf_main
+from .GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
+from .genbank2faa import modify_locus, genbankToFaa, mainFaa
+from .genbank2fna import gbkToFna, mainFna
+from .mergeImages import mergeImages
 
 import re
 import argparse as ap
 import os
 from shutil import which
+
+__all__ = ['change_background', 'visualizeGenome', 'get_args', 'main',
+           ]
 
 try:
     from cairosvg import svg2png
@@ -53,6 +65,8 @@ def visualizeGenome(input_file, output_file = "circos",
                     cogs_unclassified = True, deepnog_confidence_threshold = 0, separate_circles = False, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
+        
+    
     if not cairo:
         print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
     if output_file[-4:] == ".svg" or output_file[-4:] == ".png":
@@ -67,7 +81,7 @@ def visualizeGenome(input_file, output_file = "circos",
             print("Circos is not installed. please install for using GenoVi.")
         raise Exception("Circos is not installed. please install for using GenoVi.")
     
-    color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = colors.parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
+    color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color = parseColors(color_scheme, background_color, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_color)
     delete_background = False
     if background_color == "transparent" or background_color == "none" or background_color == "auto":
         delete_background = True
@@ -90,12 +104,12 @@ def visualizeGenome(input_file, output_file = "circos",
         full_cogs = set([])
         for i in range(1, len(contigs) + 1):
             file = "temp/" + str(i) + ".gbk"
-            sizes, cogs_p, cogs_n = create_raw.base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            sizes, cogs_p, cogs_n = base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
-            gbk2fna.gbkToFna(file, "temp/gbk_converted.fna", verbose)
-            maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
-            createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
+            gbkToFna(file, "temp/gbk_converted.fna", verbose)
+            maxmins = makeGC("temp/gbk_converted.fna", "temp/GC", window)
+            create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -112,7 +126,7 @@ def visualizeGenome(input_file, output_file = "circos",
                     svgFile.close()
 
             if size:
-                addText.addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_color = font_color)
+                addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_color = font_color)
                 os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
             else:
                 os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
@@ -128,33 +142,33 @@ def visualizeGenome(input_file, output_file = "circos",
             if captionsPosition == "auto":
                 captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
             if title_position == "center":
-                addText.addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_color = font_color)
+                addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_color = font_color)
                 os.remove(output_file + "-contig_" + "1.svg")
                 os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
-                merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
-                addText.addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
+                mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             else:
-                merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
-                addText.addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
+                mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             os.remove(output_file + ".svg")
             os.rename("titled_" + output_file + ".svg", output_file + ".svg")
         else:
-            merge.mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+            mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
         if not os.path.exists(output_file):
             os.mkdir(output_file)
         for i in range(1, len(contigs) + 1):
             os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
             os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
     else:
-        sizes, cogs_p, cogs_n = create_raw.base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+        sizes, cogs_p, cogs_n = base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
-        gbk2fna.gbkToFna(input_file, "temp/gbk_converted.fna", verbose)
-        maxmins = GC_analysis.makeGC("temp/gbk_converted.fna", "temp/GC", window)
-        createConf.create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
+        gbkToFna(input_file, "temp/gbk_converted.fna", verbose)
+        maxmins = makeGC("temp/gbk_converted.fna", "temp/GC", window)
+        create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
 
         if verbose:
             print("Drawing...")
@@ -168,7 +182,7 @@ def visualizeGenome(input_file, output_file = "circos",
             change_background("none")
         if captions or title != "" or size:
             captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-            addText.addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n),
+            addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n),
             pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color, size = sizes[0] if size else "")
             os.remove("circos.svg")
             os.rename("titled_circos.svg", "circos.svg")
@@ -236,6 +250,10 @@ def get_args():
     args.cogs_unclassified, args.deepnog_confidence_threshold, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.font_color, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
+
+def main():
+    visualizeGenome(*get_args())
+
 
 if __name__ == "__main__":
     visualizeGenome(*get_args())

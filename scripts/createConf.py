@@ -13,6 +13,9 @@
 import argparse as ap
 import os
 
+__all__ = ['create_conf', 'create_conf_main' 
+           ]
+
 
 # Function that writes base CIRCOS configuration files
 # circos.conf, highlight.conf, colors_fonts_patterns.conf, housekeeping.conf, image.conf, and ticks.conf.
@@ -578,6 +581,31 @@ label_size     = 20p
 '''.format(font_color = font_color))
     file.close()
     return
+
+def create_conf_main():
+    parser = ap.ArgumentParser()
+
+    limit_group = parser.add_argument_group("limits")
+    limit_group.add_argument("--content_min", "--min_GC_content", type=str, help="Minimum GC content", required=False, default = "0")
+    limit_group.add_argument("--content_max", "--max_GC_content", type=str, help="Maximum GC content", required=False, default = "100")
+    limit_group.add_argument("--skew_min", "--min_GC_skew", type=str, help="Minimum GC skew", required=False, default = "-1")
+    limit_group.add_argument("--skew_max", "--max_GC_skew", type=str, help="Maximum GC skew", required=False, default = "1")
+
+    color_group = parser.add_argument_group("colors")
+    color_group.add_argument("-cc", "--GC_content_color", type=str, help="Color for GC content, in R, G, B format. Default: '23, 0, 115'", default = "23, 0, 115")
+    color_group.add_argument("-sc", "--GC_skew_color", type=str, help="Color scheme for GC skew. For details on this, please read CIRCOS documentation. Default: 'eval(sprintf(\"rdbu-7-div-%%d\",remap_int(var(value),0,0,7,5)))'", default = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))')
+    color_group.add_argument("-pc", "--CDS_positive_color", type=str, help="Color for positive CDSs, in R, G, B format. Default: '180, 205, 222'", default = '180, 205, 222')
+    color_group.add_argument("-nc", "--CDS_negative_color", type=str, help="Color for negative CDSs, in R, G, B format. Default: '53, 176, 42'", default = '53, 176, 42')
+
+    args = parser.parse_args()
+    create_conf({"min_GC_content": args.min_GC_content,
+                 "max_GC_content": args.max_GC_content,
+                 "min_skew": args.min_GC_skew,
+                 "max_skew": args.max_GC_skew},
+                 args.GC_content_color,
+                 args.GC_skew_color,
+                 args.CDS_positive_color,
+                 args.CDS_negative_color)
 
 if __name__ == "__main__":
     parser = ap.ArgumentParser()

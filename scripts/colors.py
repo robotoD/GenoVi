@@ -11,6 +11,8 @@
 
 import re
 
+__all__ = ['parseColors']
+
 # This function is for parsing color schemes
 def parseColors(color_scheme = "auto", background_color = "none", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
     color_scheme = color_scheme.lower()

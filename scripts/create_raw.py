@@ -26,8 +26,12 @@ import scripts.genbank2faa as genbank2faa
 global seek
 
 
+__all__ = ['getArgs', 'listdir_r', 'ends_sorted', 'create_kar', 'create_feature', 'base_complete', 'base', 'get_categories', 'create_kar_complete', 'create_feature_complete',
+			'new_loc', 'write_cog_files', 'write_lines', 'createRaw',
+			]
+
 # Parse user arguments
-def get_args():
+def getArgs():
     parser = ap.ArgumentParser()
     parser.add_argument("input_file", help="Genbank file path")
     
@@ -521,11 +525,61 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False,
 			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
 	return ((sizes, cogs_p, cogs_n))
 
+def createRaw():
+	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]
+
+	try:
+		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]
+	except:
+		gbk_name = gbk_file.split('.g')[-2]
+	
+	if output == "":
+		output = gbk_name + "/"
+	elif output[-1] != "/":
+		output = output + "/"
+	
+	if not os.path.isdir(output):
+		os.mkdir(output)
+	
+	if complete == True:
+		
+		files_gbk = []
+		gbk = open(gbk_file,"r")
+		
+		try:
+			gbk_name = gbk_file.split("/")[-1].split(".")[-2]
+		except:
+			gbk_name = gbk_file.split(".")[-2]	
+			
+		sizes, inits, ends = create_kar(gbk_file, output, complete)
+
+		for k, rec in enumerate(SeqIO.parse(gbk, "genbank")):
+			
+			output_ = output + 'replicon_' + str(k+1) + "/"
+			
+			if not os.path.isdir(output_):
+				os.mkdir(output_)
+			
+			
+			#filename = output_ + gbk_name + '_' + rec.id + '.gbk'
+			filename = output_ + gbk_name + '_' + str(k+1) + '.gbk'
+			files_gbk.append(filename)
+			SeqIO.write([rec], open(filename, "w"), "genbank")
+			
+			output_ = output_ + gbk_name + '_' + str(k+1)
+			
+			base_complete(filename, output_, cds, trna, get_cats, divided, k, inits[k], ends[k], sizes)
+	
+	else:
+		
+		output_ = output + gbk_name
+		base(gbk_file, output_, cds, trna, get_cats, divided, complete, rrna)
+
 
 if __name__ == '__main__':
 	
 	#gbk_file, output, cds_pos, cds_neg, trna_pos, trna_neg, get_cats, divided, complete = get_args()[:]
-	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = get_args()[:]
+	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]
 	
 	try:
 		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]

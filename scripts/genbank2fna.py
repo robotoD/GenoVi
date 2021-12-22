@@ -17,6 +17,8 @@
 from Bio import SeqIO
 import argparse
 
+__all__ = ['gbkToFna', 'mainFna',
+           ]
 
 def gbkToFna(input, output = None, verbose = False):
     if output is None:
@@ -49,6 +51,18 @@ def gbkToFna(input, output = None, verbose = False):
     if verbose:
         print("Done")
 
+
+def mainFna():
+    parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")
+    parser.add_argument("-i", "--inputFile", help = "flat file to be translated", required = True)
+    parser.add_argument("-o", "--outputFile", help = "output file name" )
+    args = parser.parse_args()
+    if ".gb" in args.inputFile:
+        if args.inputFile[-4] == ".":
+            args.inputFile = args.inputFile[:-4]
+        elif args.inputFile[-3] == ".":
+            args.inputFile = args.inputFile[:-3]
+    gbkToFna(args.inputFile, args.outputFile)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")

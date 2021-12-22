@@ -12,6 +12,9 @@
 
 import re
 
+__all__ = ['addText',
+           ]
+
 # Adds text elements to Circos-generated SVG image.
 # May include title, contig size and color legend.
 def addText(text, position = "center", inFile="circos.svg", outFile="default", italic=2,

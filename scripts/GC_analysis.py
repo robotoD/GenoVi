@@ -16,8 +16,12 @@ import argparse as ap
 import sys
 from Bio import SeqIO
 
+__all__ = ['get_args_', 'write_content', 'generate_result', 'makeGC', 'createGC' 
+           ]
+
+
 # Parse user arguments
-def get_args():
+def get_args_():
     parser = ap.ArgumentParser()
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-i", "--input_file", type=str, help="Name of the input file in FASTA format",
@@ -142,6 +146,9 @@ def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_
                     "max_skew": maxSkew
             }
 
+def createGC():
+    makeGC(*get_args_())
+
 if __name__ == "__main__":
-    makeGC(*get_args())
+    makeGC(*get_args_())
     

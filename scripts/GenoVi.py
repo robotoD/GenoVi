@@ -63,12 +63,11 @@ def change_background(color, fileName = "circos.svg"):
 
 # Full pipeline
 # input: anotated genome filename.
-def visualizeGenome(input_file, output_file = "circos", 
-                    cogs_unclassified = True, deepnog_confidence_threshold = 0, separate_circles = False, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000, verbose = False,
+def visualizeGenome(input_file, status, output_file = "circos", 
+                    cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
-        
-    
+
     if not cairo:
         print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
     if output_file[-4:] == ".svg" or output_file[-4:] == ".png":
@@ -91,7 +90,7 @@ def visualizeGenome(input_file, output_file = "circos",
     
     if not os.path.exists("temp"):
         os.mkdir("temp")
-    if separate_circles:
+    if status == "complete":
         file = open(input_file)
         contigs = file.read().split("\n//\n")
         file.close()
@@ -152,6 +151,7 @@ def visualizeGenome(input_file, output_file = "circos",
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             else:
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
+                print(captionsPosition)
                 addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             os.remove(output_file + ".svg")
@@ -230,19 +230,18 @@ def get_version():
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file path", required=True)
+    parser.add_argument("-s", "--status", type=str, choices=["complete", "draft"], help="To draw each contig as a complete circle by itself.", required = True)
     parser.add_argument("-o", "--output_file", type=str, help="Output image file path. Default: circos", default = "circos")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not clasify each coding sequence and draw them by color.", required = False)
     parser.add_argument("-b", "--deepnog_confidence_threshold", type=float, help="Lower bound for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
-    parser.add_argument("-s", "--separate_circles", action='store_true', help="To draw each contig as a complete circle by itself.", required = False)
-    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --separate_circles, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes", default = "auto")
-    parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
+    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --status complete, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes", default = "auto")
+    parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --status complete, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-w", "--window", "--step", type=int, help="base pair window for CG plotting. Default: 5000", default = 5000)
     parser.add_argument("-v", "--verbose", type=bool, help="Wether to print progress logs.", default = True)
 
     text_group = parser.add_argument_group("text")
     text_group.add_argument("-c", "--captions_not_included", action='store_false', help = "Do not include color explanation.", required = False)
-    #text_group.add_argument("-cp", "--captions_position", type=str, choices=["variable", "linear", "sqrt"], help="When using --separate_circles, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     text_group.add_argument("-cp", "--captions_position", type=str, choices=["right", "left", "auto"], help = "Where to insert color explanation. Options: left, right, auto.", default = "auto")
     text_group.add_argument("-t", "--title", type=str, help="Title of the image (strain name, or something like that). By default, it doesn't include title", default = "")
     text_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
@@ -266,8 +265,8 @@ def get_args():
     
     args = parser.parse_args()
 
-    return (args.input_file, args.output_file,
-    args.cogs_unclassified, args.deepnog_confidence_threshold, args.separate_circles, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,
+    return (args.input_file, args.status, args.output_file,
+    args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.font_color, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 

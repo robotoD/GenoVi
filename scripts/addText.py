@@ -199,21 +199,48 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             index += 1
                 else: # if not cogs_legend
                     index = 0
-                    for feature in features:
-                        if feature["color"] == "line":
-                            legendPiece = otherLegendPiece
-                            feature["color"] = "none"
-                        if "eval" in feature["color"]:
-                            feature["color"] = "100,100,100"
-                        if captionsPosition == "top-right":
-                            legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 2700, 2730, font_color)
-                        elif captionsPosition == "bottom-right":
-                            legendElement += legendPiece.format(2830 + index*25, 2848 + index*25, feature["description"], feature["color"], 2700, 2730, font_color)
-                        elif captionsPosition == "top-left":
-                            legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 50, 80, font_color)
-                        else:
-                            legendElement += legendPiece.format(2830 + index*25, 2848 + index*25, feature["description"], feature["color"], 50, 80, font_color)
-                        index += 1
+                    if captionsPosition == "right":
+                        legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
+                                <text x="{5}" y="{1}" font-size="25.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+                        otherLegendPiece = '''<path d="M{4} {0} m0 10 h3 l2 -5 5 10 2-5 3 0" fill="{3}" stroke="{6}"/>
+                                <text x="{5}" y="{1}" font-size="25.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+                        for feature in features:
+                            if feature["color"] == "line":
+                                legendPiece = otherLegendPiece
+                                feature["color"] = "none"
+                            if "eval" in feature["color"]:
+                                feature["color"] = "100,100,100"
+                            legendElement += legendPiece.format(50 + index*35, 64 + index*35, feature["description"], feature["color"], 3000, 3030, font_color)
+                            index += 1
+                    elif captionsPosition == "left":
+                        legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
+                                <text x="{5}" y="{1}" font-size="25.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+                        otherLegendPiece = '''<path d="M{4} {0} m0 10 h3 l2 -5 5 10 2-5 3 0" fill="{3}" stroke="{6}"/>
+                                <text x="{5}" y="{1}" font-size="25.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+                        for feature in features:
+                            if feature["color"] == "line":
+                                legendPiece = otherLegendPiece
+                                feature["color"] = "none"
+                            if "eval" in feature["color"]:
+                                feature["color"] = "100,100,100"
+                            legendElement += legendPiece.format(50 + index*35, 64 + index*35, feature["description"], feature["color"], -900, -870, font_color)
+                            index += 1
+                    else:
+                        for feature in features:
+                            if feature["color"] == "line":
+                                legendPiece = otherLegendPiece
+                                feature["color"] = "none"
+                            if "eval" in feature["color"]:
+                                feature["color"] = "100,100,100"
+                            if captionsPosition == "top-right":
+                                legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 2700, 2730, font_color)
+                            elif captionsPosition == "bottom-right":
+                                legendElement += legendPiece.format(2830 + index*25, 2848 + index*25, feature["description"], feature["color"], 2700, 2730, font_color)
+                            elif captionsPosition == "top-left":
+                                legendElement += legendPiece.format(50 + index*25, 68 + index*25, feature["description"], feature["color"], 50, 80, font_color)
+                            else:
+                                legendElement += legendPiece.format(2830 + index*25, 2848 + index*25, feature["description"], feature["color"], 50, 80, font_color)
+                            index += 1
                 legendElement += '</g>'
                 destiny.write(legendElement)
         destiny.write(line)

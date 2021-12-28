@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-                <svg width="3000px" height="3000px"
-                version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="3000px" height="3000px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
-<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/><g transform="translate(490.82951323209,0) scale(0.67278032451194)
-"><g id="bg">
-<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/></g>
+<rect x="-1000" y="0" width="5000px" height="3000px" style="fill:none;"/><g transform="translate(490.82951323209,0) scale(0.67278032451194)">
+<g id="bg">
+<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:none;"/></g>
 <g id="ideograms">
 <g id="highlighttrack_0">
 <path d="M1500.000,467.600 A1032.400,1032.400 40.000 0,1 1502.981,467.604 L1502.847,514.004 A986.000,986.000 0.000 0,0 1500.000,514.000 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
@@ -8595,17 +8594,17 @@
 <line x1='1493.2' y1='1023.0' x2='1497.9' y2='1034.0' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
 </defs>
 </g>
-<g transform="translate(692.6636105856721,2018.34097353582) scale(0.11542896232056672)
-"><g id="bg">
-<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/></g>
+<g transform="translate(1009.17048676791,2018.34097353582) scale(0.11542896232056672)">
+<g id="bg">
+<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:none;"/></g>
 <g id="ideograms">
 <g id="highlighttrack_0">
 <path d="M2312.889,863.556 A1032.400,1032.400 40.000 0,1 2327.562,882.755 L2290.368,910.497 A986.000,986.000 0.000 0,0 2276.355,892.160 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
@@ -8910,17 +8909,17 @@
 <line x1='1219.5' y1='890.9' x2='1455.9' y2='1154.8' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
 <pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 </defs>
 </g>
-<g transform="translate(1038.9504975473724,2018.34097353582) scale(0.10202630533653978)
-"><g id="bg">
-<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/></g>
+<g transform="translate(1355.45737372961,2018.34097353582) scale(0.10202630533653978)">
+<g id="bg">
+<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:none;"/></g>
 <g id="ideograms">
 <g id="highlighttrack_0">
 <path d="M1546.006,468.626 A1032.400,1032.400 40.000 0,1 1611.881,473.680 L1606.852,519.807 A986.000,986.000 0.000 0,0 1543.938,514.979 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
@@ -9212,17 +9211,17 @@
 <line x1='1174.9' y1='1033.7' x2='1383.3' y2='896.3' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
-<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
-<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
+<pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
+<pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 </defs>
 </g>
-<g transform="translate(1345.0294135569916,2018.34097353582) scale(0.1097644078309534)
-"><g id="bg">
-<rect x="0" y="0" width="3000px" height="3000px" style="fill:none;"/></g>
+<g transform="translate(1661.5362897392292,2018.34097353582) scale(0.1097644078309534)">
+<g id="bg">
+<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:none;"/></g>
 <g id="ideograms">
 <g id="highlighttrack_0">
 <path d="M1706.633,488.490 A1032.400,1032.400 40.000 0,1 1836.831,524.093 L1821.693,567.954 A986.000,986.000 0.000 0,0 1697.346,533.951 Z" style="stroke-linecap:round;fill:rgb(255,222,235);" />
@@ -9530,41 +9529,70 @@
 <line x1='1409.5' y1='1062.8' x2='1498.4' y2='1098.6' style="stroke-width:0.5;stroke:rgb(150,150,150);stroke-linecap:round;fill:none;" />
 </g>
 <defs>
-<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="vline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="hline" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /></pattern>
 <pattern id="hline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:2" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 <pattern id="checker" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="10" y2="0" style="stroke:black;stroke-width:5" /><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:4" /></pattern>
+<pattern id="vline-sparse" width="10" height="10" patternTransform="rotate(0 0 0)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="10" style="stroke:black;stroke-width:2" /></pattern>
 </defs>
 </g>
-<g><rect x="1800" y="2730" width="15" height="15" fill="rgb(105, 123, 183)"/>
-                                <text x="1830" y="2748" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[D] Cell cycle control, adivision, chromosome partitioning</text><rect x="1800" y="2755" width="15" height="15" fill="rgb(48, 78, 157)"/>
-                                <text x="1830" y="2773" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[M] Cell wall/membrane/envelope biogenesis</text><rect x="1800" y="2780" width="15" height="15" fill="rgb(106, 154, 181)"/>
-                                <text x="1830" y="2798" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[N] Cell motility</text><rect x="1800" y="2805" width="15" height="15" fill="rgb(29, 130, 176)"/>
-                                <text x="1830" y="2823" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[O] Post translational modification, protein turnover, chaperones</text><rect x="1800" y="2830" width="15" height="15" fill="rgb(76, 169, 181)"/>
-                                <text x="1830" y="2848" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[T] Signal transduction mechanism</text><rect x="1800" y="2855" width="15" height="15" fill="rgb(28, 104, 117)"/>
-                                <text x="1830" y="2873" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[U] Intracellular trafficking, secretion and vesicular transport</text><rect x="1800" y="2880" width="15" height="15" fill="rgb(109, 191, 164)"/>
-                                <text x="1830" y="2898" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[V] Defense mechanism</text><rect x="1800" y="2905" width="15" height="15" fill="rgb(26, 147, 111)"/>
-                                <text x="1830" y="2923" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[W] Extracellular structures</text><rect x="2400" y="2530" width="15" height="15" fill="rgb(227, 73, 73)"/>
-                                <text x="2430" y="2548" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[A] RNA processing and modification</text><rect x="2400" y="2555" width="15" height="15" fill="rgb(173, 91, 159)"/>
-                                <text x="2430" y="2573" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[J] Translation, ribosomal structure and biogenesis</text><rect x="2400" y="2580" width="15" height="15" fill="rgb(163, 55, 140)"/>
-                                <text x="2430" y="2598" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[K] Transcription</text><rect x="2400" y="2605" width="15" height="15" fill="rgb(143, 118, 180)"/>
-                                <text x="2430" y="2623" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[L] Replication, recombination and repair</text><rect x="2400" y="2630" width="15" height="15" fill="rgb(83, 61, 145)"/>
-                                <text x="2430" y="2648" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[X] Mobilome: prophages, transposons</text><rect x="2400" y="2680" width="15" height="15" fill="rgb(181, 210, 123)"/>
-                                <text x="2430" y="2698" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[C] Energy production and conversion</text><rect x="2400" y="2705" width="15" height="15" fill="rgb(131, 173, 41)"/>
-                                <text x="2430" y="2723" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[E] Amino acid transport and metabolism</text><rect x="2400" y="2730" width="15" height="15" fill="rgb(188, 184, 104)"/>
-                                <text x="2430" y="2748" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[F] Nucleotide transport and metabolism</text><rect x="2400" y="2755" width="15" height="15" fill="rgb(152, 143, 28)"/>
-                                <text x="2430" y="2773" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[G] Carbohydrate transport and metabolism</text><rect x="2400" y="2780" width="15" height="15" fill="rgb(237, 194, 138)"/>
-                                <text x="2430" y="2798" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[H] Coenzyme transport and metabolism</text><rect x="2400" y="2805" width="15" height="15" fill="rgb(183, 130, 42)"/>
-                                <text x="2430" y="2823" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[I] Lipid transport and metabolism</text><rect x="2400" y="2830" width="15" height="15" fill="rgb(221, 137, 80)"/>
-                                <text x="2430" y="2848" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[P] Inorganic ion transport and metabolism</text><rect x="2400" y="2855" width="15" height="15" fill="rgb(198, 95, 23)"/>
-                                <text x="2430" y="2873" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[Q] Secondary metabolities biosynthesis, transport and metabolism</text><rect x="2400" y="2905" width="15" height="15" fill="rgb(105, 105, 105)"/>
-                                <text x="2430" y="2923" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[R] General function prediction only</text><rect x="2400" y="2930" width="15" height="15" fill="rgb(153, 153, 153)"/>
-                                <text x="2430" y="2948" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">[S] Function unknown</text><rect x="1600" y="2805" width="15" height="15" fill="rgb(255, 222, 235)"/>
-                                <text x="1630" y="2823" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">positive CDS</text><rect x="1600" y="2830" width="15" height="15" fill="rgb(181, 255, 214)"/>
-                                <text x="1630" y="2848" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">negative CDS</text><rect x="1600" y="2855" width="15" height="15" fill="rgb(143, 143, 143)"/>
-                                <text x="1630" y="2873" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">tRNA</text><rect x="1600" y="2880" width="15" height="15" fill="rgb(143, 143, 143)"/>
-                                <text x="1630" y="2898" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">rRNA</text><rect x="1600" y="2905" width="15" height="15" fill="rgb(196, 227, 255)"/>
-                                <text x="1630" y="2923" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">GC content</text><path d="M1600 2930 m0 10 h3 l2 -5 5 10 2-5 3 0" fill="none" stroke="black"/>
-                                <text x="1630" y="2948" font-size="21.0px" font-family="CMUBright-Roman" style="text-anchor:start;">GC skew</text></g></svg>
+<g><rect x="1800" y="2980" width="15" height="15" fill="rgb(26, 147, 111)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2992" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[W] Extracellular structures</text>
+<rect x="1800" y="2955" width="15" height="15" fill="rgb(109, 191, 164)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2967" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[V] Defense mechanism</text>
+<rect x="1800" y="2930" width="15" height="15" fill="rgb(28, 104, 117)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2942" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[U] Intracellular trafficking, secretion and vesicular transport</text>
+<rect x="1800" y="2905" width="15" height="15" fill="rgb(76, 169, 181)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2917" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[T] Signal transduction mechanism</text>
+<rect x="1800" y="2880" width="15" height="15" fill="rgb(29, 130, 176)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2892" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[O] Post translational modification, protein turnover, chaperones</text>
+<rect x="1800" y="2855" width="15" height="15" fill="rgb(106, 154, 181)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2867" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[N] Cell motility</text>
+<rect x="1800" y="2830" width="15" height="15" fill="rgb(48, 78, 157)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2842" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[M] Cell wall/membrane/envelope biogenesis</text>
+<rect x="1800" y="2805" width="15" height="15" fill="rgb(105, 123, 183)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1830" y="2817" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[D] Cell cycle control, adivision, chromosome partitioning</text>
+<rect x="2400" y="2980" width="15" height="15" fill="rgb(153, 153, 153)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2992" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[S] Function unknown</text>
+<rect x="2400" y="2955" width="15" height="15" fill="rgb(105, 105, 105)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2967" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[R] General function prediction only</text>
+<rect x="2400" y="2905" width="15" height="15" fill="rgb(198, 95, 23)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2917" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[Q] Secondary metabolities biosynthesis, transport and metabolism</text>
+<rect x="2400" y="2880" width="15" height="15" fill="rgb(221, 137, 80)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2892" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[P] Inorganic ion transport and metabolism</text>
+<rect x="2400" y="2855" width="15" height="15" fill="rgb(183, 130, 42)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2867" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[I] Lipid transport and metabolism</text>
+<rect x="2400" y="2830" width="15" height="15" fill="rgb(237, 194, 138)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2842" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[H] Coenzyme transport and metabolism</text>
+<rect x="2400" y="2805" width="15" height="15" fill="rgb(152, 143, 28)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2817" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[G] Carbohydrate transport and metabolism</text>
+<rect x="2400" y="2780" width="15" height="15" fill="rgb(188, 184, 104)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2792" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[F] Nucleotide transport and metabolism</text>
+<rect x="2400" y="2755" width="15" height="15" fill="rgb(131, 173, 41)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2767" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[E] Amino acid transport and metabolism</text>
+<rect x="2400" y="2730" width="15" height="15" fill="rgb(181, 210, 123)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2742" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[C] Energy production and conversion</text>
+<rect x="2400" y="2680" width="15" height="15" fill="rgb(83, 61, 145)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2692" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[X] Mobilome: prophages, transposons</text>
+<rect x="2400" y="2655" width="15" height="15" fill="rgb(143, 118, 180)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2667" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[L] Replication, recombination and repair</text>
+<rect x="2400" y="2630" width="15" height="15" fill="rgb(163, 55, 140)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2642" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[K] Transcription</text>
+<rect x="2400" y="2605" width="15" height="15" fill="rgb(173, 91, 159)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2617" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[J] Translation, ribosomal structure and biogenesis</text>
+<rect x="2400" y="2580" width="15" height="15" fill="rgb(227, 73, 73)" stroke="rgb(0, 0, 0)"/>
+                                <text x="2430" y="2592" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">[A] RNA processing and modification</text>
+<rect x="1600" y="2855" width="15" height="15" fill="rgb(255, 222, 235)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2862" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">positive CDS</text>
+<rect x="1600" y="2880" width="15" height="15" fill="rgb(181, 255, 214)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2887" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">negative CDS</text>
+<rect x="1600" y="2905" width="15" height="15" fill="rgb(143, 143, 143)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2912" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">tRNA</text>
+<rect x="1600" y="2930" width="15" height="15" fill="rgb(143, 143, 143)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2937" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">rRNA</text>
+<rect x="1600" y="2955" width="15" height="15" fill="rgb(196, 227, 255)" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2962" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">GC content</text>
+<path d="M1600 2980 m0 10 h3 l2 -5 5 10 2-5 3 0" fill="none" stroke="rgb(0, 0, 0)"/>
+                                <text x="1630" y="2987" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="rgb(0, 0, 0)">GC skew</text>
+</g></svg>

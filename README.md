@@ -27,11 +27,11 @@ conda create -n genovi python=3.7 deepnog circos
 Please type `GenoVi.py -h` for complete usage instructions. Anyway, here are a few examples:
 
 ```
-python GenoVi.py -i input_test/Corynebacterium_alimapuense_VA37.gbk --color velvet --background black --cogs_unclassified
+genovi -i input_test/Corynebacterium_alimapuense_VA37.gbk --status draft --color velvet --background black --font_color white --cogs_unclassified
 ```
 ![Corynebacterium alimapuense VA37](output_test/Corynebacterium_alimapuense_VA37-no_cogs.svg "Corynebacterium_alimapuense_VA37")
 ```
-python GenoVi.py -i input_test/Acinetobacter_radioresistens_DD78.gbk --color pastel -c
+genovi -i input_test/Acinetobacter_radioresistens_DD78.gbk --status complete --color pastel
 ```
 ![Acinetobacter radioresistens DD78](output_test/Acinetobacter_radioresistens_DD78.svg "Acinetobacter_radioresistens_DD78")
 

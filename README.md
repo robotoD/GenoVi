@@ -74,17 +74,18 @@ genovi [-h] [options ..] -i input_file -s status
 * -sc, --GC_skew_color- Color scheme for positive and negative GC skew. A pair of RGB colors. Default: '140, 150, 198 - 158, 188, 218'
 * -sl, --GC_skew_line_color. Color for GC skew line. Default: black
 
+![Acinetobacter radioresistens DD78](output_test/Acinetobacter_radioresistens_DD78.svg "Acinetobacter_radioresistens_DD78")
 
 
+## Tutorial
 
-
-
-
-
+### Draft circular genome representation withouth COGs classification
 ```
 genovi -i input_test/Corynebacterium_alimapuense_VA37.gbk --status draft --color velvet --background black --font_color white --cogs_unclassified
 ```
-![Corynebacterium alimapuense VA37](output_test/Corynebacterium_alimapuense_VA37-no_cogs.svg "Corynebacterium_alimapuense_VA37")
+![Prebuilt color palettes](Figures/Palettes.png "Prebuilt color palettes")
+
+### Complete circular genome representation
 ```
 genovi -i input_test/Acinetobacter_radioresistens_DD78.gbk --status complete --color pastel
 ```
@@ -101,6 +102,8 @@ genovi -i input_test/Acinetobacter_radioresistens_DD78.gbk --status complete --c
 | .txt | input files for Circos visualization|
 | prediction_deepnog.csv | COG prediction using the COG 2020 database by DeepNOG.|
 
+## Additional information
+For further information, please read the user guide. 
 
 ## Citation and License
 

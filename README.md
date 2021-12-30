@@ -76,6 +76,7 @@ genovi [-h] [options ..] -i input_file -s status
 * -sc, --GC_skew_color- Color scheme for positive and negative GC skew. A pair of RGB colors. Default: '140, 150, 198 - 158, 188, 218'
 * -sl, --GC_skew_line_color. Color for GC skew line. Default: black
 
+### Prebuilt color palettes
 ![Prebuilt color palettes](Figures/Palettes.png "Prebuilt color palettes")
 
 

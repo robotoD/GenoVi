@@ -39,22 +39,22 @@ genovi [-h] [options ..] -i input_file -s status
 * -o, --output_file.  Output file name. Default: circos.
 * -s, --status. Draft or complete. Complete genomes are drawn as separate circles for each contig.
 
-# Information:
+### Information:
 * -h, --help. Shows this help message and exit
 * --version. Shows the currently installed version of genovi.
 
-# COGs:
+### COGs:
 * -cu, --cogs_unclassified. Do not classify each coding sequence into Clusters of Orthologous Groups of proteins (COGs)
 * -b, --deepnog_confidence_threshold. DeepNOG confidence threshold range [0,1] Default: 0. If provided, predictions below the threshold are discarded.
 
-# Format:
+### Format:
 * -a, --alignment. When a --status complete is specified, this flag defines the alignment of each individual contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes
 * --scale. When using --status complete, whether to use a different scale format to ensure visibility. Options: variable, linear, sqrt. Default: sqrt
 * -k, --keep_temporary_files. Keep temporary files
 * -w, --window. Window size (base pair) to assign a GC analysis. Default: 5000
 * -v, --verbose. Verbose
 
-# Text:
+### Text:
 * -c, --captions_not_included.  Do not include captions in the figure.
 * -cp, --captions_position. Captions position, options: left, right, auto.
 * -t, --title. Figure 's title.
@@ -62,7 +62,7 @@ genovi [-h] [options ..] -i input_file -s status
 * --italic_words. How many words should be written in italic in the title. Default: 2
 * --size. Display genome size of each independent circular representation.
 
-# Colors:
+### Colors:
 * -cs, --color_scheme. Prebuilt color scheme to use for CDS, RNAs and GC analysis. Options: neutral, blue, purple, soil, grayscale, velvet, pastel, ocean, wood, beach, desert, ice, island, forest, toxic, fire, spring.
 * -bc, --background. Background color. Default: transparent
 * -fc, --font_color. Font color. Default: black

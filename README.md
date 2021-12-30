@@ -2,6 +2,8 @@
 
 **GenoVi** GenoVi generates circular genome representations for complete or draft bacterial genomes. GenoVi uses a pipeline that compiles several python scripts to generate all needed files for Circos software. Optionally, GenoVi uses DeepNOG to annotate COG classifications.
 
+![Diagram](Figures/Diagram.png "Diagram")
+
 ## Installation
 
 GenoVi dependencies can be installed creating the following bioconda environment
@@ -74,7 +76,7 @@ genovi [-h] [options ..] -i input_file -s status
 * -sc, --GC_skew_color- Color scheme for positive and negative GC skew. A pair of RGB colors. Default: '140, 150, 198 - 158, 188, 218'
 * -sl, --GC_skew_line_color. Color for GC skew line. Default: black
 
-![Acinetobacter radioresistens DD78](output_test/Acinetobacter_radioresistens_DD78.svg "Acinetobacter_radioresistens_DD78")
+![Prebuilt color palettes](Figures/Palettes.png "Prebuilt color palettes")
 
 
 ## Tutorial
@@ -83,7 +85,7 @@ genovi [-h] [options ..] -i input_file -s status
 ```
 genovi -i input_test/Corynebacterium_alimapuense_VA37.gbk --status draft --color velvet --background black --font_color white --cogs_unclassified
 ```
-![Prebuilt color palettes](Figures/Palettes.png "Prebuilt color palettes")
+![Corynebacterium alimapuense VA37](output_test/Corynebacterium_alimapuense_VA37-no_cogs.svg "Corynebacterium_alimapuense_VA37")
 
 ### Complete circular genome representation
 ```

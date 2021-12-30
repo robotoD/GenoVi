@@ -1,6 +1,6 @@
 # GenoVi: Genome Visualizer Software
 
-**GenoVi** GenoVi generates circular genome representations for complete or draft bacterial genomes. GenoVi uses a pipeline that compiles several python scripts to generate all needed files for Circos software. Optionally, GenoVi uses DeepNOG to annotate COG classifications.
+**GenoVi** generates circular genome representations for complete or draft bacterial genomes. **GenoVi** uses a pipeline that compiles several python scripts to generate all needed files for Circos software. Optionally, **GenoVi** uses DeepNOG to annotate COG classifications.
 
 ![Diagram](Figures/Diagram.png "Diagram")
 
@@ -11,7 +11,10 @@ GenoVi dependencies can be installed creating the following bioconda environment
 ```
 conda create -n genovi python=3.7 circos 
 ```
-
+Activate the environment
+```
+conda activate genovi
+```
 GenoVi can then be installed using pip
 
 ```

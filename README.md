@@ -86,7 +86,7 @@ genovi [-h] [options ..] -i input_file -s status
 
 ### Draft circular genome representation without COGs classification
 ```
-genovi -i input_test/Corynebacterium_alimapuense_VA37.gbk --status draft --color velvet --background black --font_color white --cogs_unclassified
+genovi -i input_test/Corynebacterium_alimapuense_VA37.gbk --status draft --color velvet --background "255,247,248" --cogs_unclassified
 ```
 ![Corynebacterium alimapuense VA37](output_test/Corynebacterium_alimapuense_VA37-no_cogs.svg "Corynebacterium_alimapuense_VA37")
 

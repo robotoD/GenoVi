@@ -18,7 +18,7 @@ conda activate genovi
 GenoVi can then be installed using pip
 
 ```
-pip install genovi=0.2.0
+pip install genovi==0.2.1
 ```
  
 ## Dependencies

@@ -452,8 +452,7 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 	#print(genovi_dir)
 	#tab_file =  genovi_dir + "/dataset/cog-20.def.tab"
 	cogs_df.columns = ['id', 'cog']
-	parent = '.'.join(__name__.split('.')[:-1])
-	tab_file = pkg_resources.resource_stream(parent, "dataset/cog-20.def.tab")
+	tab_file = pkg_resources.resource_stream('scripts', "dataset/cog-20.def.tab")
 	tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1], encoding='cp1252') # (parche) We should check why this file is different if it's running on Windows. (Maybe it works on Linux too?)
 	# tab_df = pd.read_csv(tab_file, header=None, sep='\t', usecols=[0,1]) # Original Linux form
 	tab_df.columns = ['cog', 'category']

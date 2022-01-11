@@ -199,11 +199,11 @@ def visualizeGenome(input_file, status, output_file = "circos",
         file = open(output_file + "/" + output_file + ".svg")
         svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
         file.close()
-    if output_file != "circos":
-        try:
-            os.remove("circos.png")
-        except:
-            pass
+
+    try:
+        os.remove("circos.png")
+    except:
+        pass
 
     if not keep_temporary_files:
         if verbose:

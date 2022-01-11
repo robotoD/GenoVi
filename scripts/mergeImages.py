@@ -16,11 +16,14 @@
 
 
 from math import sqrt
+import re
 
 __all__ = ['mergeImages',
            ]
 
 def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False, captions_position = "normal"):
+    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
+        background_color = "rgb(" + background_color + ")"
     totalWidth = 0
     extraElements = ""
     if sort:

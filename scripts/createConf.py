@@ -19,7 +19,9 @@ __all__ = ['create_conf', 'create_conf_main'
 
 # Function that writes base CIRCOS configuration files
 # circos.conf, highlight.conf, colors_fonts_patterns.conf, housekeeping.conf, image.conf, and ticks.conf.
-def create_conf(maxmins,
+def create_conf(output,
+                folder,
+                maxmins,
                 font_color = "0, 0, 0",
                 GC_content_color = "23, 0, 115",
                 GC_skew_color = 'eval(sprintf("rdbu-7-div-%d",remap_int(var(value),0,0,7,5)))',
@@ -33,7 +35,7 @@ def create_conf(maxmins,
                 cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
                 cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
     file = open("circos.conf", "w")
-    file.write('''karyotype = temp/_bands.kar
+    file.write('''karyotype = {folder}/{output}_bands.kar
 chromosomes_units = 100
 chromosomes_display_default = yes
 
@@ -79,7 +81,7 @@ extend_bin = no
 color      = {font_color}
 fill_under = yes
 thickness  = 1
-file = temp/GC_GC_content.wig
+file = {folder}/{output}_GC_content.wig
 r0   = 0.62r
 r1   = 0.7r
 min  = {GC_min}
@@ -99,7 +101,7 @@ extend_bin = no
 color      = {skew_line}
 fill_under = no
 thickness  = 0.5
-file = temp/GC_GC_skew.wig
+file = {folder}/{output}_GC_skew.wig
 r0   = 0.3r
 r1   = 0.6r
 min  = {skew_min}
@@ -118,7 +120,9 @@ background_stroke_color     = {font_color}
 background_stroke_thickness = 1
 
 </plots>
-'''.format( GC_min = maxmins["min_GC_content"],
+'''.format( folder = folder,
+            output = output,
+            GC_min = maxmins["min_GC_content"],
             GC_max = maxmins["max_GC_content"],
             skew_min = maxmins["min_skew"],
             skew_max = maxmins["max_skew"],
@@ -143,7 +147,7 @@ r0               = 1r
 
 #Positive band BGCs
 init_counter = highlight:1
-file = temp/_CDS_pos.txt
+file = {folder}/{output}_CDS_pos.txt
 fill_color = {CDS_positive}
 r1 = 0.85r
 r0 = 0.89r
@@ -152,7 +156,7 @@ r0 = 0.89r
 #Negative
 <highlight>
 
-file = temp/_CDS_neg.txt
+file = {folder}/{output}_CDS_neg.txt
 fill_color = {CDS_negative}
 r1 = 0.8r
 r0 = 0.84r
@@ -160,7 +164,7 @@ r0 = 0.84r
 
 #Positive band tRNAs
 <highlight>
-file = temp/_tRNA_pos.txt
+file = {folder}/{output}_tRNA_pos.txt
 fill_color = {tRNA_positive}
 r1 = 0.85r
 r0 = 0.89r
@@ -168,7 +172,7 @@ r0 = 0.89r
 
 #Negative
 <highlight>
-file = temp/_tRNA_neg.txt
+file = {folder}/{output}_tRNA_neg.txt
 fill_color = {tRNA_negative}
 r1 = 0.8r
 r0 = 0.84r
@@ -176,7 +180,7 @@ r0 = 0.84r
 
 #Positive band rRNAs
 <highlight>
-file = temp/_rRNA_pos.txt
+file = {folder}/{output}_rRNA_pos.txt
 fill_color = {rRNA_positive}
 r1 = 0.85r
 r0 = 0.89r
@@ -184,13 +188,15 @@ r0 = 0.89r
 
 #Negative
 <highlight>
-file = temp/_rRNA_neg.txt
+file = {folder}/{output}_rRNA_neg.txt
 fill_color = {rRNA_negative}
 r1 = 0.8r
 r0 = 0.84r
 </highlight>
 
-'''.format(CDS_positive = CDS_positive_color,
+'''.format(folder = folder,
+           output = output,
+           CDS_positive = CDS_positive_color,
            CDS_negative = CDS_negative_color,
            tRNA_positive = tRNA_color,
            tRNA_negative = tRNA_color,
@@ -234,23 +240,23 @@ r0 = 0.84r
 #positive {name}
 <highlight>
 
-file = temp/_CDS_pos_{name}.txt
+file = {folder}/{output}_CDS_pos_{name}.txt
 fill_color = {color}
 r1 = 0.9r
 r0 = 0.94r
 </highlight>
-'''.format(name = COG["name"], color = COG["color"]))
+'''.format(folder = folder, output = output, name = COG["name"], color = COG["color"]))
             if COG["name"] in cogs_n:
                 file.write('''
 #negative {name}
 <highlight>
 
-file = temp/_CDS_neg_{name}.txt
+file = {folder}/{output}_CDS_neg_{name}.txt
 fill_color = {color}
 r1 = 0.75r
 r0 = 0.79r
 </highlight>
-'''.format(name = COG["name"], color = COG["color"]))
+'''.format(folder = folder, output = output, name = COG["name"], color = COG["color"]))
     file.write("</highlights>")
     file.close()
 

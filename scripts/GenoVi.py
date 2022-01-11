@@ -64,7 +64,7 @@ def change_background(color, fileName = "circos.svg"):
 # Full pipeline
 # input: anotated genome filename.
 def visualizeGenome(input_file, status, output_file = "circos", 
-                    cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, window = 5000, verbose = False,
+                    cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
                     color_scheme = "auto", background_color = "transparent", font_color = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_color = '0, 0, 0'):
 
@@ -88,8 +88,11 @@ def visualizeGenome(input_file, status, output_file = "circos",
         delete_background = True
         background_color = "white"
     
-    if not os.path.exists("temp"):
-        os.mkdir("temp")
+    temp_folder = output_file + "-temp"
+    if not os.path.exists(temp_folder):
+        os.mkdir(temp_folder)
+    if not os.path.exists(output_file):
+        os.mkdir(output_file)
     if status == "complete":
         file = open(input_file)
         contigs = file.read().split("\n//\n")
@@ -97,20 +100,23 @@ def visualizeGenome(input_file, status, output_file = "circos",
         if len(contigs[-1]) < 20:   # If file ends with "//"
             contigs = contigs[:-1]
         for i in range(1, len(contigs) + 1):
-            contigFile = open("temp/" + str(i) + ".gbk", "w")
+            contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
             contigFile.write(contigs[i - 1])
             contigFile.close()
         
         images = []
         full_cogs = set([])
         for i in range(1, len(contigs) + 1):
-            file = "temp/" + str(i) + ".gbk"
-            sizes, cogs_p, cogs_n = base(file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            output_file_part = "contig_" + str(i) + "-" + output_file
+            file = temp_folder + "/" + str(i) + ".gbk"
+            if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
+                os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
+            sizes, cogs_p, cogs_n = base(file, temp_folder + "/" + output_file_part, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
-            gbkToFna(file, "temp/gbk_converted.fna", verbose)
-            maxmins = makeGC("temp/gbk_converted.fna", "temp/GC", window)
-            create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
+            gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
+            maxmins = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
+            create_conf(output_file_part, temp_folder, maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -122,21 +128,17 @@ def visualizeGenome(input_file, status, output_file = "circos",
                     if verbose:
                         print("Converting to png...")
                     svgFile = open("circos.svg")
-                    svg2png(bytestring = svgFile.read(), write_to = output_file + ".png")
-                    
+                    svg2png(bytestring = svgFile.read(), write_to = output_file + "-contig_" + str(i) + ".png")
                     svgFile.close()
+                    os.remove("circos.png")
 
             if size:
                 addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_color = font_color)
                 os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
             else:
                 os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
-            os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
-            if cogs_unclassified:
-                os.rename("temp/_prediction_deepnog.csv", "temp/" + str(i) + "_prediction_deepnog.csv")
-            for file_i in os.listdir("temp/"):
-                if ".gbk" not in file_i and ".csv" not in file_i and not "contig-" in file_i:
-                    os.rename("temp/" + file_i, "temp/contig-" + str(i) + "-" + file_i)
+            if not delete_background:
+                os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
             os.remove(file)
 
         if captions or title != "":
@@ -152,25 +154,25 @@ def visualizeGenome(input_file, status, output_file = "circos",
             else:
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
                 print(captionsPosition)
-                addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
+                addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
                                 pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color)
             os.remove(output_file + ".svg")
-            os.rename("titled_" + output_file + ".svg", output_file + ".svg")
+            os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
         else:
-            mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
-        if not os.path.exists(output_file):
-            os.mkdir(output_file)
+            mergeImages(images, outFile = output_file + "/" + output_file + ".svg", align = alignment, scale = scale, background_color = "none" if delete_background else background_color)
         for i in range(1, len(contigs) + 1):
             os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
             os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
     else:
-        sizes, cogs_p, cogs_n = base(input_file, "temp/", True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+        if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
+            os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
+        sizes, cogs_p, cogs_n = base(input_file, temp_folder + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
-        gbkToFna(input_file, "temp/gbk_converted.fna", verbose)
-        maxmins = makeGC("temp/gbk_converted.fna", "temp/GC", window)
-        create_conf(maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
+        gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
+        maxmins = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
+        create_conf(output_file, temp_folder, maxmins, font_color, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_color, background_color, cogs_unclassified, cogs_p, cogs_n)
 
         if verbose:
             print("Drawing...")
@@ -187,26 +189,31 @@ def visualizeGenome(input_file, status, output_file = "circos",
             addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n),
             pCDS_color = CDS_positive, nCDS_color = CDS_negative, tRNA_color = tRNA, rRNA_color = rRNA, GC_content_color = GC_content, font_color = font_color, size = sizes[0] if size else "")
             os.remove("circos.svg")
-            os.rename("titled_circos.svg", "circos.svg")
+            os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
+        else:
+            os.rename("circos.svg", output_file + "/" + output_file + ".svg")
+            os.rename("circos.png", output_file + "/" + output_file + ".png")
     if cairo:
         if verbose:
             print("Converting to png...")
-        file = open("circos.svg")
-        svg2png(bytestring = file.read(), write_to = output_file + ".png")
+        file = open(output_file + "/" + output_file + ".svg")
+        svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
         file.close()
-    os.rename("circos.svg", output_file + ".svg")
     if output_file != "circos":
-        os.remove("circos.png")
+        try:
+            os.remove("circos.png")
+        except:
+            pass
 
     if not keep_temporary_files:
         if verbose:
             print("deleting temporary files")
         os.remove("circos.conf")
-        for file in os.listdir("temp/"):
-            os.remove("temp/" + file)
+        for file in os.listdir(temp_folder + "/"):
+            os.remove(temp_folder + "/" + file)
         for file in os.listdir("conf/"):
             os.remove("conf/" + file)
-        os.rmdir("temp")
+        os.rmdir(temp_folder)
         os.rmdir("conf")
     
 def get_version():
@@ -237,6 +244,8 @@ def get_args():
     parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --status complete, this defines the vertical alignment of every contig. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes", default = "auto")
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="When using --status complete, wether to use a different scale for tiny contigs, so to ensure visibility. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Don't delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
+    parser.add_argument("-r", "--reuse_predictions", action='store_true', help="If available, reuse DeepNog prediction result from previous run. This speeds up the process and is useful only after running this script with --keep_temporary_files flag enabled.", required = False)
+    
     parser.add_argument("-w", "--window", "--step", type=int, help="base pair window for CG plotting. Default: 5000", default = 5000)
     parser.add_argument("-v", "--verbose", type=bool, help="Wether to print progress logs.", default = True)
 
@@ -266,7 +275,7 @@ def get_args():
     args = parser.parse_args()
 
     return (args.input_file, args.status, args.output_file,
-    args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.window, args.verbose,
+    args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, args.verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
     args.color_scheme, args.background, args.font_color, args.GC_content_color, args.GC_skew_color, args.tRNA_color, args.rRNA_color, args.CDS_positive_color, args.CDS_negative_color, args.GC_skew_line_color)
 

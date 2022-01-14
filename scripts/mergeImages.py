@@ -21,9 +21,9 @@ import re
 __all__ = ['mergeImages',
            ]
 
-def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_color = "none", sort = False, captions_position = "normal"):
-    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_color):
-        background_color = "rgb(" + background_color + ")"
+def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variable", background_colour = "none", sort = False, captions_position = "normal"):
+    if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", background_colour):
+        background_colour = "rgb(" + background_colour + ")"
     totalWidth = 0
     extraElements = ""
     if sort:
@@ -42,7 +42,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                     image["scale"] = "variable"
                     totalVariableWidth += image["size"]
                     totalWidth -= image["size"]
-                totalWidth += totalWidth/4
+                totalWidth += totalWidth * rectangleSize / 3000
                 break
     elif scale == "sqrt":
         totalWidth = 0
@@ -56,11 +56,15 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
     if captions_position == "right":
         file.write('''<svg width="4000px" height="3000px" ''')
     elif captions_position == "left":
-        file.write('''<svg width=viewBox="-1000 0 4000 3000" ''')
+        file.write('''<svg width="4000px" viewBox="-1000 0 4000 3000" ''')
+    elif captions_position == "top" or captions_position == "up":
+        file.write('''<svg width="3000px" viewBox="0 -1000 3000 4000" ''')
+    elif captions_position == "bottom" or captions_position == "down":
+        file.write('''<svg width="3000px" height="4000px" ''')
     else:
         file.write('''<svg width="3000px" height="3000px" ''')
     file.write('''version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n\n''')
-    file.write('<rect x="-1000" y="0" width="5000px" height="3000px" style="fill:{};"/>'.format(background_color))
+    file.write('<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:{};"/>'.format(background_colour))
     currentX = 0
     beginGroup = '<g transform="translate({},{}) scale({})">\n'
     if align == "auto":
@@ -88,6 +92,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 firstSize = float(image["size"])/totalWidth
                 file.write(beginGroup.format(1500 - (3000*firstSize/2.0), 0, firstSize))
                 currentX += 1500 - 1500*(1-firstSize) - 3000*float(image["size"])/totalWidth
+                if scale == "variable":
+                    currentX -= rectangleSize/2
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
@@ -104,6 +110,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 firstSize = float(image["size"])/totalWidth
                 file.write(beginGroup.format(0, 1500 - (3000*firstSize/2.0), firstSize))
                 currentX += 1500 - 1500*(1-firstSize) - 3000*float(image["size"])/totalWidth
+                if scale == "variable":
+                    currentX -= rectangleSize/2
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:
@@ -123,6 +131,8 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 secondSize = float(image["size"])/totalWidth
                 file.write(beginGroup.format(1500, 0, secondSize))
                 currentX = 1500 + 1500*(firstSize + secondSize - 1) - 3000*float(image["size"])/totalWidth
+                if scale == "variable":
+                    currentX -= rectangleSize/2
             else:
                 if scale == "variable" and image["scale"] == "variable":
                     if not rectIsDrawn:

@@ -123,10 +123,10 @@ def create_kar(gbk_filename, output_folder, complete):
 		for i in range(len(ends)):
 			line1 = "chr - chr"+ str(i+1) +" 1 " +str(inits[i])+" "+str(new_ends[i])+" black\n"
 			if i%2 == 0:
-				color = " white\n"
+				colour = " white\n"
 			else:
-				color = " black\n"
-			line2 = "band chr"+ str(i+1)+" band01 band01 "+str(inits[i])+" "+str(new_ends[i])+color
+				colour = " black\n"
+			line2 = "band chr"+ str(i+1)+" band01 band01 "+str(inits[i])+" "+str(new_ends[i])+colour
 			lines.append(line1)
 			lines.append(line2)
 

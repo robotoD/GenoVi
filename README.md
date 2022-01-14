@@ -1,6 +1,6 @@
-# GenoVi: Genome Visualizer Software
+# GenoVi: Genome Visualiser Software
 
-**GenoVi** generates circular genome representations for complete or draft bacterial and archaeal genomes. **GenoVi** pipeline combines several python scripts to automatically generate all needed files for Circos, including customizable options for color palettes, fonts, font format, background color and scaling options for complete genomes comprising more than 1 replicon. Optionally, **GenoVi** built-in workflow integrates DeepNOG to annotate COG categories using alignment-free methods with user-defined thresholds.
+**GenoVi** generates circular genome representations for complete or draft bacterial and archaeal genomes. **GenoVi** pipeline combines several python scripts to automatically generate all needed files for Circos, including customizable options for colour palettes, fonts, font format, background colour and scaling options for complete genomes comprising more than 1 replicon. Optionally, **GenoVi** built-in workflow integrates DeepNOG to annotate COG categories using alignment-free methods with user-defined thresholds.
 
 ![Diagram](Figures/Diagram.png "Diagram")
 
@@ -67,17 +67,17 @@ genovi [-h] [options ..] -i input_file -s status
 * `--italic_words`. How many title words should be written in italic. Default: `2`.
 * `--size`. Display genome size of each independent circular representation.
 
-### Colors:
-* `-cs`, `--color_scheme`. Prebuilt color scheme to use for CDS, RNAs and GC analysis. Options: `neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
-* `-bc`, `--background`. Background color, in R, G, B format. Default: `transparent`.
-* `-fc`, `--font_color`. Font color. Default: `black`.
-* `-pc`, `--CDS_positive_color`. Color for positive CDSs, in R, G, B format. Default: `'180, 205, 222'`.
-* `-nc`, `--CDS_negative_color`. Color for negative CDSs, in R, G, B format. Default: `'53, 176, 42'`.
-* `-tc`, `--tRNA_color`. Color for tRNAs, in R, G, B format. Default: `'150, 5, 50'`.
-* `-rc`, `--rRNA_color`. Color for rRNAs, in R, G, B format. Default: `'150, 150, 50'`.
-* `-cc`, `--GC_content_color`. Color for GC content, in R, G, B format. Default: `'23, 0, 115'`.
-* `-sc`, `--GC_skew_color`. Color scheme for positive and negative GC skew. A pair of RGB colors. Default: `'140, 150, 198 - 158, 188, 218'`.
-* `-sl`, `--GC_skew_line_color`. Color for GC skew line. Default: `black`.
+### Colours:
+* `-cs`, `--colour_scheme`. Prebuilt colour scheme to use for CDS, RNAs and GC analysis. Options: `neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
+* `-bc`, `--background`. Background colour, in R, G, B format. Default: `transparent`.
+* `-fc`, `--font_colour`. Font colour. Default: `black`.
+* `-pc`, `--CDS_positive_colour`. Colour for positive CDSs, in R, G, B format. Default: `'180, 205, 222'`.
+* `-nc`, `--CDS_negative_colour`. Colour for negative CDSs, in R, G, B format. Default: `'53, 176, 42'`.
+* `-tc`, `--tRNA_colour`. Colour for tRNAs, in R, G, B format. Default: `'150, 5, 50'`.
+* `-rc`, `--rRNA_colour`. Colour for rRNAs, in R, G, B format. Default: `'150, 150, 50'`.
+* `-cc`, `--GC_content_colour`. Colour for GC content, in R, G, B format. Default: `'23, 0, 115'`.
+* `-sc`, `--GC_skew_colour`. Colour scheme for positive and negative GC skew. A pair of RGB colours. Default: `'140, 150, 198 - 158, 188, 218'`.
+* `-sl`, `--GC_skew_line_colour`. Colour for GC skew line. Default: `black`.
 
 More detailed information about the arguments can be found in the [user guide](https://github.com/robotoD/GenoVi/wiki/User-guide#arguments-).
 

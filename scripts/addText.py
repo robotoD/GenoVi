@@ -263,7 +263,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             else:
                                 legendElement += legendPiece.format(2830 + index*25, 2848 + index*25, feature["description"], feature["colour"], 50, 80, font_colour)
                             index += 1
-                legendElement += '</g>'
+                legendElement += '</g>\n'
                 destiny.write(legendElement)
         destiny.write(line)
     destiny.close()

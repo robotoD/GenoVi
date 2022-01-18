@@ -54,9 +54,9 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
     for line in file:
         if re.match('<rect (?:xmlns="http://www.w3.org/2000/svg" )?x="-?1?0?0?0" y="-?1?0?0?0" width="[345]000px" height="[345]000px" style="fill:rgb\([12]\d?\d,[12]\d?\d,[12]\d?\d\);"/>',line):
             if finalImage:
-                outFile.write('<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:{};"/>'.format(colour))
+                outFile.write('<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:{};"/>\n'.format(colour))
             else:
-                outFile.write('<rect x="0" y="0" width="3000px" height="3000px" style="fill:{};"/>'.format(colour))
+                outFile.write('<rect x="0" y="0" width="3000px" height="3000px" style="fill:{};"/>\n'.format(colour))
         else:
             outFile.write(line)
     if os.remove(fileName):

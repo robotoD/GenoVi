@@ -25,6 +25,7 @@ import pandas as pd
 import scripts.genbank2faa as genbank2faa
 global seek
 import pkg_resources
+import matplotlib.pyplot as plt
 
 
 __all__ = ['getArgs', 'listdir_r', 'ends_sorted', 'create_kar', 'create_feature', 'base_complete', 'base', 'get_categories', 'create_kar_complete', 'create_feature_complete',
@@ -171,6 +172,11 @@ def new_loc(array, sizes_x):
 # Writting locations to file.
 def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	lines = []
+	cogs_df = pd.DataFrame.from_dict(cogs)
+	categories = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','T','U','Y','Z','R','S','None']
+	hist = pd.DataFrame(categories, columns=["cat"])
+	hist["freq"] = [0]*len(categories)
+	
 	#print(locations)		
 	for i in range(len(locations)):
 		#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
@@ -179,13 +185,20 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 		elif len(cogs) == 0:
 			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]]
 		else:
-			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]] + [cogs[i]]
+			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]] + [cogs[i] if cogs[i] is not None else "None"]
+			cats = list(cogs[i]) if cogs[i] is not None else ["None"]
+			hist.loc[hist['cat'].isin(cats), 'freq'] += 1
 		lines.append(line)
 	with open(output_, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		writer.writerows(lines)
 		if verbose:
 			print(output_,"created succesfully.")
+	
+	if len(cogs) == 0:
+		return None
+	else:
+		return hist
 
 def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 	
@@ -197,13 +210,17 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 	cogs_df[['loc_init','loc_end']] = pd.DataFrame(cogs_df.location.tolist(), index= cogs_df.index)
 	cogs_df["chr"] = chrx
 	cogs_df["locus"] = locus
-	cogs_df["main"] = cogs_df["category"].str[0]
+	cogs_df["main"] = cogs_df["category"].apply(lambda x: "None" if x is None else x[0]) #cogs_df["category"].str[0]
 	categories = map(str, cogs_df["main"].unique())
+	#hist = pd.DataFrame(columns = ["cat", "freq"])
 	
-	for c in categories:
+	for c in list(categories):
 		lines = []
 		subset = cogs_df.loc[cogs_df["main"] == c]
 		subset = subset.sort_values(["chr", "loc_init"], ascending=[True, True])
+		
+		#hist = hist.append({"cat": c, "freq": len(subset)}, ignore_index=True)
+		
 		for index, row in subset.iterrows():
 			line = ["chr"+row["chr"]] + list(map(str, row["location"]))
 			lines.append(line)
@@ -214,6 +231,8 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 			if verbose:
 				print(filename, "created succesfully.")
 	
+	#return hist
+
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is not complete.
@@ -292,8 +311,17 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
 		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
 	else:
-		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
-		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
+		hist1 = write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
+		hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
+		if hist1 is not None and hist2 is not None:
+			hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
+			hist1.columns = ["COG Category", "Frequency"]
+			ax = hist1.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False)
+			#ax.set_ylabel("CDS Frequency")
+			for p in ax.patches:
+				ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
+			plt.tight_layout()
+			ax.figure.savefig(output+"_COG_Histogram.png")
 	
 	return(cogs_p, cogs_n)
 	
@@ -382,7 +410,6 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 
 # Function to predict COG categories with DeepNOG
 def get_categories(gbk_file, output, deepnog_confidence = 0):
-	
 	
 	# Check if deepnog is installed
 	
@@ -525,6 +552,7 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False,
 			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, verbose = verbose)
 		if divided:
 			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
+			
 	return ((sizes, cogs_p, cogs_n))
 
 def createRaw():

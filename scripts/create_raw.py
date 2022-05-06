@@ -173,7 +173,7 @@ def new_loc(array, sizes_x):
 def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	lines = []
 	cogs_df = pd.DataFrame.from_dict(cogs)
-	categories = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','T','U','Y','Z','R','S','None']
+	categories = ['D','M','N','O','T','U','V','W','Y','Z','A','B','J','K','L','X','C','E','F','G','H','I','P','Q','R','S','None']
 	hist = pd.DataFrame(categories, columns=["cat"])
 	hist["freq"] = [0]*len(categories)
 	
@@ -236,7 +236,7 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is not complete.
-def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=False, verbose = False):
+def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divided=False, verbose = False):
 	
 	#chrx = '1'
 	
@@ -304,8 +304,8 @@ def create_feature(gbk_filename, output, sizes, feat, cogs_dict=None, divided=Fa
 	new_pos = new_loc(positives, sizes_p)
 	new_negs = 	new_loc(negatives, sizes_n)
 	
-	p_output = output + "_" + feat + "_pos.txt"
-	n_output = output + "_" + feat + "_neg.txt"
+	p_output = tmp + "_" + feat + "_pos.txt"
+	n_output = tmp + "_" + feat + "_neg.txt"
 	
 	if divided:
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
@@ -491,7 +491,7 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 
 
 # Base pipeline for complete genome.
-def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, sizes):
+def base_complete(gbk_file, tmp, output, cds, trna, get_cats, divided, k, init, end, sizes):
 	
 	flag = True
 	
@@ -521,7 +521,7 @@ def base_complete(gbk_file, output, cds, trna, get_cats, divided, k, init, end, 
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 # Base pipeline for non-complete genome.	
-def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_confidence = 0, verbose = False):
+def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_confidence = 0, verbose = False):
 	
 	flag = True
 
@@ -545,13 +545,13 @@ def base(gbk_file, output, cds, trna, get_cats, divided, complete, rrna = False,
 		sizes, _, _ = create_kar(gbk_file, output, complete)
 			
 		if trna:
-			create_feature(gbk_file, output, sizes, "tRNA", verbose = verbose)
+			create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose)
 		if rrna:
-			create_feature(gbk_file, output, sizes, "rRNA", verbose = verbose)
+			create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose)
 		if cds:
-			create_feature(gbk_file, output, sizes, "CDS", cogs_dict, verbose = verbose)
+			create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, verbose = verbose)
 		if divided:
-			cogs_p, cogs_n = create_feature(gbk_file, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
+			cogs_p, cogs_n = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
 			
 	return ((sizes, cogs_p, cogs_n))
 
@@ -618,8 +618,11 @@ if __name__ == '__main__':
 	
 	if output == "":
 		output = gbk_name + "/"
+		tmp = gbk_name + "-temp/"
 	elif output[-1] != "/":
+		tmp = output + "-temp/"
 		output = output + "/"
+		
 	
 	if not os.path.isdir(output):
 		os.mkdir(output)
@@ -651,7 +654,7 @@ if __name__ == '__main__':
 			
 			output_ = output_ + gbk_name + '_' + str(k+1)
 			
-			base_complete(filename, output_, cds, trna, get_cats, divided, k, inits[k], ends[k], sizes)
+			base_complete(filename, tmp, output_, cds, trna, get_cats, divided, k, inits[k], ends[k], sizes)
 	
 	else:
 		

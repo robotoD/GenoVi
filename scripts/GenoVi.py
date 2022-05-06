@@ -11,14 +11,14 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
-#import create_raw as create_raw
-#import GC_analysis as GC_analysis
-#import genbank2fna as gbk2fna
-#import genbank2faa as genbank2faa
-#import createConf as createConf
-#import addText as addText
-#import mergeImages as merge
-#import colours as colours
+#from create_raw import base
+#from GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
+#from genbank2fna import gbkToFna, mainFna 
+#from genbank2faa import modify_locus, genbankToFaa, mainFaa
+#from createConf import create_conf, create_conf_main
+#from addText import addText 
+#from mergeImages import mergeImages 
+#from colours import parseColours
 
 from .addText import addText
 from .colours import parseColours
@@ -172,7 +172,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
     else:
         if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n = base(input_file, temp_folder + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+        sizes, cogs_p, cogs_n = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         

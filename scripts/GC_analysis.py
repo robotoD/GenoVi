@@ -59,10 +59,14 @@ def generate_result():
     global maxSkew
     global minSkew
     i = -1
+    percent_avg = 0
+    count = 0
     for i in range((seq_len - window_size + shift) // shift):  # Iterate over the total number of shifts
+        count += 1
         frag = record.seq[i * shift: i * shift + window_size]  # Extract the string for counting
         # Count number of C and G and convert to percentage
         percent = int(round((frag.count("C") + frag.count("G")) / float(window_size) * 100))
+        percent_avg += percent
         g = float(frag.count("G"))
         c = float(frag.count("C"))
         if (g+c) > 0:
@@ -80,9 +84,11 @@ def generate_result():
         write_content(sequence_begin + i * shift, sequence_begin + i * shift + window_size, percent, result_content)
         write_content(sequence_begin + i * shift, sequence_begin + i * shift + window_size, new_calc, result_skew)
     if (i + 1) * shift < seq_len and not omit_tail:
+        count += 1
         # if trailing sequence exits and omit_tail is False
         frag = record.seq[(i + 1) * shift:]
         percent = int(round((frag.count("C") + frag.count("G")) / float(len(frag)) * 100))
+        percent_avg += percent
         g = float(frag.count("G"))
         c = float(frag.count("C"))
         if (g+c) > 0:
@@ -99,7 +105,7 @@ def generate_result():
             minSkew = new_calc
         write_content(sequence_begin + (i + 1) * shift, sequence_begin + seq_len, percent, result_content)
         write_content(sequence_begin + (i + 1) * shift, sequence_begin + seq_len, new_calc, result_skew)
-    return(seq_len)
+    return(seq_len, (percent_avg,count))
 
 # Starting from a .fna FASTA file, generates files with GC content and GC skew.
 # Input: FASTA filename
@@ -130,8 +136,11 @@ def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_
         result_content = open(output_file + "_GC_content.wig", "a+")
         result_skew = open(output_file + "_GC_skew.wig", "a+")
         globalIndex = 1
+        percent_avg = []
         for record in SeqIO.parse(input_file, "fasta"):
-            sequence_begin += generate_result()
+            seq, avg = generate_result()
+            percent_avg.append(avg)
+            sequence_begin += seq
             globalIndex += 1
         result_content.close()
         result_skew.close()
@@ -144,7 +153,7 @@ def makeGC(input_file, output_file = " ", w_size = 5000, s = -1, o_t = False, o_
                     "max_GC_content": max_GC_percentage,
                     "min_skew": minSkew,
                     "max_skew": maxSkew
-            }
+            }, percent_avg
 
 def createGC():
     makeGC(*get_args_())

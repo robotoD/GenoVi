@@ -110,13 +110,16 @@ def create_kar(gbk_filename, output_folder, complete):
 	inits = []
 	init = 0
 	end = ends[0]
+	lengths = []
 	for i in range(len(ends)-1):
 		inits.append(init)
 		new_ends.append(end)
+		lengths.append(end-init+1)
 		init = end + 1
 		end = end + ends[i+1]
 	inits.append(init)
 	new_ends.append(end)
+	lengths.append(end-init+1)
 		
 	lines = []
 	
@@ -137,7 +140,7 @@ def create_kar(gbk_filename, output_folder, complete):
 			print(output_file+" created succesfully.")
 
 
-	return ends, inits, new_ends		
+	return ends, inits, new_ends, lengths		
 
 # Fuction for creating base KAR file that defines contig bands.
 # It considers that the genome is complete.
@@ -322,8 +325,7 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 				ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
 			plt.tight_layout()
 			ax.figure.savefig(output+"_COG_Histogram.png")
-	
-	return(cogs_p, cogs_n)
+	return(cogs_p, cogs_n, chrms_p, chrms_n)
 	
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
@@ -542,18 +544,25 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 	
 	if flag:
 		
-		sizes, _, _ = create_kar(gbk_file, output, complete)
-			
+		sizes, _, _, lengths = create_kar(gbk_file, output, complete)
+		chrms = []
+		
 		if trna:
-			create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose)
+			_ , _, chrms_tp, chrms_tn = create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose)
+			chrms_t = [np.unique(chrms_tp, return_counts=True), np.unique(chrms_tn, return_counts=True)]
+			chrms.append(chrms_t)
 		if rrna:
-			create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose)
+			_ , _, chrms_rp, chrms_rn = create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose)
+			chrms_r = [np.unique(chrms_rp, return_counts=True), np.unique(chrms_rn, return_counts=True)]
+			chrms.append(chrms_r)
 		if cds:
-			create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, verbose = verbose)
+			_ , _, chrms_cp, chrms_cn = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, verbose = verbose)
+			chrms_c = [np.unique(chrms_cp, return_counts=True), np.unique(chrms_cn, return_counts=True)]
+			chrms.append(chrms_c)
 		if divided:
-			cogs_p, cogs_n = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
+			cogs_p, cogs_n, _, _ = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
 			
-	return ((sizes, cogs_p, cogs_n))
+	return ((sizes, cogs_p, cogs_n, lengths, chrms))
 
 def createRaw():
 	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]
@@ -637,7 +646,7 @@ if __name__ == '__main__':
 		except:
 			gbk_name = gbk_file.split(".")[-2]	
 			
-		sizes, inits, ends = create_kar(gbk_file, output, complete)
+		sizes, inits, ends, lengths = create_kar(gbk_file, output, complete)
 
 		for k, rec in enumerate(SeqIO.parse(gbk, "genbank")):
 			

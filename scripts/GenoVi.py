@@ -19,6 +19,7 @@
 #from addText import addText 
 #from mergeImages import mergeImages 
 #from colours import parseColours
+#from create_tables import gral_table
 
 from .addText import addText
 from .colours import parseColours
@@ -28,6 +29,7 @@ from .GC_analysis import get_args_, write_content, generate_result, makeGC, crea
 from .genbank2faa import modify_locus, genbankToFaa, mainFaa
 from .genbank2fna import gbkToFna, mainFna
 from .mergeImages import mergeImages
+from .create_tables import gral_table
 from scripts import __version__
 
 import re
@@ -114,12 +116,13 @@ def visualiseGenome(input_file, status, output_file = "circos",
             file = temp_folder + "/" + str(i) + ".gbk"
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n = base(file, temp_folder + "/" + output_file_part, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            sizes, cogs_p, cogs_n, lengths, chrms = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
             gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
-            maxmins = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
+            maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
             create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
+            gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_gral_stats.csv")
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -172,13 +175,14 @@ def visualiseGenome(input_file, status, output_file = "circos",
     else:
         if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+        sizes, cogs_p, cogs_n, lengths, chrms = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
-        maxmins = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
+        maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
         create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
+        gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_gral_stats.csv")
 
         if verbose:
             print("Drawing...")

@@ -122,7 +122,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
             gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
             maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
             create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
-            gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_gral_stats.csv")
+            gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -182,7 +182,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
         create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
-        gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_gral_stats.csv")
+        gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 
         if verbose:
             print("Drawing...")

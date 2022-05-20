@@ -26,8 +26,9 @@ def gral_table(lengths, contents, chrms, output):
 	ttrnas = fill_unique_chrms(chrms[0], len(lengths))
 	rrnas = fill_unique_chrms(chrms[1], len(lengths))
 	cdss = fill_unique_chrms(chrms[2], len(lengths))
+	
 	csv_file = open(output, "w")
-	writer = csv.writer(csv_file, delimiter='\t')
+	writer = csv.writer(csv_file)
 	writer.writerow(header)
 	
 	for i in range(len(lengths)):
@@ -38,6 +39,26 @@ def gral_table(lengths, contents, chrms, output):
 	avg_total = np.sum([x[0] for x in contents])/np.sum([x[1] for x in contents])
 	footer = map(str, ["Total", np.sum(lengths), avg_total, np.sum(cdss), np.sum(ttrnas), np.sum(rrnas)])
 	
+	writer.writerow(footer)
+	csv_file.close()
+	
+	return
+	
+def cogs_classif(hist, output):
+	
+	header1 = ["","Cellular Processes and Signaling"]+[""]*9+["Information Storage and Processing"]+[""]*5+["Metabolism"]+[""]*7+["Poorly Characterized","","",""]
+	header2 = ["Replicon","D","M","N","O","T","U","V","W","Y","Z","A","B","J","K","L","X","C","E","F","G","H","I","P","Q","R","S","Unclassified"]
+	
+	csv_file = open(output, 'w')
+	writer = csv.writer(csv_file)
+	writer.writerow(header1)
+	writer.writerow(header2)
+	
+	for i in range(len(hist.columns) - 2):
+		line = map(str,[i+1] + [hist[hist["COG Category"] == c]["chr"+str(i+1)].item() for c in header2[1:]])
+		writer.writerow(line)
+		
+	footer = map(str,["Total"] + [hist[hist["COG Category"] == c]["Frequency"].item() for c in header2[1:]])
 	writer.writerow(footer)
 	csv_file.close()
 	

@@ -12,6 +12,8 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
+#from create_tables import cogs_classif
+from .create_tables import cogs_classif
 
 from Bio import SeqIO
 import numpy as np
@@ -180,6 +182,10 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	hist = pd.DataFrame(categories, columns=["cat"])
 	hist["freq"] = [0]*len(categories)
 	
+	chrms, counts = np.unique(chrx, return_counts=True)
+	for c in range(len(chrms)):
+		hist["chr"+str(chrms[c])] = [0]*len(categories)
+
 	#print(locations)		
 	for i in range(len(locations)):
 		#line = ["chr-Node_x_length_"+str(sizes_x[i])+"_cov_x"] + list(map(str, locations[i]))
@@ -191,6 +197,7 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 			line = ["chr"+chrx[i]] + list(map(str, locations[i]))# + [locus[i]] + [cogs[i] if cogs[i] is not None else "None"]
 			cats = list(cogs[i]) if cogs[i] is not None else ["None"]
 			hist.loc[hist['cat'].isin(cats), 'freq'] += 1
+			hist.loc[hist['cat'].isin(cats), 'chr'+str(chrx[i])] += 1
 		lines.append(line)
 	with open(output_, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -318,13 +325,14 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 		hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
 		if hist1 is not None and hist2 is not None:
 			hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
-			hist1.columns = ["COG Category", "Frequency"]
+			hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
 			ax = hist1.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False)
 			#ax.set_ylabel("CDS Frequency")
 			for p in ax.patches:
 				ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
 			plt.tight_layout()
 			ax.figure.savefig(output+"_COG_Histogram.png")
+			cogs_classif(hist1, output+"_COG_Classification.csv")
 	return(cogs_p, cogs_n, chrms_p, chrms_n)
 	
 

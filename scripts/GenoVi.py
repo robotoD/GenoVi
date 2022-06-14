@@ -11,7 +11,7 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
-#from create_raw import base
+#from create_raw import base, postprocess
 #from GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
 #from genbank2fna import gbkToFna, mainFna 
 #from genbank2faa import modify_locus, genbankToFaa, mainFaa
@@ -19,23 +19,24 @@
 #from addText import addText 
 #from mergeImages import mergeImages 
 #from colours import parseColours
-#from create_tables import gral_table
+#from create_tables import gral_table, draw_histogram
 
 from .addText import addText
 from .colours import parseColours
-from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base_complete, base, get_categories, create_kar_complete, create_feature_complete, new_loc, write_cog_files, write_lines, createRaw
+from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base_complete, base, get_categories, create_kar_complete, create_feature_complete, new_loc, write_cog_files, write_lines, createRaw, postprocess
 from .createConf import create_conf, create_conf_main
 from .GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
 from .genbank2faa import modify_locus, genbankToFaa, mainFaa
 from .genbank2fna import gbkToFna, mainFna
 from .mergeImages import mergeImages
-from .create_tables import gral_table
+from .create_tables import gral_table, draw_histogram
 from scripts import __version__
 
 import re
 import argparse as ap
 import os
 from shutil import which
+import pandas as pd
 
 
 __all__ = ['change_background', 'visualiseGenome', 'get_args', 'main',
@@ -111,18 +112,32 @@ def visualiseGenome(input_file, status, output_file = "circos",
         
         images = []
         full_cogs = set([])
+        
+        sizes_full = []
+        lengths_full = []
+        chrms_full = []
+        gc_avg_full = []
+        hists_full = []
+        
         for i in range(1, len(contigs) + 1):
             output_file_part = "contig_" + str(i) + "-" + output_file
             file = temp_folder + "/" + str(i) + ".gbk"
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            sizes, cogs_p, cogs_n, lengths, chrms, hist = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            #sizes_full = sizes_full + sizes
+            lengths_full = lengths_full + lengths
+            chrms_full = chrms_full + chrms 
+            hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
+            hists_full.append(hist)
+            
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
             gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
             maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
+            gc_avg_full = gc_avg_full + gc_avg
+            
             create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
-            gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -146,6 +161,19 @@ def visualiseGenome(input_file, status, output_file = "circos",
             if not delete_background:
                 os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
             os.remove(file)
+        
+        chrms_full = postprocess(chrms_full)
+        
+        new_hist = pd.DataFrame()
+        for hist in hists_full:
+            new_hist[hist.columns[-1]] = hist.iloc[:,-1]
+        new_hist['Frequency'] = new_hist.sum(axis=1)
+        new_hist['COG Category'] = hists_full[0]['COG Category']
+        new_hist = new_hist[['COG Category', 'Frequency']+['chr'+str(i) for i in range(1, len(contigs) + 1)]]
+        
+        gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
+        
+        draw_histogram(new_hist, output_file + "/" + output_file) 
 
         if captions or title != "":
             if captionsPosition == "auto":
@@ -175,12 +203,16 @@ def visualiseGenome(input_file, status, output_file = "circos",
     else:
         if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n, lengths, chrms = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+        sizes, cogs_p, cogs_n, lengths, chrms, hist = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose) 
+        
+        draw_histogram(hist, output_file + "/" + output_file)
+        
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
+
         create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
         gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 

@@ -113,15 +113,16 @@ def create_kar(gbk_filename, output_folder, complete):
 	init = 0
 	end = ends[0]
 	lengths = []
-	for i in range(len(ends)-1):
+	inits.append(init)
+	new_ends.append(end)
+	lengths.append(end-init)
+	for i in range(0,len(ends)-1):
+		
+		init = end + 1
+		end = end + ends[i+1]
 		inits.append(init)
 		new_ends.append(end)
 		lengths.append(end-init+1)
-		init = end + 1
-		end = end + ends[i+1]
-	inits.append(init)
-	new_ends.append(end)
-	lengths.append(end-init+1)
 		
 	lines = []
 	
@@ -243,10 +244,50 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 	
 	#return hist
 
+def postprocess(chroms):
+	
+	def get_tuples(init, chroms):
+		
+		n_chrom = int(len(chroms)/3)
+		
+		sum_p_c = np.array([], dtype='<U32')
+		sum_p_n = np.array([], dtype=np.float64)
+		sum_n_c = np.array([], dtype='<U32')
+		sum_n_n = np.array([], dtype=np.float64)
+		
+		for i in range(init,len(chroms),3):
+			
+			n_chrom = int(i/3)+1
+			
+			if len(chroms[i][0][0]) > 0 and len(chroms[i][1][0]) > 0:
+				sum_p_c = np.concatenate((sum_p_c, np.array([str(n_chrom)])))
+				sum_n_c = np.concatenate((sum_n_c, np.array([str(n_chrom)])))
+			elif len(chroms[i][0][0]) != len(chroms[i][1][0]):
+				sum_p_c = np.concatenate((sum_p_c, np.array([str(n_chrom)])))
+				sum_n_c = np.concatenate((sum_n_c, np.array([str(n_chrom)])))
+			else:	
+				sum_p_c = np.concatenate((sum_p_c, chroms[i][0][0]))
+				sum_n_c = np.concatenate((sum_n_c, chroms[i][1][0]))
+				
+			sum_p_n = np.array(np.concatenate((sum_p_n, chroms[i][0][1])))
+			sum_n_n = np.array(np.concatenate((sum_n_n, chroms[i][1][1])))
+		
+		return [(np.array(sum_p_c),np.array(sum_p_n)),(np.array(sum_n_c),np.array(sum_n_n))]
+	
+	new_chroms = []
+	n_chroms = int(len(chroms)/3)
+		
+	trnas = get_tuples(0, chroms)
+	rrnas = get_tuples(1, chroms)
+	cdss = get_tuples(2, chroms)
+	
+	return [trnas, rrnas, cdss]
+
+
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is not complete.
-def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divided=False, verbose = False):
+def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divided=False, verbose = False, complete=False):
 	
 	#chrx = '1'
 	
@@ -320,25 +361,30 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 	if divided:
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
 		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
-	else:
-		hist1 = write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
-		hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
-		if hist1 is not None and hist2 is not None:
-			hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
-			hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
-			ax = hist1.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False)
-			#ax.set_ylabel("CDS Frequency")
-			for p in ax.patches:
-				ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
-			plt.tight_layout()
-			ax.figure.savefig(output+"_COG_Histogram.png")
-			cogs_classif(hist1, output+"_COG_Classification.csv")
-	return(cogs_p, cogs_n, chrms_p, chrms_n)
+	#else:
+	hist1 = write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
+	hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
+	
+	if hist1 is not None and hist2 is not None:
+		hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
+		hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
+	
+		#if hist1 is not None and hist2 is not None:
+		#	hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
+		#	hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
+		#	ax = hist1.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False)
+		#	for p in ax.patches:
+		#		ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
+		#	plt.tight_layout()
+		#	ax.figure.savefig(output+"_COG_Histogram.png")
+		#	cogs_classif(hist1, output+"_COG_Classification.csv")
+	
+	return(cogs_p, cogs_n, chrms_p, chrms_n, hist1)
 	
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is complete.
-def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None, divided=False):
+def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None, divided=False, verbose = False):
 	
 	#chrx = '1'
 	
@@ -411,11 +457,27 @@ def create_feature_complete(gbk_filename, output, sizes, j, feat, cogs_dict=None
 		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p)
 		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n)		
 			 
+	#else:
+	#	write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
+	#	write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
+		
 	else:
-		write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p)
-		write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n)
+		hist1 = write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
+		hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
+		if hist1 is not None and hist2 is not None:
+			hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
+			hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
+			ax = hist1.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False)
+			#ax.set_ylabel("CDS Frequency")
+			for p in ax.patches:
+				ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
+			plt.tight_layout()
+			ax.figure.savefig(output+"_COG_Histogram.png")
+			cogs_classif(hist1, output+"_COG_Classification.csv")
 	
-	return
+	return(cogs_p, cogs_n, chrms_p, chrms_n)
+	
+	#return
 
 
 # Function to predict COG categories with DeepNOG
@@ -554,23 +616,31 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 		
 		sizes, _, _, lengths = create_kar(gbk_file, output, complete)
 		chrms = []
+		hist = None
 		
 		if trna:
-			_ , _, chrms_tp, chrms_tn = create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose)
+			_ , _, chrms_tp, chrms_tn, _ = create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose, complete=complete)
+			#print("\nHIST TRNA\n")
+			#print(hist)
 			chrms_t = [np.unique(chrms_tp, return_counts=True), np.unique(chrms_tn, return_counts=True)]
 			chrms.append(chrms_t)
 		if rrna:
-			_ , _, chrms_rp, chrms_rn = create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose)
+			_ , _, chrms_rp, chrms_rn, _ = create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose, complete=complete)
+			#print("\nHIST RRNA\n")
+			#print(hist)
 			chrms_r = [np.unique(chrms_rp, return_counts=True), np.unique(chrms_rn, return_counts=True)]
 			chrms.append(chrms_r)
 		if cds:
-			_ , _, chrms_cp, chrms_cn = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, verbose = verbose)
+			_ , _, chrms_cp, chrms_cn, hist = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, verbose = verbose, complete=complete)
+			
 			chrms_c = [np.unique(chrms_cp, return_counts=True), np.unique(chrms_cn, return_counts=True)]
 			chrms.append(chrms_c)
-		if divided:
-			cogs_p, cogs_n, _, _ = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose)
 			
-	return ((sizes, cogs_p, cogs_n, lengths, chrms))
+		if divided:
+			cogs_p, cogs_n, _, _, hist = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose, complete=complete)
+
+			
+	return ((sizes, cogs_p, cogs_n, lengths, chrms, hist))
 
 def createRaw():
 	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]

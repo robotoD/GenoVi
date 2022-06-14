@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import matplotlib.pyplot as plt
 
 
 def fill_unique_chrms(chrms, n):
@@ -61,5 +62,17 @@ def cogs_classif(hist, output):
 	footer = map(str,["Total"] + [hist[hist["COG Category"] == c]["Frequency"].item() for c in header2[1:]])
 	writer.writerow(footer)
 	csv_file.close()
+	
+	return
+	
+def draw_histogram(hist, output):
+	colors = ["#697BB7", '#304E9D', '#6A9AB5', '#1D82B0', '#4CA9B5', '#1C6875', '#6DBFA4', '#1A936F', '#4EB160', '#1C7633', '#E34949', '#CD1B1B', '#AD5B9F', '#A3378C', '#8F76B4',
+	          '#533D91', '#B5D27B', '#83AD29', '#BCB868', '#988F1C', '#EDC28A', '#B7822A', '#DD8950', '#C65F17', '#696969', '#999999', '#EAEAEA']
+	ax = hist.plot.bar(x="COG Category", y="Frequency", rot=90, legend=False, color=colors)
+	for p in ax.patches:
+		ax.annotate(str(p.get_height()), (p.get_x()+p.get_width()/2, p.get_height()+5), ha='center', va='center')
+	plt.tight_layout()
+	ax.figure.savefig(output+"_COG_Histogram.png", dpi=150)
+	cogs_classif(hist, output+"_COG_Classification.csv")
 	
 	return

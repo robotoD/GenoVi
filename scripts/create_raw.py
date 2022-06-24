@@ -94,7 +94,7 @@ def ends_sorted(ends):
 
 # Fuction for creating base KAR file that defines contig bands.
 # It considers that the genome is not complete.
-def create_kar(gbk_filename, output_folder, complete):
+def create_kar(gbk_filename, temp_folder, output_folder, complete):
 	
 	gbk_file = open(gbk_filename,"r")
 
@@ -137,7 +137,7 @@ def create_kar(gbk_filename, output_folder, complete):
 			lines.append(line1)
 			lines.append(line2)
 
-		output_file = output_folder + "_bands.kar"
+		output_file = temp_folder + "_bands.kar"
 		with open(output_file, 'w') as output:
 			output.writelines(lines)
 			print(output_file+" created succesfully.")
@@ -614,7 +614,7 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 	
 	if flag:
 		
-		sizes, _, _, lengths = create_kar(gbk_file, output, complete)
+		sizes, _, _, lengths = create_kar(gbk_file, tmp, output, complete)
 		chrms = []
 		hist = None
 		
@@ -724,7 +724,7 @@ if __name__ == '__main__':
 		except:
 			gbk_name = gbk_file.split(".")[-2]	
 			
-		sizes, inits, ends, lengths = create_kar(gbk_file, output, complete)
+		sizes, inits, ends, lengths = create_kar(gbk_file, tmp, output, complete)
 
 		for k, rec in enumerate(SeqIO.parse(gbk, "genbank")):
 			

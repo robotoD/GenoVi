@@ -604,7 +604,7 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 		print("Error: Categories can only be predicted for CDS. Please enter output file paths for both CDS.") 
 		flag = False
 	elif get_cats:
-		cogs_dict = get_categories(gbk_file, output, deepnog_confidence)
+		cogs_dict = get_categories(gbk_file, tmp, deepnog_confidence)
 	else:
 		cogs_dict = None
 		

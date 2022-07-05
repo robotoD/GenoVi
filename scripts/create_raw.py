@@ -258,19 +258,30 @@ def postprocess(chroms):
 		for i in range(init,len(chroms),3):
 			
 			n_chrom = int(i/3)+1
-			
+
 			if len(chroms[i][0][0]) > 0 and len(chroms[i][1][0]) > 0:
 				sum_p_c = np.concatenate((sum_p_c, np.array([str(n_chrom)])))
 				sum_n_c = np.concatenate((sum_n_c, np.array([str(n_chrom)])))
 			elif len(chroms[i][0][0]) != len(chroms[i][1][0]):
 				sum_p_c = np.concatenate((sum_p_c, np.array([str(n_chrom)])))
 				sum_n_c = np.concatenate((sum_n_c, np.array([str(n_chrom)])))
-			else:	
-				sum_p_c = np.concatenate((sum_p_c, chroms[i][0][0]))
-				sum_n_c = np.concatenate((sum_n_c, chroms[i][1][0]))
-				
-			sum_p_n = np.array(np.concatenate((sum_p_n, chroms[i][0][1])))
-			sum_n_n = np.array(np.concatenate((sum_n_n, chroms[i][1][1])))
+			else:
+				if len(chroms[i][0][0]) == 0:
+					sum_p_c = np.concatenate((sum_p_c, np.array(["1"], dtype='<U32')))
+				else:
+					sum_p_c = np.concatenate((sum_p_c, chroms[i][0][0]))
+				if len(chroms[i][1][0]) == 0:
+					sum_n_c = np.concatenate((sum_n_c, np.array(["1"], dtype='<U32')))
+				else:
+					sum_n_c = np.concatenate((sum_n_c, chroms[i][1][0]))
+			if len(chroms[i][0][1]) == 0:
+				sum_p_n = np.array(np.concatenate((sum_p_n, np.array([0], dtype=np.float64))))
+			else:
+				sum_p_n = np.array(np.concatenate((sum_p_n, chroms[i][0][1])))
+			if len(chroms[i][1][1]) == 0:
+				sum_n_n = np.array(np.concatenate((sum_n_n, np.array([0], dtype=np.float64))))
+			else:
+				sum_n_n = np.array(np.concatenate((sum_n_n, chroms[i][1][1])))
 		
 		return [(np.array(sum_p_c),np.array(sum_p_n)),(np.array(sum_n_c),np.array(sum_n_n))]
 	

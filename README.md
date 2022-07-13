@@ -85,8 +85,7 @@ More detailed information about the arguments can be found in the [user guide](h
 
 Check the tutorials in the [user guide tutorials](https://github.com/robotoD/GenoVi/wiki/User-guide#tutorials-).
 
-## Output files 
-## Output files 
+## Output files  
 Resulting images are saved in a folder called **\[name\]** as **\[name\].svg** and **\[name\].png** (name being specified with `output_file` argument or, by default, circos. In case of a complete genome, individual contig image files are stored in a **\[name\]** subdirectory as **\[name\]-contig_\[i\].png** with i in \[1, the number of circles\].
 
 Besides images, if `-k` or `--keep_temporary_files` was called, files described in [user guide arguments](https://github.com/robotoD/GenoVi/wiki/User-guide#keep-temporary-files-) will also be stored. 

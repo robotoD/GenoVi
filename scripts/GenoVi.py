@@ -128,8 +128,10 @@ def visualiseGenome(input_file, status, output_file = "circos",
             #sizes_full = sizes_full + sizes
             lengths_full = lengths_full + lengths
             chrms_full = chrms_full + chrms 
-            hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
-            hists_full.append(hist)
+            
+            if hist is not None:
+                hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
+                hists_full.append(hist)
             
             full_cogs = full_cogs.union(cogs_p).union(cogs_n)
             images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
@@ -164,16 +166,19 @@ def visualiseGenome(input_file, status, output_file = "circos",
         
         chrms_full = postprocess(chrms_full)
         
-        new_hist = pd.DataFrame()
-        for hist in hists_full:
-            new_hist[hist.columns[-1]] = hist.iloc[:,-1]
-        new_hist['Frequency'] = new_hist.sum(axis=1)
-        new_hist['COG Category'] = hists_full[0]['COG Category']
-        new_hist = new_hist[['COG Category', 'Frequency']+['chr'+str(i) for i in range(1, len(contigs) + 1)]]
+        if len(hists_full) > 0:
+            new_hist = pd.DataFrame()
+            for hist in hists_full:
+                new_hist[hist.columns[-1]] = hist.iloc[:,-1]
+            new_hist['Frequency'] = new_hist.sum(axis=1)
+            new_hist['COG Category'] = hists_full[0]['COG Category']
+            new_hist = new_hist[['COG Category', 'Frequency']+['chr'+str(i) for i in range(1, len(contigs) + 1)]]
+            
+            draw_histogram(new_hist, output_file + "/" + output_file) 
         
         gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
         
-        draw_histogram(new_hist, output_file + "/" + output_file) 
+        
 
         if captions or title != "":
             if captionsPosition == "auto":
@@ -205,7 +210,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
         sizes, cogs_p, cogs_n, lengths, chrms, hist = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose) 
         
-        draw_histogram(hist, output_file + "/" + output_file)
+        if hist is not None:
+            draw_histogram(hist, output_file + "/" + output_file)
         
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))

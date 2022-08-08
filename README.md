@@ -26,6 +26,7 @@ pip install genovi
 * Python 3.7 or later
 * [DeepNog 1.2.3](https://github.com/univieCUBE/deepnog "DeepNOG")
 * NumPy 1.20.2
+* MatPlotLib 3.5.2
 * Pandas 1.2.4
 * Biopython 1.79
 * CairoSVG 2.5.2

@@ -50,6 +50,7 @@ setup(
   keywords = ['bioinformatics', 'genomics', 'CIRCOS'],   # Keywords that define your package best
   install_requires=[            # I get to this in a second
           'cairosvg>=2.5.2',
+          'matplotlib>=3.5.2',
           'numpy>=1.20.2',
           'pandas>=1.2.4',
           'BioPython>=1.79',

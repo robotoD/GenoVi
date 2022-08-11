@@ -378,7 +378,9 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 	
 	if hist1 is not None and hist2 is not None:
 		hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
-		hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
+		hist1 = hist1.rename(columns={'freq': 'Frequency', 'cat': 'COG Category'})
+		hist1 = hist1[["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]] # Reordering columns
+		#hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
 	
 		#if hist1 is not None and hist2 is not None:
 		#	hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")

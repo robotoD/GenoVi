@@ -69,13 +69,14 @@ def genbankToFaa(input, output, verbose = False):
     if not line.split(' bp ')[-2].split(' ')[-1].isdecimal():
         modify_locus(input)
         
-      
+    areCDS = False
     for seq_record in SeqIO.parse(open(input,"r"), "genbank"):
         if verbose:
             print("Dealing with GenBank record %s" % seq_record.id)
         for seq_feature in seq_record.features :
             if seq_feature.type=="CDS":
                 if "translation" in seq_feature.qualifiers and len(seq_feature.qualifiers['translation'])==1:
+                    areCDS = True
                     fasta = seq_feature.qualifiers['translation'][0]
                     output_handle.write(">%s from %s\n%s\n" % (
                         seq_feature.qualifiers['locus_tag'][0],
@@ -86,6 +87,7 @@ def genbankToFaa(input, output, verbose = False):
     input_handle.close()
     if verbose:
         print("Done")
+    return areCDS
 
 def mainFaa():
     parser = argparse.ArgumentParser(description="Starting from a GenBank flat file, this simplifies it as a .fna")

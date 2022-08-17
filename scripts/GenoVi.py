@@ -127,8 +127,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
             sizes, cogs_p, cogs_n, lengths, chrms, hist = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
             #sizes_full = sizes_full + sizes
             lengths_full = lengths_full + lengths
-            chrms_full = chrms_full + chrms 
-            
+            chrms_full = chrms_full + chrms
+
             if hist is not None:
                 hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
                 hists_full.append(hist)
@@ -195,7 +195,6 @@ def visualiseGenome(input_file, status, output_file = "circos",
                                 pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             else:
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                print(captionsPosition)
                 addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
                                 pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             os.remove(output_file + ".svg")

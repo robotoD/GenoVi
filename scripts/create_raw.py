@@ -184,6 +184,7 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	hist["freq"] = [0]*len(categories)
 	
 	chrms, counts = np.unique(chrx, return_counts=True)
+	
 	for c in range(len(chrms)):
 		hist["chr"+str(chrms[c])] = [0]*len(categories)
 
@@ -205,7 +206,8 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 		writer.writerows(lines)
 		if verbose:
 			print(output_,"created succesfully.")
-	
+
+	# why is this distinction a thing?
 	if len(cogs) == 0:
 		return None
 	else:
@@ -380,6 +382,8 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 		hist1 = hist1.set_index("cat").add(hist2.set_index("cat"), fill_value=0).reset_index().replace("None", "Unclassified")
 		hist1 = hist1.rename(columns={'freq': 'Frequency', 'cat': 'COG Category'})
 		hist1 = hist1[["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]] # Reordering columns
+		if not "chr1" in hist1:
+			hist1["chr1"] = 0
 		#hist1.columns = ["COG Category", "Frequency"] + ["chr"+str(x) for x in sorted(list(set(chrms_p+chrms_n)))]
 	
 		#if hist1 is not None and hist2 is not None:
@@ -517,7 +521,7 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 	
 	try: 
 		#print(command1)
-		genbank2faa.genbankToFaa(gbk_file, output_faa)
+		areCDS = genbank2faa.genbankToFaa(gbk_file, output_faa)
 		#process = subprocess.Popen(command1.split(), stdout=subprocess.PIPE)
 		#output_, error = process.communicate()
 		print()
@@ -531,24 +535,28 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 	
 	print("output", output)
 	output_pred = output + "_prediction_deepnog.csv"
-	command2 = "deepnog infer " + output_faa + " --out " + output_pred + " -db cog2020 -t 1"
-	if deepnog_confidence > 0:
-		command2 += " -c " + str(deepnog_confidence)
-	
-	try: 
-		print()
-		print("Deepnog prediction started")
-		print()
-		print(command2)
-		process = subprocess.Popen(command2.split(), stdout=subprocess.PIPE)
-		output_, error = process.communicate()
-		print()
-		print("Deepnog prediction finished succesfully. Predictions saved as", output_pred)
-		print()
-	except:
-		print("Error when predicting categories from " + output_faa + " with deepnog.")
-		return
-	
+	if areCDS:
+		command2 = "deepnog infer " + output_faa + " --out " + output_pred + " -db cog2020 -t 1"
+		if deepnog_confidence > 0:
+			command2 += " -c " + str(deepnog_confidence)
+		
+		try: 
+			print()
+			print("Deepnog prediction started")
+			print()
+			print(command2)
+			process = subprocess.Popen(command2.split(), stdout=subprocess.PIPE)
+			output_, error = process.communicate()
+			print()
+			print("Deepnog prediction finished succesfully. Predictions saved as", output_pred)
+			print()
+		except:
+			print("Error when predicting categories from " + output_faa + " with deepnog.")
+			return
+	else:
+		file = open(output_pred, "w")
+		file.write("sequence_id,prediction,confidence")
+		file.close()
 	# Cross files 
 	
 	cogs_df = pd.read_csv(output_pred, sep=',', usecols=['sequence_id', 'prediction'])
@@ -633,14 +641,10 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 		
 		if trna:
 			_ , _, chrms_tp, chrms_tn, _ = create_feature(gbk_file, tmp, output, sizes, "tRNA", verbose = verbose, complete=complete)
-			#print("\nHIST TRNA\n")
-			#print(hist)
 			chrms_t = [np.unique(chrms_tp, return_counts=True), np.unique(chrms_tn, return_counts=True)]
 			chrms.append(chrms_t)
 		if rrna:
 			_ , _, chrms_rp, chrms_rn, _ = create_feature(gbk_file, tmp, output, sizes, "rRNA", verbose = verbose, complete=complete)
-			#print("\nHIST RRNA\n")
-			#print(hist)
 			chrms_r = [np.unique(chrms_rp, return_counts=True), np.unique(chrms_rn, return_counts=True)]
 			chrms.append(chrms_r)
 		if cds:

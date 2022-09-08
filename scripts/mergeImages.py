@@ -15,7 +15,7 @@
 #           {"fileName": "img2.svg", "size": 10000}]
 
 
-from math import sqrt
+from math import sqrt, floor, ceil
 import re
 
 __all__ = ['mergeImages',
@@ -66,10 +66,17 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
     file.write('''version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n\n''')
     file.write('<rect x="-1000" y="-1000" width="5000px" height="5000px" style="fill:{};"/>'.format(background_colour))
     currentX = 0
+    matrixRows = floor(sqrt(len(images)))
+    matrixColumns = ceil(len(images) / matrixRows)
+    matrixScale = totalWidth / max([sum([a["size"] for a in images[i:i+matrixColumns]]) for i in range(0,len(images),matrixColumns)]) # 1 # matrixRows * totalWidth / max([a["size"] for a in images])
     beginGroup = '<g transform="translate({},{}) scale({})">\n'
     if align == "auto":
-        if len(images) > 1 and images[1]["size"] > images[0]["size"]*0.75:
+        if len(images) > 1 and images[1]["size"] > images[0]["size"]*0.75 and images[0]["size"] + images[1]["size"] > totalWidth*0.5:
             align = "U"
+        elif len(images) == 1 or images[0]["size"] > totalWidth * 0.5:
+            align = "A"
+        elif len(images) > 3:
+            align = "matrix"
         else:
             align = "A"
     imageIndex = 0
@@ -143,6 +150,41 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                     image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
                 else:
                     file.write(beginGroup.format(currentX, 3000*max([firstSize, secondSize]), float(image["size"])/totalWidth))
+        elif align == "two_lines":
+            if imageIndex == 0:
+                currentX = 1500 - 3000*1.6*sum([a["size"] for a in images[0 : len(images)//2]])/(2.0*totalWidth)
+                y = 0
+            elif imageIndex == len(images)//2:
+                currentX = 1500 - 3000*1.6*sum([a["size"] for a in images[len(images)//2 : ]])/(2.0*totalWidth)
+                y = 1.6*max([a["size"] for a in images[len(images)//2 : ]])*3000.0 / totalWidth
+            
+            if scale == "variable" and image["scale"] == "variable":
+                if not rectIsDrawn:
+                    extraElements = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, y, rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                    extraElements += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, y + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
+                    rectIsDrawn = True
+                file.write(beginGroup.format(currentX, y, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
+                image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
+            else:
+                image["size"] *= 1.6
+                file.write(beginGroup.format(currentX , y, float(image["size"])/totalWidth))
+        elif align == "matrix":
+            if imageIndex == 0:
+                currentX = 1500 - matrixScale * 3000 * sum([a["size"] for a in images[0 : matrixColumns]])/(2*totalWidth)
+                y = 0
+            elif 0 == imageIndex % matrixColumns:
+                currentX = 1500 - matrixScale * 3000 * sum([a["size"] for a in images[imageIndex : imageIndex + matrixColumns]]) / (2*totalWidth)
+                y += max([a["size"] for a in images[imageIndex-matrixColumns : imageIndex]])*3000.0 / totalWidth
+            if scale == "variable" and image["scale"] == "variable":
+                if not rectIsDrawn:
+                    extraElements = '<rect x="{0}" y="{1}" width="{2}" height="{3}" fill="none" stroke = "black"/>'.format(currentX, y, rectangleSize, 35 + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth)
+                    extraElements += '<text x="{0}" y="{1}" font-size="30" font-family="CMUBright-Roman" text-anchor="left">scale: x{2}</text>\n'.format(currentX, y + max([x["size"] for x in images[imageIndex:]])*(rectangleSize*11/12)/totalVariableWidth + 30, round(totalWidth/((3000/rectangleSize)*totalVariableWidth)))
+                    rectIsDrawn = True
+                file.write(beginGroup.format(currentX, y, float(image["size"])/((3000/rectangleSize)*totalVariableWidth)))
+                image["size"] = image["size"]*totalWidth/((3000/rectangleSize)*totalVariableWidth)
+            else:
+                image["size"] *= matrixScale
+                file.write(beginGroup.format(currentX , y, float(image["size"])/totalWidth))
         for line in inFile:
             if("</svg>" in line):
                 break

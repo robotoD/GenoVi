@@ -172,7 +172,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
                 new_hist[hist.columns[-1]] = hist.iloc[:,-1]
             new_hist['Frequency'] = new_hist.sum(axis=1)
             new_hist['COG Category'] = hists_full[0]['COG Category']
-            new_hist = new_hist[['COG Category', 'Frequency']+['chr'+str(i) for i in range(1, len(contigs) + 1)]]
+            new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
             
             draw_histogram(new_hist, output_file + "/" + output_file) 
         
@@ -290,7 +290,7 @@ def get_args():
     parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: circos", default = "circos")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not classify each protein sequence into COG categories.", required = False)
     parser.add_argument("-b", "--deepnog_confidence_threshold", type=float, help="Lower threshold for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
-    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U"], help="When using --status complete, this defines the vertical alignment of every circular representation. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below). By default this is defined by contig sizes", default = "auto")
+    parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U", "matrix", "two_lines"], help="When using --status complete, this defines the vertical alignment of every circular representation. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below), matrix (multiple rows). By default this is defined by contig sizes", default = "auto")
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="To select the scale-up ratio between each circular representations when the file is processes as a complete genome. This is useful to ensure visibility of each representation when the length difference is too high. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Do not delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-r", "--reuse_predictions", action='store_true', help="If available, reuse DeepNog prediction result from previous run. Useful only after --keep_temporary_files flag enabled.", required = False)

@@ -2,7 +2,6 @@ import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
-
 def fill_unique_chrms(chrms, n):
 	
 	def check(lst, n):
@@ -54,9 +53,12 @@ def cogs_classif(hist, output):
 	writer = csv.writer(csv_file)
 	writer.writerow(header1)
 	writer.writerow(header2)
-	
-	for i in range(len(hist.columns) - 2):
-		line = map(str,[i+1] + [hist[hist["COG Category"] == c]["chr"+str(i+1)].item() for c in header2[1:]])
+
+	for column in hist.columns:
+		if column[:3] != "chr":
+			continue
+		i = column[3:]
+		line = map(str,[i] + [hist[hist["COG Category"] == c]["chr"+i].item() for c in header2[1:]])
 		writer.writerow(line)
 		
 	footer = map(str,["Total"] + [hist[hist["COG Category"] == c]["Frequency"].item() for c in header2[1:]])

@@ -192,11 +192,11 @@ def visualiseGenome(input_file, status, output_file = "circos",
                 os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
                 addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
-                                pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                        pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             else:
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
                 addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
-                                pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                        pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             os.remove(output_file + ".svg")
             os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
         else:
@@ -234,7 +234,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         if captions or title != "" or size:
             captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
             addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n),
-            pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sizes[0] if size else "")
+                    pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "")
             os.remove("circos.svg")
             os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
         else:
@@ -246,6 +246,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
         file = open(output_file + "/" + output_file + ".svg")
         svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
         file.close()
+        if title != "":
+            print("\nWARNING! PNG version of image may look weird because italic text transformation is not yet properly implemented.\nPlease prefer using the svg version instead.\n")
 
     try:
         os.remove("circos.png")

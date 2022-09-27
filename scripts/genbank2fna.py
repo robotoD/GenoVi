@@ -35,7 +35,7 @@ def gbkToFna(input, output = None, verbose = False):
     #Long version, allows full control of fasta output
     for seq_record in SeqIO.parse(input_handle, "genbank"):
         if verbose:
-            print("Dealing with GenBank record %s" % seq_record.id)
+            print("Transforming GenBank record %s to .fna" % seq_record.id)
         try: # The old way, removed in Biopython 1.73
             fasta = seq_record.seq.tostring()
         except AttributeError: # The new way, needs Biopython 1.45 or later.

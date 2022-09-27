@@ -246,7 +246,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         file = open(output_file + "/" + output_file + ".svg")
         svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
         file.close()
-        if title != "":
+        if verbose and title != "" and italic_words > 0:
             print("\nWARNING! PNG version of image may look weird because italic text transformation is not yet properly implemented.\nPlease prefer using the svg version instead.\n")
 
     try:
@@ -305,7 +305,7 @@ def get_args():
     text_group.add_argument("-cp", "--captions_position", type=str, choices=["right", "left", "top", "bottom", "auto"], help = "Where to position figure captions. Options: left, right, top, bottom, auto.", default = "auto")
     text_group.add_argument("-t", "--title", type=str, help="Title of the image (e.g., strain taxomomical identification). By default, it does not include title", default = "")
     text_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
-    text_group.add_argument("--italic_words", type=int, help="How many of words of the title should be written in italics. Default: 2", default = 2)
+    text_group.add_argument("--italic_words", type=int, help="How many of words of the title should be written in italics. WARNING: Italics is not supported by the svg-to-png engine, so PNG image will not be available if this option is used. Default: 0", default = 0)
     text_group.add_argument("--size", action='store_true', help="To write the size (in base pairs) inside each circle.", required = False)
 
     colour_group = parser.add_argument_group("colours")

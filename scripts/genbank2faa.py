@@ -72,7 +72,7 @@ def genbankToFaa(input, output, verbose = False):
     areCDS = False
     for seq_record in SeqIO.parse(open(input,"r"), "genbank"):
         if verbose:
-            print("Dealing with GenBank record %s" % seq_record.id)
+            print("Transforming GenBank record %s to .faa" % seq_record.id)
         for seq_feature in seq_record.features :
             if seq_feature.type=="CDS":
                 if "translation" in seq_feature.qualifiers and len(seq_feature.qualifiers['translation'])==1:

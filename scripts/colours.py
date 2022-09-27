@@ -68,7 +68,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "217, 195, 205" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "196, 187, 193" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "230, 200, 211" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "pastel":
+    elif colour_scheme == "pastel" or colour_scheme == "soft":
         GC_content = "196, 227, 255" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("pastel1-7-qual-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
         tRNA = "143, 143, 143" if tRNA == "auto" else tRNA
@@ -124,7 +124,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "254,155,227" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "154,215,173" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "155,187,89" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "forest":
+    elif colour_scheme == "forest" or colour_scheme == "jungle":
         GC_content = "45,158,48" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,32,136),remap_int(var(value),0,0,103,208),remap_int(var(value),0,0,78,95)))' if GC_skew == "auto" else GC_skew
         tRNA = "109,137,75" if tRNA == "auto" else tRNA
@@ -132,7 +132,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "136,208,95" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "105,184,128" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "45,158,48" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "toxic":
+    elif colour_scheme == "toxic" or colour_scheme == "nuclear" or colour_scheme == "bubblegum" or colour_scheme == "gum":
         GC_content = "137,4,177" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,106,11),remap_int(var(value),0,0,8,97),remap_int(var(value),0,0,136,11)))' if GC_skew == "auto" else GC_skew
         tRNA = "0,0,0" if tRNA == "auto" else tRNA

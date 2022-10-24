@@ -72,7 +72,8 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
 def visualiseGenome(input_file, status, output_file = "circos", 
                     cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
-                    colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0'):
+                    colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
+                    wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '+']):
 
     if not cairo:
         print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
@@ -82,6 +83,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
         if verbose:
             print("DeepNOG lower bound must be between 0 and 1")
         raise Exception("DeepNOG lower bound must be between 0 and 1")
+    if len(wanted_cogs) > 26:
+        wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'None']
 
     if which("circos") == None:
         if verbose:
@@ -124,7 +127,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
             file = temp_folder + "/" + str(i) + ".gbk"
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms, hist = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose)
+            sizes, cogs_p, cogs_n, lengths, chrms, hist = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
             #sizes_full = sizes_full + sizes
             lengths_full = lengths_full + lengths
             chrms_full = chrms_full + chrms
@@ -139,7 +142,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
             maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
             gc_avg_full = gc_avg_full + gc_avg
             
-            create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
+            create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)))
             
             if verbose:
                 print("Drawing {}...".format(i))
@@ -191,11 +194,11 @@ def visualiseGenome(input_file, status, output_file = "circos",
                 os.remove(output_file + "-contig_" + "1.svg")
                 os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
+                addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
                         pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             else:
                 mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs,
+                addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
                         pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             os.remove(output_file + ".svg")
             os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
@@ -207,7 +210,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
     else:
         if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n, lengths, chrms, hist = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose) 
+        sizes, cogs_p, cogs_n, lengths, chrms, hist = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
         
         if hist is not None:
             draw_histogram(hist, output_file + "/" + output_file)
@@ -218,7 +221,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
 
-        create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p, cogs_n)
+        create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)))
         gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 
         if verbose:
@@ -233,7 +236,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
             change_background("none")
         if captions or title != "" or size:
             captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-            addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n),
+            addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
                     pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "")
             os.remove("circos.svg")
             os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
@@ -292,6 +295,7 @@ def get_args():
     parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: circos", default = "circos")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not classify each protein sequence into COG categories.", required = False)
     parser.add_argument("-b", "--deepnog_confidence_threshold", type=float, help="Lower threshold for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
+    parser.add_argument("--cogs", type=str, help="Symbol of each COG to draw. For example, for drawing only information storage and processing related, use 'ABJKLX'. By default, draws all of them.", default = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+")
     parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U", "matrix", "two_lines"], help="When using --status complete, this defines the vertical alignment of every circular representation. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below), matrix (multiple rows). By default this is defined by contig sizes", default = "auto")
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="To select the scale-up ratio between each circular representations when the file is processes as a complete genome. This is useful to ensure visibility of each representation when the length difference is too high. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Do not delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
@@ -328,7 +332,8 @@ def get_args():
     return (args.input_file, args.status, args.output_file,
     args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, args.verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
-    args.colour_scheme, args.background, args.font_colour, args.GC_content_colour, args.GC_skew_colour, args.tRNA_colour, args.rRNA_colour, args.CDS_positive_colour, args.CDS_negative_colour, args.GC_skew_line_colour)
+    args.colour_scheme, args.background, args.font_colour, args.GC_content_colour, args.GC_skew_colour, args.tRNA_colour, args.rRNA_colour, args.CDS_positive_colour, args.CDS_negative_colour, args.GC_skew_line_colour,
+    list(args.cogs))
 
 def main():
     visualiseGenome(*get_args())

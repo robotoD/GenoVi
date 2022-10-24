@@ -82,8 +82,8 @@ color      = {font_color}
 fill_under = yes
 thickness  = 1
 file = {folder}/{output}_GC_content.wig
-r0   = 0.62r
-r1   = 0.7r
+r0   = 0.59r
+r1   = 0.65r
 min  = {GC_min}
 max  = {GC_max}
 <rules>
@@ -103,7 +103,7 @@ fill_under = no
 thickness  = 0.5
 file = {folder}/{output}_GC_skew.wig
 r0   = 0.3r
-r1   = 0.6r
+r1   = 0.55r
 min  = {skew_min}
 max  = {skew_max}
 <rules>
@@ -145,12 +145,14 @@ r0               = 1r
 
 <highlight>
 
-#Positive band BGCs
+#Positive band CDSs
 init_counter = highlight:1
 file = {folder}/{output}_CDS_pos.txt
 fill_color = {CDS_positive}
-r1 = 0.85r
-r0 = 0.89r
+r1 = 0.86r
+r0 = 0.90r
+stroke_thickness = 2
+stroke_color ={CDS_positive}
 </highlight>
 
 #Negative
@@ -158,32 +160,40 @@ r0 = 0.89r
 
 file = {folder}/{output}_CDS_neg.txt
 fill_color = {CDS_negative}
-r1 = 0.8r
-r0 = 0.84r
+r1 = 0.75r
+r0 = 0.79r
+stroke_thickness = 2
+stroke_color ={CDS_negative}
 </highlight>
 
 #Positive band tRNAs
 <highlight>
 file = {folder}/{output}_tRNA_pos.txt
 fill_color = {tRNA_positive}
-r1 = 0.85r
-r0 = 0.89r
+r1 = 0.83r
+r0 = 0.85r
+stroke_thickness = 2
+stroke_color ={tRNA_positive}
 </highlight>
 
 #Negative
 <highlight>
 file = {folder}/{output}_tRNA_neg.txt
 fill_color = {tRNA_negative}
+stroke_thickness = 2
+stroke_color ={tRNA_negative}
 r1 = 0.8r
-r0 = 0.84r
+r0 = 0.82r
 </highlight>
 
 #Positive band rRNAs
 <highlight>
 file = {folder}/{output}_rRNA_pos.txt
 fill_color = {rRNA_positive}
-r1 = 0.85r
-r0 = 0.89r
+r1 = 0.83r
+r0 = 0.85r
+stroke_thickness = 2
+stroke_color ={rRNA_positive}
 </highlight>
 
 #Negative
@@ -191,7 +201,9 @@ r0 = 0.89r
 file = {folder}/{output}_rRNA_neg.txt
 fill_color = {rRNA_negative}
 r1 = 0.8r
-r0 = 0.84r
+r0 = 0.82r
+stroke_thickness = 2
+stroke_color ={rRNA_negative}
 </highlight>
 
 '''.format(folder = folder,
@@ -242,8 +254,8 @@ r0 = 0.84r
 
 file = {folder}/{output}_CDS_pos_{name}.txt
 fill_color = {color}
-r1 = 0.9r
-r0 = 0.94r
+r1 = 0.91r
+r0 = 0.95r
 </highlight>
 '''.format(folder = folder, output = output, name = COG["name"], color = COG["color"]))
             if COG["name"] in cogs_n:
@@ -253,8 +265,8 @@ r0 = 0.94r
 
 file = {folder}/{output}_CDS_neg_{name}.txt
 fill_color = {color}
-r1 = 0.75r
-r0 = 0.79r
+r1 = 0.7r
+r0 = 0.74r
 </highlight>
 '''.format(folder = folder, output = output, name = COG["name"], color = COG["color"]))
     file.write("</highlights>")

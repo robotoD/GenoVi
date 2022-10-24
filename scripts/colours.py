@@ -36,9 +36,49 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "191, 204, 217" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "171, 178, 217" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 191, 217" if skew_line_colour == "auto" else skew_line_colour
+    elif colour_scheme == "strong" or colour_scheme == "super":
+        GC_content = "0, 158, 115" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,213,0),remap_int(var(value),0,0,94,0),remap_int(var(value),0,0,0,0)))' if GC_skew == "auto" else GC_skew
+        tRNA = "230, 159, 0" if tRNA == "auto" else tRNA
+        rRNA = "204, 121, 167" if rRNA == "auto" else rRNA
+        CDS_positive = "86, 180, 233" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "0, 114, 178" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
+    elif colour_scheme == "paradise" or colour_scheme == "tropical":
+        GC_content = "246,232,195" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("brbg-11-div-%d",remap_int(var(value),0,0,0,1)))' if GC_skew == "auto" else GC_skew
+        tRNA = "140,81,10" if tRNA == "auto" else tRNA
+        rRNA = "191,129,45" if rRNA == "auto" else rRNA
+        CDS_positive = "1,102,94" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "128,205,193" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
+    elif colour_scheme == "blossom" or colour_scheme == "cherry":
+        GC_content = "230,245,208" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("piyg-11-div-%d",remap_int(var(value),0,0,11,10)))' if GC_skew == "auto" else GC_skew
+        tRNA = "184,134,224" if tRNA == "auto" else tRNA
+        rRNA = "127,188,65" if rRNA == "auto" else rRNA
+        CDS_positive = "142,1,82" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "222,119,174" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour    
+    elif colour_scheme == "dawn" or colour_scheme == "sunrise":
+        GC_content = "0,0,0" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,230,213),remap_int(var(value),0,0,159,94),remap_int(var(value),0,0,0,0)))' if GC_skew == "auto" else GC_skew
+        tRNA = "86, 180, 233" if tRNA == "auto" else tRNA
+        rRNA = "0, 158, 115" if rRNA == "auto" else rRNA
+        CDS_positive = "204, 121, 167" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "0, 114, 178" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
+    elif colour_scheme == "autumn" or colour_scheme == "fall":
+        GC_content = "0,0,0" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,0,240),remap_int(var(value),0,0,158,228),remap_int(var(value),0,0,115,66)))' if GC_skew == "auto" else GC_skew
+        tRNA = "0, 114, 178" if tRNA == "auto" else tRNA
+        rRNA = "106, 200, 253" if rRNA == "auto" else rRNA
+        CDS_positive = "213, 94, 0" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "230, 159, 0" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
     elif colour_scheme == "purple" or colour_scheme == "purples":
         GC_content = "57, 1, 120" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("puor-7-div-%d",remap_int(var(value),0,0,7,5)))' if GC_skew == "auto" else GC_skew
+        GC_skew = 'eval(sprintf("puor-7-div-%d",remap_int(var(value),0,0,7,6)))' if GC_skew == "auto" else GC_skew
         tRNA = "108, 95, 156" if tRNA == "auto" else tRNA
         rRNA = "128, 85, 156" if rRNA == "auto" else rRNA
         CDS_positive = "196, 187, 237" if CDS_positive == "auto" else CDS_positive
@@ -68,7 +108,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "217, 195, 205" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "196, 187, 193" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "230, 200, 211" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "pastel" or colour_scheme == "soft":
+    elif colour_scheme == "pastel":
         GC_content = "196, 227, 255" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("pastel1-7-qual-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
         tRNA = "143, 143, 143" if tRNA == "auto" else tRNA
@@ -124,7 +164,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "254,155,227" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "154,215,173" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "155,187,89" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "forest" or colour_scheme == "jungle":
+    elif colour_scheme == "forest":
         GC_content = "45,158,48" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,32,136),remap_int(var(value),0,0,103,208),remap_int(var(value),0,0,78,95)))' if GC_skew == "auto" else GC_skew
         tRNA = "109,137,75" if tRNA == "auto" else tRNA
@@ -132,7 +172,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "136,208,95" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "105,184,128" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "45,158,48" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "toxic" or colour_scheme == "nuclear" or colour_scheme == "bubblegum" or colour_scheme == "gum":
+    elif colour_scheme == "toxic":
         GC_content = "137,4,177" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,106,11),remap_int(var(value),0,0,8,97),remap_int(var(value),0,0,136,11)))' if GC_skew == "auto" else GC_skew
         tRNA = "0,0,0" if tRNA == "auto" else tRNA
@@ -180,7 +220,7 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "255,219,172" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "241,194,125" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "224,172,105" if skew_line_colour == "auto" else skew_line_colour
-    else: # auto or neutral
+    elif colour_scheme == "neutral":
         GC_content = "94, 120, 145" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("bupu-7-seq-%d",remap_int(var(value),0,0,4,3)))' if GC_skew == "auto" else GC_skew
         tRNA = "67, 14, 110" if tRNA == "auto" else tRNA
@@ -188,5 +228,13 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "186, 186, 186" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "140, 140, 140" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "171, 171, 171" if skew_line_colour == "auto" else skew_line_colour
-    
+    else: # Color Universal Design, Suggested by Okabe, Ito, in "Color Universal Design (CUD) - How to make figures and presentations that are friendly to Colorblind people", available at https://jfly.uni-koeln.de/color/
+        GC_content = "204, 121, 167" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,86,0),remap_int(var(value),0,0,180,158),remap_int(var(value),0,0,233,115)))' if GC_skew == "auto" else GC_skew
+        tRNA = "230, 159, 0" if tRNA == "auto" else tRNA
+        rRNA = "0, 114, 178" if rRNA == "auto" else rRNA
+        CDS_positive = "240, 228, 66" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "213, 94, 0" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "171, 171, 200" if skew_line_colour == "auto" else skew_line_colour
+
     return colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour

@@ -213,7 +213,7 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 	else:
 		return hist
 
-def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
+def write_cog_files(locations, output, chrx, locus, cogs, verbose = False, categories = None):
 	
 	if len(cogs) == 0:
 		return
@@ -224,7 +224,10 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False):
 	cogs_df["chr"] = chrx
 	cogs_df["locus"] = locus
 	cogs_df["main"] = cogs_df["category"].apply(lambda x: "None" if x is None else x[0]) #cogs_df["category"].str[0]
-	categories = map(str, cogs_df["main"].unique())
+	if categories == None:
+		categories = map(str, cogs_df["main"].unique())
+	else:
+		categories = [x for x in categories if x in cogs_df["main"].unique()]
 	#hist = pd.DataFrame(columns = ["cat", "freq"])
 	
 	for c in list(categories):
@@ -300,7 +303,8 @@ def postprocess(chroms):
 
 # Creates feature (CDS, tRNAm, or rRNA) files for CIRCOS.
 # It considers that the genome is not complete.
-def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divided=False, verbose = False, complete=False):
+def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divided=False, verbose = False, complete=False,
+				   wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '+']):
 	
 	#chrx = '1'
 	
@@ -372,8 +376,8 @@ def create_feature(gbk_filename, tmp, output, sizes, feat, cogs_dict=None, divid
 	n_output = tmp + "_" + feat + "_neg.txt"
 	
 	if divided:
-		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
-		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
+		write_cog_files(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose, categories = wanted_cogs)
+		write_cog_files(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose, categories = wanted_cogs)
 	#else:
 	hist1 = write_lines(new_pos, p_output, chrms_p, locus_p, cogs_p, verbose = verbose)
 	hist2 = write_lines(new_negs, n_output, chrms_n, locus_n, cogs_n, verbose = verbose)
@@ -614,7 +618,8 @@ def base_complete(gbk_file, tmp, output, cds, trna, get_cats, divided, k, init, 
 			create_feature_complete(gbk_file, output, sizes, k, "CDS", cogs_dict, divided)
 
 # Base pipeline for non-complete genome.	
-def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_confidence = 0, verbose = False):
+def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = False, deepnog_confidence = 0, verbose = False,
+         wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '+']):
 	
 	flag = True
 
@@ -654,7 +659,7 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 			chrms.append(chrms_c)
 			
 		if divided:
-			cogs_p, cogs_n, _, _, hist = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose, complete=complete)
+			cogs_p, cogs_n, _, _, hist = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose, complete=complete, wanted_cogs = wanted_cogs)
 
 			
 	return ((sizes, cogs_p, cogs_n, lengths, chrms, hist))

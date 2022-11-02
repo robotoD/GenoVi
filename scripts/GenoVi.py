@@ -37,6 +37,8 @@ import argparse as ap
 import os
 from shutil import which
 import pandas as pd
+import gzip
+import shutil
 
 
 __all__ = ['change_background', 'visualiseGenome', 'get_args', 'main',
@@ -117,6 +119,12 @@ def visualiseGenome(input_file, status, output_file = "circos",
         os.mkdir(temp_folder)
     if not os.path.exists(output_file):
         os.mkdir(output_file)
+    if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
+        old_input_file = input_file
+        input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
+        with gzip.open(old_input_file, 'rb') as f_in:
+            with open(input_file , 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
     if status == "complete":
         file = open(input_file)
         contigs = file.read().split("\n//\n")
@@ -304,7 +312,7 @@ def get_version():
 # Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
-    parser.add_argument("-i", "--input_file", type=str, help="Genbank file (.gb, .gbk, .gbff) path", required=True)
+    parser.add_argument("-i", "--input_file", type=str, help="Genbank file (.gb, .gbk, .gbff, .gbff.gz) path", required=True)
     parser.add_argument("-s", "--status", type=str, choices=["complete", "draft"], help="To draw each sequence as a unique circular representation (complete) or as a circle with bands per sequence (draft).", required = True)
     parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: circos", default = "circos")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not classify each protein sequence into COG categories.", required = False)

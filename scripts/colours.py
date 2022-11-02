@@ -36,43 +36,35 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "191, 204, 217" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "171, 178, 217" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 191, 217" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "strong" or colour_scheme == "super":
-        GC_content = "0, 158, 115" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,213,0),remap_int(var(value),0,0,94,0),remap_int(var(value),0,0,0,0)))' if GC_skew == "auto" else GC_skew
-        tRNA = "230, 159, 0" if tRNA == "auto" else tRNA
-        rRNA = "204, 121, 167" if rRNA == "auto" else rRNA
-        CDS_positive = "86, 180, 233" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "0, 114, 178" if CDS_negative == "auto" else CDS_negative
-        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
     elif colour_scheme == "paradise" or colour_scheme == "tropical":
         GC_content = "246,232,195" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("brbg-11-div-%d",remap_int(var(value),0,0,0,1)))' if GC_skew == "auto" else GC_skew
         tRNA = "140,81,10" if tRNA == "auto" else tRNA
-        rRNA = "191,129,45" if rRNA == "auto" else rRNA
+        rRNA = "223,194,125" if rRNA == "auto" else rRNA
         CDS_positive = "1,102,94" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "128,205,193" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "blossom" or colour_scheme == "cherry":
+    elif colour_scheme == "blossom" or colour_scheme == "cherry" or colour_scheme == "sakura":
         GC_content = "230,245,208" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("piyg-11-div-%d",remap_int(var(value),0,0,11,10)))' if GC_skew == "auto" else GC_skew
-        tRNA = "184,134,224" if tRNA == "auto" else tRNA
-        rRNA = "127,188,65" if rRNA == "auto" else rRNA
+        tRNA = "241,182,218" if tRNA == "auto" else tRNA
+        rRNA = "184,225,134" if rRNA == "auto" else rRNA
         CDS_positive = "142,1,82" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "222,119,174" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour    
     elif colour_scheme == "dawn" or colour_scheme == "sunrise":
         GC_content = "0,0,0" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,230,213),remap_int(var(value),0,0,159,94),remap_int(var(value),0,0,0,0)))' if GC_skew == "auto" else GC_skew
-        tRNA = "86, 180, 233" if tRNA == "auto" else tRNA
+        tRNA = "240, 228, 66" if tRNA == "auto" else tRNA
         rRNA = "0, 158, 115" if rRNA == "auto" else rRNA
         CDS_positive = "204, 121, 167" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "0, 114, 178" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
-    elif colour_scheme == "autumn" or colour_scheme == "fall":
+    elif colour_scheme == "autumn" or colour_scheme == "fall":  # Color Universal Design, Suggested by Okabe, Ito, in "Color Universal Design (CUD) - How to make figures and presentations that are friendly to Colorblind people", available at https://jfly.uni-koeln.de/color/
         GC_content = "0,0,0" if GC_content == "auto" else GC_content
         GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,0,240),remap_int(var(value),0,0,158,228),remap_int(var(value),0,0,115,66)))' if GC_skew == "auto" else GC_skew
-        tRNA = "0, 114, 178" if tRNA == "auto" else tRNA
-        rRNA = "106, 200, 253" if rRNA == "auto" else rRNA
+        tRNA = "204, 121, 167" if tRNA == "auto" else tRNA
+        rRNA = "86, 180, 233" if rRNA == "auto" else rRNA
         CDS_positive = "213, 94, 0" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "230, 159, 0" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
@@ -228,13 +220,13 @@ def parseColours(colour_scheme = "auto", background_colour = "none", GC_content 
         CDS_positive = "186, 186, 186" if CDS_positive == "auto" else CDS_positive
         CDS_negative = "140, 140, 140" if CDS_negative == "auto" else CDS_negative
         skew_line_colour = "171, 171, 171" if skew_line_colour == "auto" else skew_line_colour
-    else: # Color Universal Design, Suggested by Okabe, Ito, in "Color Universal Design (CUD) - How to make figures and presentations that are friendly to Colorblind people", available at https://jfly.uni-koeln.de/color/
-        GC_content = "204, 121, 167" if GC_content == "auto" else GC_content
-        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,86,0),remap_int(var(value),0,0,180,158),remap_int(var(value),0,0,233,115)))' if GC_skew == "auto" else GC_skew
+    else: # if colour_scheme == "strong" # Color-blind friendly palette
+        GC_content = "0, 158, 115" if GC_content == "auto" else GC_content
+        GC_skew = 'eval(sprintf("%d,%d,%d",remap_int(var(value),0,0,213,0),remap_int(var(value),0,0,94,0),remap_int(var(value),0,0,0,0)))' if GC_skew == "auto" else GC_skew
         tRNA = "230, 159, 0" if tRNA == "auto" else tRNA
-        rRNA = "0, 114, 178" if rRNA == "auto" else rRNA
-        CDS_positive = "240, 228, 66" if CDS_positive == "auto" else CDS_positive
-        CDS_negative = "213, 94, 0" if CDS_negative == "auto" else CDS_negative
-        skew_line_colour = "171, 171, 200" if skew_line_colour == "auto" else skew_line_colour
+        rRNA = "204, 121, 167" if rRNA == "auto" else rRNA
+        CDS_positive = "86, 180, 233" if CDS_positive == "auto" else CDS_positive
+        CDS_negative = "0, 114, 178" if CDS_negative == "auto" else CDS_negative
+        skew_line_colour = "163, 163, 217" if skew_line_colour == "auto" else skew_line_colour
 
     return colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour

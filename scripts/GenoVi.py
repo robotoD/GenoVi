@@ -73,7 +73,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
                     cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
-                    wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '+']):
+                    wanted_cogs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+"):
 
     if not cairo:
         print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
@@ -83,8 +83,23 @@ def visualiseGenome(input_file, status, output_file = "circos",
         if verbose:
             print("DeepNOG lower bound must be between 0 and 1")
         raise Exception("DeepNOG lower bound must be between 0 and 1")
-    if len(wanted_cogs) > 26:
+    wanted_cogs = wanted_cogs.upper()
+    if wanted_cogs == "MET-" or wanted_cogs == "METABOLISM":
+        wanted_cogs = ['C', 'E', 'F', 'G', 'H', 'I', 'P', 'Q']
+    elif wanted_cogs == "CEL-"  or wanted_cogs == "CELLULAR PROCESSES AND SIGNALING":
+        wanted_cogs = ['D', 'M', 'N', 'O', 'Y', 'U', 'V', 'W', 'Y', 'Z']
+    elif wanted_cogs == "INF-" or wanted_cogs == "INFORMATION STORAGE AND PROCESSING":
+        wanted_cogs = ['A', 'B', 'J', 'K', 'L', 'X']
+    elif wanted_cogs == "POO-" or wanted_cogs == "POORLY CHARACTERIZED":
+        wanted_cogs = ["R", "S", "None"]
+    elif len(wanted_cogs) > 26:
         wanted_cogs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'None']
+    else:
+        try:
+            wanted_cogs = int(wanted_cogs)
+        except ValueError:
+            wanted_cogs = list(wanted_cogs)
+    
 
     if which("circos") == None:
         if verbose:
@@ -127,7 +142,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
             file = temp_folder + "/" + str(i) + ".gbk"
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms, hist = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
+            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
             #sizes_full = sizes_full + sizes
             lengths_full = lengths_full + lengths
             chrms_full = chrms_full + chrms
@@ -210,14 +225,13 @@ def visualiseGenome(input_file, status, output_file = "circos",
     else:
         if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
             os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n, lengths, chrms, hist = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
-        
+        sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
+            
         if hist is not None:
             draw_histogram(hist, output_file + "/" + output_file)
         
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
-        
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
 
@@ -295,7 +309,7 @@ def get_args():
     parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: circos", default = "circos")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not classify each protein sequence into COG categories.", required = False)
     parser.add_argument("-b", "--deepnog_confidence_threshold", type=float, help="Lower threshold for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
-    parser.add_argument("--cogs", type=str, help="Symbol of each COG to draw. For example, for drawing only information storage and processing related, use 'ABJKLX'. By default, draws all of them.", default = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+")
+    parser.add_argument("--cogs", type=str, help="Symbol of each COG to draw. For example, for drawing only information storage and processing related, use 'ABJKLX'. When using a number n, the n most common categories will be drawn. By default, draws all of them.", default = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+")
     parser.add_argument("-a", "--alignment", type=str, choices=["center", "top", "bottom", "A", "<", "U", "matrix", "two_lines"], help="When using --status complete, this defines the vertical alignment of every circular representation. Options: center, top, bottom, A (First on top), < (first to the left), U (Two on top, the rest below), matrix (multiple rows). By default this is defined by contig sizes", default = "auto")
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="To select the scale-up ratio between each circular representations when the file is processes as a complete genome. This is useful to ensure visibility of each representation when the length difference is too high. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Do not delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
@@ -333,7 +347,7 @@ def get_args():
     args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, args.verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
     args.colour_scheme, args.background, args.font_colour, args.GC_content_colour, args.GC_skew_colour, args.tRNA_colour, args.rRNA_colour, args.CDS_positive_colour, args.CDS_negative_colour, args.GC_skew_line_colour,
-    list(args.cogs))
+    args.cogs)
 
 def main():
     visualiseGenome(*get_args())

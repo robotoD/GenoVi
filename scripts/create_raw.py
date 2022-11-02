@@ -214,7 +214,6 @@ def write_lines(locations, output_, chrx, locus, cogs, verbose = False):
 		return hist
 
 def write_cog_files(locations, output, chrx, locus, cogs, verbose = False, categories = None):
-	
 	if len(cogs) == 0:
 		return
 	cogs_df = pd.DataFrame.from_dict(cogs)
@@ -631,6 +630,8 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 		flag = False
 	elif get_cats:
 		cogs_dict = get_categories(gbk_file, tmp, deepnog_confidence)
+		if type(wanted_cogs) == type(1): #If it is a number
+			wanted_cogs = list(map(lambda x: x[1], sorted([(list(map(lambda cat: cat[0], cogs_dict.values())).count(x), x) for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"], reverse = True)[:wanted_cogs])) # Transform it to n more repeated COGs
 	else:
 		cogs_dict = None
 		
@@ -662,7 +663,7 @@ def base(gbk_file, tmp, output, cds, trna, get_cats, divided, complete, rrna = F
 			cogs_p, cogs_n, _, _, hist = create_feature(gbk_file, tmp, output, sizes, "CDS", cogs_dict, divided, verbose = verbose, complete=complete, wanted_cogs = wanted_cogs)
 
 			
-	return ((sizes, cogs_p, cogs_n, lengths, chrms, hist))
+	return ((sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs))
 
 def createRaw():
 	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]

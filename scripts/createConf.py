@@ -33,7 +33,9 @@ def create_conf(output,
                 background_color = "transparent",
                 cogs = True,
                 cogs_p = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
-                cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"}):
+                cogs_n = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "None"},
+                tracks_explain = False,
+                contigs_quantity = 1):
     file = open("circos.conf", "w")
     file.write('''karyotype = {folder}/{output}_bands.kar
 chromosomes_units = 100
@@ -49,6 +51,7 @@ chromosomes_display_default = yes
 
 # IMAGE
 <image>
+angle_offset* = {angle_offset}
 <<include conf/image.conf>>
 </image>
 
@@ -56,6 +59,7 @@ chromosomes_display_default = yes
 <ideogram>
 <spacing>
 default = 0.001r
+{explain_space}
 </spacing>
 radius           = 0.8r
 thickness        = 40p
@@ -129,7 +133,11 @@ background_stroke_thickness = 1
             content_fill = GC_content_color,
             skew_fill = GC_skew_color,
             skew_line = GC_skew_line_color,
-            font_color = font_color))
+            font_color = font_color,
+            explain_space = '''<pairwise chr{contigs_quantity}>
+                                spacing = 50r
+                                </pairwise>'''.format(contigs_quantity = str(contigs_quantity) + (" chr1" if contigs_quantity > 1 else "")) if tracks_explain else "",
+            angle_offset = "-81" if tracks_explain else "-90"))
     file.close()
     if not os.path.exists("conf"):
         os.mkdir("conf")

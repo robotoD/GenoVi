@@ -73,7 +73,7 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
 # input: anotated genome filename.
 def visualiseGenome(input_file, status, output_file = "circos", 
                     cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
-                    captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False,
+                    captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
                     wanted_cogs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+"):
 
@@ -165,12 +165,18 @@ def visualiseGenome(input_file, status, output_file = "circos",
             maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
             gc_avg_full = gc_avg_full + gc_avg
             
-            create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)))
+            create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
             
             if verbose:
                 print("Drawing {}...".format(i))
             os.system("circos circos.conf >/dev/null 2>&1")
             os.system("circos -debug_group _all >/dev/null 2>&1")
+
+            if tracks_explain:
+                addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = True, font_colour = font_colour, tracks_explain = True)
+                os.remove("circos.svg")
+                os.rename("circ_v.svg", "circos.svg")
+
             if delete_background:
                 change_background("none", False)
                 if cairo:
@@ -242,8 +248,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
-
-        create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)))
+        create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
         gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 
         if verbose:
@@ -259,7 +264,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         if captions or title != "" or size:
             captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
             addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
-                    pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "")
+                    pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
             os.remove("circos.svg")
             os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
         else:
@@ -333,6 +338,7 @@ def get_args():
     text_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
     text_group.add_argument("--italic_words", type=int, help="How many of words of the title should be written in italics. WARNING: Italics is not supported by the svg-to-png engine, so PNG image will not be available if this option is used. Default: 0", default = 0)
     text_group.add_argument("--size", action='store_true', help="To write the size (in base pairs) inside each circle.", required = False)
+    text_group.add_argument("-te", "--tracks_explain", action='store_true', help="To include an additional text on each track to specify the meaning for each one.", required = False)
 
     colour_group = parser.add_argument_group("colours")
     colour_group.add_argument("-cs", "--colour_scheme", "--colour", type=str, help='''Colour scheme to use. Individual colours may be overriden wih other arguments. COG colours can not be edited.
@@ -353,7 +359,7 @@ def get_args():
 
     return (args.input_file, args.status, args.output_file,
     args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, args.verbose,
-    args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, 
+    args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, args.tracks_explain,
     args.colour_scheme, args.background, args.font_colour, args.GC_content_colour, args.GC_skew_colour, args.tRNA_colour, args.rRNA_colour, args.CDS_positive_colour, args.CDS_negative_colour, args.GC_skew_line_colour,
     args.cogs)
 

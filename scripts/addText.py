@@ -19,7 +19,8 @@ __all__ = ['addText',
 # May include title, contig size and colour legend.
 def addText(text, position = "center", inFile="circos.svg", outFile="default", italic=2,
             captions=True, cogs_captions=True, captionsPosition = "botom-right", cogs = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"},
-            pCDS_colour = "180, 205, 222", nCDS_colour = "150, 200, 150", tRNA_colour = "150, 5, 50", rRNA_colour = "150, 150, 50", GC_content_colour = "23, 0, 115", size = "", font_colour = "0, 0, 0"):
+            pCDS_colour = "180, 205, 222", nCDS_colour = "150, 200, 150", tRNA_colour = "150, 5, 50", rRNA_colour = "150, 150, 50", GC_content_colour = "23, 0, 115", size = "", font_colour = "0, 0, 0",
+            tracks_explain = False):
     if re.match("^\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*,\s*[012]?\d?\d\s*$", font_colour):
         font_colour = "rgb(" + font_colour + ")"
     if(outFile == "default"):
@@ -70,6 +71,22 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
             background_has_been_amplified = True
             continue
         if('</svg>' in line):
+            if tracks_explain:
+                destiny.write('''
+                    <text x="1500" y="535" font-size="30.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">RNA (+)</text>
+                    <text x="1500" y="570" font-size="30.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">RNA (-)</text>
+                    <text x="1500" y="495" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">CDS (+)</text>
+                    <text x="1500" y="630" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">CDS (-)</text>
+                    <text x="1500" y="810" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">GC</text>
+                    <text x="1500" y="835" font-size="30.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">content</text>
+                    <text x="1500" y="1050" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">GC</text>
+                    <text x="1500" y="1075" font-size="30.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">skew</text>
+                '''.format(font_colour=font_colour))
+                if cogs_captions:
+                    destiny.write('''
+                        <text x="1500" y="440" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">COG (+)</text>
+                        <text x="1500" y="685" font-size="50.0px" font-family="CMUBright-Roman" style="text-anchor:middle;" fill="{font_colour}">COG (-)</text>
+                    ''')
             if text != "":
                 destiny.write(textElement)
             if size != "":

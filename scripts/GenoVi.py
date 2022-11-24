@@ -205,9 +205,9 @@ def visualiseGenome(input_file, status, output_file = "circos",
             new_hist['Frequency'] = new_hist.sum(axis=1)
             new_hist['COG Category'] = hists_full[0]['COG Category']
             new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
-            
-            draw_histogram(new_hist, output_file + "/" + output_file) 
-        
+
+            draw_histogram(new_hist, output_file + "/" + output_file, status)
+
         gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
 
         if captions or title != "":
@@ -260,8 +260,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
             sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
             images.append({"size": sum(sizes), "fileName": output_file + "/" + output_file + ".svg"})
             if hist is not None:
-                draw_histogram(hist, output_file + "/" + output_file)
-            
+                draw_histogram(hist, output_file + "/" + output_file, status)
+
             cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
             cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
             gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
@@ -312,8 +312,8 @@ def visualiseGenome(input_file, status, output_file = "circos",
         sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
             
         if hist is not None:
-            draw_histogram(hist, output_file + "/" + output_file)
-        
+            draw_histogram(hist, output_file + "/" + output_file, status)
+
         cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
         cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
         gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)

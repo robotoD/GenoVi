@@ -46,7 +46,7 @@ def gral_table(lengths, contents, chrms, output):
 
 def cogs_classif(hist, output, status):
 
-	header1 = ["","Cellular Processes and Signaling"]+[""]*9+["Information Storage and Processing"]+[""]*5+["Metabolism"]+[""]*7+["Poorly Characterized","","",""]
+    header1 = ["","Cellular Processes and Signaling"]+[""]*9+["Information Storage and Processing"]+[""]*5+["Metabolism"]+[""]*7+["Poorly Characterized","","",""]
     header2 = ["Replicon","D","M","N","O","T","U","V","W","Y","Z","A","B","J","K","L","X","C","E","F","G","H","I","P","Q","R","S","Unclassified"]
 
     csv_file = open(output, 'w')
@@ -65,7 +65,7 @@ def cogs_classif(hist, output, status):
 
     for column in hist.columns:
         if column[:3] != "chr":
-        	continue
+            continue
         i = column[3:]
         line = map(str,[i] + [hist[hist["COG Category"] == c]["chr"+i].item() for c in header2[1:]])
         writer.writerow(line)

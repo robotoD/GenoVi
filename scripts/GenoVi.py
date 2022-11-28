@@ -71,7 +71,7 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
 
 # Full pipeline
 # input: anotated genome filename.
-def visualiseGenome(input_file, status, output_file = "circos", 
+def visualiseGenome(input_file, status, output_file = "genovi", 
                     cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
@@ -115,7 +115,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         background_colour = "white"
     
     temp_folder = output_file + "-temp"
-    if not os.path.exists(temp_folder) and status[:5] != "multi":
+    if not os.path.exists(temp_folder) and not os.path.isdir(input_file):
         os.mkdir(temp_folder)
     if not os.path.exists(output_file):
         os.mkdir(output_file)
@@ -205,9 +205,9 @@ def visualiseGenome(input_file, status, output_file = "circos",
             new_hist['Frequency'] = new_hist.sum(axis=1)
             new_hist['COG Category'] = hists_full[0]['COG Category']
             new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
-
-            draw_histogram(new_hist, output_file + "/" + output_file, status)
-
+            
+            draw_histogram(new_hist, output_file + "/" + output_file, status) 
+        
         gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
 
         if captions or title != "":
@@ -234,31 +234,107 @@ def visualiseGenome(input_file, status, output_file = "circos",
         for i in range(1, len(contigs) + 1):
             os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
             os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
-    elif status == "multi_draft":
-        input_folder = input_file
-        os.chdir(output_file)
-        output_folder = output_file
-        images = []
-        for input_file in os.listdir("../" + input_folder):
-            output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
-            input_file = "../" + input_folder + "/" + input_file
-            temp_folder = output_file + "-temp"
-            if not os.path.exists(temp_folder):
-                os.mkdir(temp_folder)
-            if not os.path.exists(output_file):
-                os.mkdir(output_file)
-            if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
-                old_input_file = input_file
-                input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
-                with gzip.open(old_input_file, 'rb') as f_in:
-                    with open(input_file , 'wb') as f_out:
-                        shutil.copyfileobj(f_in, f_out)
+    else: # if status == "draft"
+        if os.path.isdir(input_file):
+            input_folder = input_file
+            os.chdir(output_file)
+            output_folder = output_file
+            images = []
+            files_to_draw = [x for x in os.listdir("../" + input_folder) if ".gb" in x]
 
+            gral_stats_table = open("Gral_Stats.csv", "w")
+            gral_stats_table.write("Replicon,Size (bp),GC content (%),CDS,tRNA,rRNA\n")
+            cog_classification_table = open("COG_Classification.csv", "w")
+            cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
+            for input_file in files_to_draw:
+                output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
+                input_file = "../" + input_folder + "/" + input_file
+                temp_folder = output_file + "-temp"
+                if verbose:
+                    print("processing file " + input_file)
+                if not os.path.exists(temp_folder):
+                    os.mkdir(temp_folder)
+                if not os.path.exists(output_file):
+                    os.mkdir(output_file)
+                if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
+                    old_input_file = input_file
+                    input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
+                    with gzip.open(old_input_file, 'rb') as f_in:
+                        with open(input_file , 'wb') as f_out:
+                            shutil.copyfileobj(f_in, f_out)
+
+                
+                if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
+                    os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
+                sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
+                images.append({"size": sum(sizes), "fileName": output_file + "/" + output_file + ".svg"})
+                if hist is not None:
+                    draw_histogram(hist, output_file + "/" + output_file, status)
+
+                cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
+                cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
+                gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
+                maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
+                create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
+                gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
+
+                if verbose:
+                    print("Drawing...")
+                if which("circos") == None:
+                    if verbose:
+                        print("Circos is not installed. please install for using this program.")
+                    raise(Exception)
+                os.system("circos circos.conf >/dev/null 2>&1")
+                os.system("circos -debug_group _all >/dev/null 2>&1")
+                if delete_background:
+                    change_background("none")
+                if captions or title != "" or size:
+                    captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
+                    addText("", inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
+                    os.remove("circos.svg")
+                    os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
+                else:
+                    os.rename("circos.svg", output_file + "/" + output_file + ".svg")
+                    os.rename("circos.png", output_file + "/" + output_file + ".png")
+                if not keep_temporary_files:
+                    if verbose:
+                        print("deleting temporary files")
+                    os.remove("circos.conf")
+                    for file in os.listdir(temp_folder + "/"):
+                        if (not reuse_predictions) or "_prediction_deepnog.csv" != file[-23:]:
+                            os.remove(temp_folder + "/" + file)
+                    for file in os.listdir("conf/"):
+                        os.remove("conf/" + file)
+                    if not reuse_predictions:
+                        os.rmdir(temp_folder)
+                    os.rmdir("conf")
+                
+                gral_stats_table.write(output_file + "\n")
+                with open(output_file + "/" + output_file + "_Gral_Stats.csv") as local_table:
+                    gral_stats_table.write("\n".join(local_table.read().split("\n")[1:]))
+                cog_classification_table.write(output_file + "\n")
+                with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
+                    cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
             
+            gral_stats_table.close()
+            cog_classification_table.close()
+            mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+            addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_unclassified, captionsPosition = captionsPosition,
+                pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+            os.remove(output_folder + ".svg")
+            os.rename("titled_" + output_folder + ".svg", output_folder + ".svg")
+            try:
+                os.remove("circos.png")
+            except:
+                pass
+            os.chdir("..")
+            output_file = output_folder
+            input_file = input_folder
+        else:
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
             sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
-            images.append({"size": sum(sizes), "fileName": output_file + "/" + output_file + ".svg"})
+                
             if hist is not None:
                 draw_histogram(hist, output_file + "/" + output_file, status)
 
@@ -281,65 +357,13 @@ def visualiseGenome(input_file, status, output_file = "circos",
                 change_background("none")
             if captions or title != "" or size:
                 captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-                addText("", inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
+                addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
+                        pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
                 os.remove("circos.svg")
                 os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
             else:
                 os.rename("circos.svg", output_file + "/" + output_file + ".svg")
                 os.rename("circos.png", output_file + "/" + output_file + ".png")
-            if not keep_temporary_files:
-                if verbose:
-                    print("deleting temporary files")
-                os.remove("circos.conf")
-                for file in os.listdir(temp_folder + "/"):
-                    if (not reuse_predictions) or "_prediction_deepnog.csv" != file[-23:]:
-                        os.remove(temp_folder + "/" + file)
-                for file in os.listdir("conf/"):
-                    os.remove("conf/" + file)
-                if not reuse_predictions:
-                    os.rmdir(temp_folder)
-                os.rmdir("conf")
-        mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-        addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_unclassified, captionsPosition = captionsPosition,
-            pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
-        os.remove(output_folder + ".svg")
-        os.rename("titled_" + output_folder + ".svg", output_folder + ".svg")
-        os.chdir("..")
-        output_file = output_folder
-    else: # if status == "draft"
-        if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
-            os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-        sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
-            
-        if hist is not None:
-            draw_histogram(hist, output_file + "/" + output_file, status)
-
-        cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
-        cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
-        gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
-        maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
-        create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
-        gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
-
-        if verbose:
-            print("Drawing...")
-        if which("circos") == None:
-            if verbose:
-                print("Circos is not installed. please install for using this program.")
-            raise(Exception)
-        os.system("circos circos.conf >/dev/null 2>&1")
-        os.system("circos -debug_group _all >/dev/null 2>&1")
-        if delete_background:
-            change_background("none")
-        if captions or title != "" or size:
-            captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-            addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
-                    pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
-            os.remove("circos.svg")
-            os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
-        else:
-            os.rename("circos.svg", output_file + "/" + output_file + ".svg")
-            os.rename("circos.png", output_file + "/" + output_file + ".png")
 
     if cairo:
         if verbose:
@@ -354,8 +378,7 @@ def visualiseGenome(input_file, status, output_file = "circos",
         os.remove("circos.png")
     except:
         pass
-
-    if not keep_temporary_files and status[:5] != "multi":
+    if (not keep_temporary_files) and (not os.path.isdir(input_file)):
         if verbose:
             print("deleting temporary files")
         os.remove("circos.conf")
@@ -389,8 +412,8 @@ def get_version():
 def get_args():
     parser = ap.ArgumentParser()
     parser.add_argument("-i", "--input_file", type=str, help="Genbank file (.gb, .gbk, .gbff, .gbff.gz) path", required=True)
-    parser.add_argument("-s", "--status", type=str, choices=["complete", "draft", "multi_complete", "multi_draft"], help="To draw each sequence as a unique circular representation (complete) or as a circle with bands per sequence (draft).", required = True)
-    parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: circos", default = "circos")
+    parser.add_argument("-s", "--status", type=str, choices=["complete", "draft"], help="To draw each sequence as a unique circular representation (complete) or as a circle with bands per sequence (draft).", required = True)
+    parser.add_argument("-o", "--output_file", type=str, help="Directory for output files. Default: genovi", default = "genovi")
     parser.add_argument("-cu", "--cogs_unclassified", action='store_false', help="Do not classify each protein sequence into COG categories.", required = False)
     parser.add_argument("-b", "--deepnog_confidence_threshold", type=float, help="Lower threshold for DeepNOG prediction certainty to be considered. Values in range [0,1] Default: 0", default = 0)
     parser.add_argument("--cogs", type=str, help="Symbol of each COG to draw. For example, for drawing only information storage and processing related, use 'ABJKLX'. When using a number n, the n most common categories will be drawn. By default, draws all of them.", default = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+")

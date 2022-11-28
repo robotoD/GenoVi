@@ -42,7 +42,7 @@ genovi [-h] [options ..] -i input_file -s status
 
 ### Main arguments
 * `-i`, `--input_file`. GenBank input file path.
-* `-o`, `--output_file`.  Output file name. Default: circos.
+* `-o`, `--output_file`.  Output file name. Default: genovi.
 * `-s`, `--status`. “complete” or “draft”. Complete genomes are drawn as separate circles for each contig/replicon.
 
 ### Information:

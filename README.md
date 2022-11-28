@@ -55,12 +55,12 @@ genovi [-h] [options ..] -i input_file -s status
 * `-b`, `--deepnog`_confidence_threshold. DeepNOG confidence threshold range \[0,1\] Default: 0. If provided, predictions below the threshold are discarded.
 
 ### Format:
-* `-a`, `--alignment`. When a `--status complete` is specified, this flag defines the alignment of each individual contig. Options: `center`, `top`, `bottom`, `A` (First on top), `<` (first to the left), `U` (Two on top, the rest below). By default this is defined by contig sizes.
+* `-a`, `--alignment`. When a `--status complete` is specified, this flag defines the alignment of each individual contig. Options: `center`, `top`, `bottom`, `A` (First on top), `<` (first to the left), `U` (Two on top, the rest below). By default, this is defined by contig sizes.
 * `--scale`. When using `--status complete`, whether to use a different scale format to ensure visibility. Options: `variable`, `linear`, `sqrt`. Default: `sqrt`.
 * `-k`, `--keep_temporary_files`. Keep temporary files.
-* `-r`, `-reuse_predictions`. If available, reuse DeepNog prediction result from previous run. Useful only if --keep_temporary_files flag is enabled.
+* `-r`, `-reuse_predictions`. If available, reuse DeepNog prediction result from the previous run. Useful only if --keep_temporary_files flag is enabled.
 * `-w`, `--window`. Window size (base pair) to assign a GC analysis. Default: `5000`.
-* `-v`, `--verbose`. Verbose or in console log messages activated.
+* `-v`, `--verbose`. Verbose or in-console log messages activated.
 
 ### Text:
 * `-c`, `--captions_not_included`.  Do not include captions in the figure.
@@ -68,19 +68,19 @@ genovi [-h] [options ..] -i input_file -s status
 * `-t`, `--title`. Figure title.
 * `--title_position`. Title position. Options: `center`, `top`, `bottom`.
 * `--italic_words`. How many title words should be written in italic. Default: `2`.
-* `--size`. Display genome size of each independent circular representation.
+* `--size`. Displays the genome size of each independent circular representation.
 * `-te`, `--tracks_explain`. To include an additional text on each track.
 
 ### Colours:
-* `-cs`, `--colour_scheme`. Prebuilt colour scheme to use for CDS, RNAs and GC analysis. Options: `strong`,`autumn`,`dawn`,`blossom`,`paradise`,`neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
+* `-cs`, `--colour_scheme`. Prebuilt color scheme to use for CDS, RNAs, and GC analysis. Options: `strong`,`autumn`,`dawn`,`blossom`,`paradise`,`neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
 * `-bc`, `--background`. Background colour, in R, G, B format. Default: `transparent`.
-* `-fc`, `--font_colour`. Font colour. Default: `black`.
+* `-fc`, `--font_colour`. Font color. Default: `black`.
 * `-pc`, `--CDS_positive_colour`. Colour for positive CDSs, in R, G, B format. Default: `'180, 205, 222'`.
 * `-nc`, `--CDS_negative_colour`. Colour for negative CDSs, in R, G, B format. Default: `'53, 176, 42'`.
 * `-tc`, `--tRNA_colour`. Colour for tRNAs, in R, G, B format. Default: `'150, 5, 50'`.
 * `-rc`, `--rRNA_colour`. Colour for rRNAs, in R, G, B format. Default: `'150, 150, 50'`.
 * `-cc`, `--GC_content_colour`. Colour for GC content, in R, G, B format. Default: `'23, 0, 115'`.
-* `-sc`, `--GC_skew_colour`. Colour scheme for positive and negative GC skew. A pair of RGB colours. Default: `'140, 150, 198 - 158, 188, 218'`.
+* `-sc`, `--GC_skew_colour`. Colour scheme for positive and negative GC skew. A pair of RGB colors. Default: `'140, 150, 198 - 158, 188, 218'`.
 * `-sl`, `--GC_skew_line_colour`. Colour for GC skew line. Default: `black`.
 
 More detailed information about the arguments can be found in the [user guide](https://github.com/robotoD/GenoVi/wiki/User-guide#arguments-).

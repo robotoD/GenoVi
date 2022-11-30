@@ -69,7 +69,7 @@ genovi [-h] [options ..] -i input_file -s status
 * `--title_position`. Title position. Options: `center`, `top`, `bottom`.
 * `--italic_words`. How many title words should be written in italic. Default: `2`.
 * `--size`. Displays the genome size of each independent circular representation.
-* `-te`, `--tracks_explain`. To include an additional text on each track.
+* `-te`, `--tracks_explain`. Adds a space break in the circular representation, including captions for each track within the ideogram. 
 
 ### Colours:
 * `-cs`, `--colour_scheme`. Prebuilt color scheme to use for CDS, RNAs, and GC analysis. Options: `strong`,`autumn`,`dawn`,`blossom`,`paradise`,`neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.

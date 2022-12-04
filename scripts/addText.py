@@ -247,7 +247,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             legendElement += '''<line stroke = "#13110C" x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" />'''.format(x1 = xb + 209.98 - 0.36, x2 = xb + 209.98 + 635, y = yb + 17.16 + 5.4)
 
                 else: # if not cogs_legend
-                    xb = 50 if "left" in captionsPosition else 2050
+                    xb = 50 if "left" in captionsPosition else 2750
                     yb = 50 if "top" in captionsPosition else 2750
                     legendElement += '''<text font-size="20px" x="{x}" y="{y}">Genomic features</text>
                     <line stroke = "{font_colour}" x1="{xb}" y1="{yl}" x2="{xl}" y2="{yl}" />
@@ -266,7 +266,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                     '''.format( x = xb + 1.62,y = yb + 17.16,
                                 xb = xb, yl = yb + 22.52, xl = 167.56 + xb,
                                 xf = xb + 8.17, xft = xb + 35.5,
-                                yf1 = yb + 55.84, yf2 = yb + 82.73, yf3 = yb + 109.14, yf4 = yb + 136.03, yf5 = yb + 162.42, yf6 = yb + 2192, xf6 = xb + 2060,
+                                yf1 = yb + 55.84, yf2 = yb + 82.73, yf3 = yb + 109.14, yf4 = yb + 136.03, yf5 = yb + 162.42, yf6 = yb + 192, xf6 = xb + 10,
                                 yft1 = yb + 70.54, yft2 = yb + 97.72, yft3 = yb + 124.89, yft4 = yb + 152.07, yft5 = yb + 179.25, yft6 = yb + 206.43,
                                 font_colour = font_colour,
                                 pCDS_color = pCDS_colour, nCDS_color = nCDS_colour, tRNA_color = tRNA_colour, rRNA_color = rRNA_colour, GC_color = GC_content_colour)

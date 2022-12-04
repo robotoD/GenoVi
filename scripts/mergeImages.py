@@ -132,11 +132,17 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
         elif align == "U":
             if imageIndex == 0:
                 firstSize = float(image["size"])/totalWidth
-                file.write(beginGroup.format(1500 - (3000*firstSize), 0, firstSize))
+                if firstSize > 0.5:
+                    file.write(beginGroup.format(0, 0, firstSize))
+                else:
+                    file.write(beginGroup.format(1500 - (3000*firstSize), 0, firstSize))
                 currentX = -1 - 3000*float(image["size"])/totalWidth
             elif imageIndex == 1:
                 secondSize = float(image["size"])/totalWidth
-                file.write(beginGroup.format(1500, 0, secondSize))
+                if firstSize > 0.5:
+                    file.write(beginGroup.format((3000 * firstSize), 0, secondSize))
+                else:
+                    file.write(beginGroup.format(1500, 0, secondSize))
                 currentX = 1500 + 1500*(firstSize + secondSize - 1) - 3000*float(image["size"])/totalWidth
                 if scale == "variable":
                     currentX -= rectangleSize/2

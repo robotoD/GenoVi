@@ -69,10 +69,18 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
     if os.rename("Genovi_temp_file.svg", fileName):
         raise RuntimeError("Theres been an error deleting a temporary file")
 
+def unzip(input_file):
+    if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
+        old_input_file = input_file
+        input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
+        with gzip.open(old_input_file, 'rb') as f_in:
+            with open(input_file , 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
 # Full pipeline
 # input: anotated genome filename.
 def visualiseGenome(input_file, status, output_file = "genovi", 
-                    cogs_unclassified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
+                    cogs_classified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
                     wanted_cogs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+"):
@@ -119,121 +127,296 @@ def visualiseGenome(input_file, status, output_file = "genovi",
         os.mkdir(temp_folder)
     if not os.path.exists(output_file):
         os.mkdir(output_file)
-    if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
-        old_input_file = input_file
-        input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
-        with gzip.open(old_input_file, 'rb') as f_in:
-            with open(input_file , 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
+    unzip(input_file)
     if status == "complete":
-        file = open(input_file)
-        contigs = file.read().split("\n//\n")
-        file.close()
-        if len(contigs[-1]) < 20:   # If file ends with "//"
-            contigs = contigs[:-1]
-        for i in range(1, len(contigs) + 1):
-            contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
-            contigFile.write(contigs[i - 1])
-            contigFile.close()
-        
-        images = []
-        full_cogs = set([])
-        
-        sizes_full = []
-        lengths_full = []
-        chrms_full = []
-        gc_avg_full = []
-        hists_full = []
-        
-        for i in range(1, len(contigs) + 1):
-            output_file_part = "contig_" + str(i) + "-" + output_file
-            file = temp_folder + "/" + str(i) + ".gbk"
-            if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
-                os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
-            #sizes_full = sizes_full + sizes
-            lengths_full = lengths_full + lengths
-            chrms_full = chrms_full + chrms
+        if os.path.isdir(input_file):
+            input_folder = input_file
+            os.chdir(output_file)
+            output_folder = output_file
+            files_to_draw = [x for x in os.listdir("../" + input_folder) if ".gb" in x]
 
-            if hist is not None:
-                hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
-                hists_full.append(hist)
-            
-            full_cogs = full_cogs.union(cogs_p).union(cogs_n)
-            images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
-            gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
-            maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
-            gc_avg_full = gc_avg_full + gc_avg
-            
-            create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
-            
-            if verbose:
-                print("Drawing {}...".format(i))
-            os.system("circos circos.conf >/dev/null 2>&1")
-            os.system("circos -debug_group _all >/dev/null 2>&1")
+            gral_stats_table = open("Gral_Stats.csv", "w")
+            gral_stats_table.write("Replicon,Size (bp),GC content (%),CDS,tRNA,rRNA\n")
+            if cogs_classified:
+                cog_classification_table = open("COG_Classification.csv", "w")
+                cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
+            for input_file in files_to_draw:
+                output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
+                input_file = "../" + input_folder + "/" + input_file
+                unzip(input_file)
+                temp_folder = output_file + "-temp"
+                if verbose:
+                    print("processing file " + input_file)
+                if not os.path.exists(temp_folder):
+                    os.mkdir(temp_folder)
+                if not os.path.exists(output_file):
+                    os.mkdir(output_file)
+                if input_file[-3:] == ".gz" or input_file[-2:] == ".z":
+                    old_input_file = input_file
+                    input_file = temp_folder + "/" + input_file[:-3 if input_file[-3] == "." else -2].split("/")[-1]
+                    with gzip.open(old_input_file, 'rb') as f_in:
+                        with open(input_file , 'wb') as f_out:
+                            shutil.copyfileobj(f_in, f_out)
 
-            if tracks_explain:
-                addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = True, font_colour = font_colour, tracks_explain = True)
-                os.remove("circos.svg")
-                os.rename("circ_v.svg", "circos.svg")
+                
+                file = open(input_file)
+                contigs = file.read().split("\n//\n")
+                file.close()
+                if len(contigs[-1]) < 20:   # If file ends with "//"
+                    contigs = contigs[:-1]
+                for i in range(1, len(contigs) + 1):
+                    contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
+                    contigFile.write(contigs[i - 1])
+                    contigFile.close()
+                
+                images = []
+                full_cogs = set([])
+                
+                sizes_full = []
+                lengths_full = []
+                chrms_full = []
+                gc_avg_full = []
+                hists_full = []
+                
+                for i in range(1, len(contigs) + 1):
+                    output_file_part = "contig_" + str(i) + "-" + output_file
+                    file = temp_folder + "/" + str(i) + ".gbk"
+                    if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
+                        os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
+                    sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
+                    #sizes_full = sizes_full + sizes
+                    lengths_full = lengths_full + lengths
+                    chrms_full = chrms_full + chrms
 
-            if delete_background:
-                change_background("none", False)
+                    if hist is not None:
+                        hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
+                        hists_full.append(hist)
+                    
+                    full_cogs = full_cogs.union(cogs_p).union(cogs_n)
+                    images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
+                    gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
+                    maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
+                    gc_avg_full = gc_avg_full + gc_avg
+                    
+                    create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
+                    
+                    if verbose:
+                        print("Drawing {}...".format(i))
+                    os.system("circos circos.conf >/dev/null 2>&1")
+                    os.system("circos -debug_group _all >/dev/null 2>&1")
+
+                    if tracks_explain:
+                        addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = True, font_colour = font_colour, tracks_explain = True)
+                        os.remove("circos.svg")
+                        os.rename("circ_v.svg", "circos.svg")
+
+                    if delete_background:
+                        change_background("none", False)
+                        if cairo:
+                            if verbose:
+                                print("Converting to png...")
+                            svgFile = open("circos.svg")
+                            svg2png(bytestring = svgFile.read(), write_to = output_file + "-contig_" + str(i) + ".png")
+                            svgFile.close()
+                            os.remove("circos.png")
+
+                    if size:
+                        addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_colour = font_colour)
+                        os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
+                    else:
+                        os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
+                    if not delete_background:
+                        os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
+                    os.remove(file)
+                
+                chrms_full = postprocess(chrms_full)
+                
+                if len(hists_full) > 0:
+                    new_hist = pd.DataFrame()
+                    for hist in hists_full:
+                        new_hist[hist.columns[-1]] = hist.iloc[:,-1]
+                    new_hist['Frequency'] = new_hist.sum(axis=1)
+                    new_hist['COG Category'] = hists_full[0]['COG Category']
+                    new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
+                    
+                    draw_histogram(new_hist, output_file + "/" + output_file, status) 
+                
+                gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
+
+                if captions or title != "":
+                    if captionsPosition == "auto":
+                        if scale == "variable":
+                            captionsPosition = "right"
+                        else:
+                            captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
+                    if title_position == "center":
+                        addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
+                        os.remove(output_file + "-contig_" + "1.svg")
+                        os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
+                        mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+                        addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                                pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                    else:
+                        mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+                        addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                                pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                    os.remove(output_file + ".svg")
+                    os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
+                else:
+                    mergeImages(images, outFile = output_file + "/" + output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+                for i in range(1, len(contigs) + 1):
+                    os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
+                    os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
+                
+                if not keep_temporary_files:
+                    if verbose:
+                        print("deleting temporary files")
+                    os.remove("circos.conf")
+                    for file in os.listdir(temp_folder + "/"):
+                        if (not reuse_predictions) or "_prediction_deepnog.csv" != file[-23:]:
+                            os.remove(temp_folder + "/" + file)
+                    for file in os.listdir("conf/"):
+                        os.remove("conf/" + file)
+                    if not reuse_predictions:
+                        os.rmdir(temp_folder)
+                    os.rmdir("conf")
+
                 if cairo:
                     if verbose:
                         print("Converting to png...")
-                    svgFile = open("circos.svg")
-                    svg2png(bytestring = svgFile.read(), write_to = output_file + "-contig_" + str(i) + ".png")
-                    svgFile.close()
-                    os.remove("circos.png")
+                    file = open(output_file + "/" + output_file + ".svg")
+                    svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
+                    file.close()
 
-            if size:
-                addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_colour = font_colour)
-                os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
-            else:
-                os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
-            if not delete_background:
-                os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
-            os.remove(file)
-        
-        chrms_full = postprocess(chrms_full)
-        
-        if len(hists_full) > 0:
-            new_hist = pd.DataFrame()
-            for hist in hists_full:
-                new_hist[hist.columns[-1]] = hist.iloc[:,-1]
-            new_hist['Frequency'] = new_hist.sum(axis=1)
-            new_hist['COG Category'] = hists_full[0]['COG Category']
-            new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
+                gral_stats_table.write(output_file + "\n")
+                with open(output_file + "/" + output_file + "_Gral_Stats.csv") as local_table:
+                    gral_stats_table.write("\n".join(local_table.read().split("\n")[1:]))
+                if cogs_classified:
+                    cog_classification_table.write(output_file + "\n")
+                    with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
+                        cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
             
-            draw_histogram(new_hist, output_file + "/" + output_file, status) 
-        
-        gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
+            gral_stats_table.close()
+            if cogs_classified:
+                cog_classification_table.close()
+            try:
+                os.remove("circos.png")
+                # os.remove("circos.svg")
+            except:
+                pass
+            os.chdir("..")
+            output_file = output_folder
+            input_file = input_folder
 
-        if captions or title != "":
-            if captionsPosition == "auto":
-                if scale == "variable":
-                    captionsPosition = "right"
+        else: # if it is only one input file
+            file = open(input_file)
+            contigs = file.read().split("\n//\n")
+            file.close()
+            if len(contigs[-1]) < 20:   # If file ends with "//"
+                contigs = contigs[:-1]
+            for i in range(1, len(contigs) + 1):
+                contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
+                contigFile.write(contigs[i - 1])
+                contigFile.close()
+            
+            images = []
+            full_cogs = set([])
+            
+            sizes_full = []
+            lengths_full = []
+            chrms_full = []
+            gc_avg_full = []
+            hists_full = []
+            
+            for i in range(1, len(contigs) + 1):
+                output_file_part = "contig_" + str(i) + "-" + output_file
+                file = temp_folder + "/" + str(i) + ".gbk"
+                if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file_part + "_prediction_deepnog.csv"):
+                    os.remove(temp_folder + "/contig_" + str(i) + "-" + output_file + "_prediction_deepnog.csv")
+                sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(file, temp_folder + "/" + output_file_part, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
+                #sizes_full = sizes_full + sizes
+                lengths_full = lengths_full + lengths
+                chrms_full = chrms_full + chrms
+
+                if hist is not None:
+                    hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
+                    hists_full.append(hist)
+                
+                full_cogs = full_cogs.union(cogs_p).union(cogs_n)
+                images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
+                gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
+                maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
+                gc_avg_full = gc_avg_full + gc_avg
+                
+                create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
+                
+                if verbose:
+                    print("Drawing {}...".format(i))
+                os.system("circos circos.conf >/dev/null 2>&1")
+                os.system("circos -debug_group _all >/dev/null 2>&1")
+
+                if tracks_explain:
+                    addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = True, font_colour = font_colour, tracks_explain = True)
+                    os.remove("circos.svg")
+                    os.rename("circ_v.svg", "circos.svg")
+
+                if delete_background:
+                    change_background("none", False)
+                    if cairo:
+                        if verbose:
+                            print("Converting to png...")
+                        svgFile = open("circos.svg")
+                        svg2png(bytestring = svgFile.read(), write_to = output_file + "-contig_" + str(i) + ".png")
+                        svgFile.close()
+                        os.remove("circos.png")
+
+                if size:
+                    addText("", "center", "circos.svg", "circ_v.svg", captions = False, cogs_captions = False, size = sizes[0], font_colour = font_colour)
+                    os.rename("circ_v.svg", output_file + "-contig_" + str(i) + ".svg")
                 else:
-                    captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
-            if title_position == "center":
-                addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
-                os.remove(output_file + "-contig_" + "1.svg")
-                os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
-                mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
-                        pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                    os.rename("circos.svg", output_file + "-contig_" + str(i) + ".svg")
+                if not delete_background:
+                    os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
+                os.remove(file)
+            
+            chrms_full = postprocess(chrms_full)
+            
+            if len(hists_full) > 0:
+                new_hist = pd.DataFrame()
+                for hist in hists_full:
+                    new_hist[hist.columns[-1]] = hist.iloc[:,-1]
+                new_hist['Frequency'] = new_hist.sum(axis=1)
+                new_hist['COG Category'] = hists_full[0]['COG Category']
+                new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
+                
+                draw_histogram(new_hist, output_file + "/" + output_file, status) 
+            
+            gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
+
+            if captions or title != "":
+                if captionsPosition == "auto":
+                    if scale == "variable":
+                        captionsPosition = "right"
+                    else:
+                        captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
+                if title_position == "center":
+                    addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
+                    os.remove(output_file + "-contig_" + "1.svg")
+                    os.rename("titled_" + output_file + "-contig_" + "1.svg", output_file + "-contig_" + "1.svg")
+                    mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+                    addText("", inFile = output_file + ".svg", captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                            pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                else:
+                    mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+                    addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                            pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
+                os.remove(output_file + ".svg")
+                os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
             else:
-                mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
-                        pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
-            os.remove(output_file + ".svg")
-            os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
-        else:
-            mergeImages(images, outFile = output_file + "/" + output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-        for i in range(1, len(contigs) + 1):
-            os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
-            os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
+                mergeImages(images, outFile = output_file + "/" + output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
+            for i in range(1, len(contigs) + 1):
+                os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
+                os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
     else: # if status == "draft"
         if os.path.isdir(input_file):
             input_folder = input_file
@@ -244,11 +427,13 @@ def visualiseGenome(input_file, status, output_file = "genovi",
 
             gral_stats_table = open("Gral_Stats.csv", "w")
             gral_stats_table.write("Replicon,Size (bp),GC content (%),CDS,tRNA,rRNA\n")
-            cog_classification_table = open("COG_Classification.csv", "w")
-            cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
+            if cogs_classified:
+                cog_classification_table = open("COG_Classification.csv", "w")
+                cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
             for input_file in files_to_draw:
                 output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
                 input_file = "../" + input_folder + "/" + input_file
+                unzip(input_file)
                 temp_folder = output_file + "-temp"
                 if verbose:
                     print("processing file " + input_file)
@@ -266,7 +451,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 
                 if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
                     os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-                sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
+                sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
                 images.append({"size": sum(sizes), "fileName": output_file + "/" + output_file + ".svg"})
                 if hist is not None:
                     draw_histogram(hist, output_file + "/" + output_file, status)
@@ -275,7 +460,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
                 gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
                 maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
-                create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
+                create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
                 gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 
                 if verbose:
@@ -290,7 +475,10 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     change_background("none")
                 if captions or title != "" or size:
                     captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-                    addText("", inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
+                    if title == "filename":
+                        addText(".".join(input_file.split("/")[-1].split(".")[:-1]), inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
+                    else:
+                        addText("", inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
                     os.remove("circos.svg")
                     os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
                 else:
@@ -308,18 +496,27 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     if not reuse_predictions:
                         os.rmdir(temp_folder)
                     os.rmdir("conf")
+
+                if cairo:
+                    if verbose:
+                        print("Converting to png...")
+                    file = open(output_file + "/" + output_file + ".svg")
+                    svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
+                    file.close()
                 
                 gral_stats_table.write(output_file + "\n")
                 with open(output_file + "/" + output_file + "_Gral_Stats.csv") as local_table:
                     gral_stats_table.write("\n".join(local_table.read().split("\n")[1:]))
-                cog_classification_table.write(output_file + "\n")
-                with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
-                    cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
+                if cogs_classified:
+                    cog_classification_table.write(output_file + "\n")
+                    with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
+                        cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
             
             gral_stats_table.close()
-            cog_classification_table.close()
+            if cogs_classified:
+                cog_classification_table.close()
             mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-            addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_unclassified, captionsPosition = captionsPosition,
+            addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_classified, captionsPosition = captionsPosition,
                 pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             os.remove(output_folder + ".svg")
             os.rename("titled_" + output_folder + ".svg", output_folder + ".svg")
@@ -333,7 +530,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
         else:
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_unclassified, cogs_unclassified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
+            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
                 
             if hist is not None:
                 draw_histogram(hist, output_file + "/" + output_file, status)
@@ -342,7 +539,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
             gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
             maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
-            create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_unclassified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
+            create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
             gral_table(lengths, gc_avg, chrms, output_file + "/" + output_file + "_Gral_Stats.csv")
 
             if verbose:
@@ -357,7 +554,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 change_background("none")
             if captions or title != "" or size:
                 captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
-                addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_unclassified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
+                addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
                         pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
                 os.remove("circos.svg")
                 os.rename("titled_circos.svg", output_file + "/" + output_file + ".svg")
@@ -365,7 +562,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 os.rename("circos.svg", output_file + "/" + output_file + ".svg")
                 os.rename("circos.png", output_file + "/" + output_file + ".png")
 
-    if cairo:
+    if cairo and not (status == "complete" and os.path.isdir(input_file)):
         if verbose:
             print("Converting to png...")
         file = open(output_file + "/" + output_file + ".svg")

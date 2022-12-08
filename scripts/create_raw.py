@@ -239,7 +239,7 @@ def write_cog_files(locations, output, chrx, locus, cogs, verbose = False, categ
 		for index, row in subset.iterrows():
 			line = ["chr"+row["chr"]] + list(map(str, row["location"]))
 			lines.append(line)
-		filename = output.split(".")[-2]+"_"+c+"."+output.split(".")[-1]
+		filename = ".".join(output.split(".")[:-1])+"_"+c+"."+output.split(".")[-1]
 		with open(filename, 'w', newline='') as csvfile:
 			writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 			writer.writerows(lines)
@@ -517,7 +517,7 @@ def get_categories(gbk_file, output, deepnog_confidence = 0):
 		faa_name = gbk_file.split("/")[-1]
 	except:
 		pass
-	faa_name = faa_name.split(".")[0]
+	faa_name = ".".join(faa_name.split(".")[:-1])
 	
 	output_faa = output + ".faa"
 	# command1 = "python " + path + "/genbank2faa.py --outputFile " + output_faa + " " + gbk_file
@@ -669,9 +669,9 @@ def createRaw():
 	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]
 
 	try:
-		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]
+		gbk_name = ".".join(gbk_file.split('/')[-1].split('.g')[:-1])
 	except:
-		gbk_name = gbk_file.split('.g')[-2]
+		gbk_name = ".".join(gbk_file.split('.g')[:-1])
 	
 	if output == "":
 		output = gbk_name + "/"
@@ -687,9 +687,9 @@ def createRaw():
 		gbk = open(gbk_file,"r")
 		
 		try:
-			gbk_name = gbk_file.split("/")[-1].split(".")[-2]
+			gbk_name = ".".join(gbk_file.split("/")[-1].split(".")[:-1])
 		except:
-			gbk_name = gbk_file.split(".")[-2]	
+			gbk_name = ".".join(gbk_file.split(".")[:-1])
 			
 		sizes, inits, ends = create_kar(gbk_file, output, complete)
 
@@ -722,9 +722,9 @@ if __name__ == '__main__':
 	gbk_file, output, cds, trna, rrna, get_cats, divided, complete = getArgs()[:]
 	
 	try:
-		gbk_name = gbk_file.split('/')[-1].split('.g')[-2]
+		gbk_name = ".".join(gbk_file.split('/')[-1].split('.g')[:-1])
 	except:
-		gbk_name = gbk_file.split('.g')[-2]
+		gbk_name = ".".join(gbk_file.split('.g')[:-1])
 	
 	if output == "":
 		output = gbk_name + "/"
@@ -743,9 +743,9 @@ if __name__ == '__main__':
 		gbk = open(gbk_file,"r")
 		
 		try:
-			gbk_name = gbk_file.split("/")[-1].split(".")[-2]
+			gbk_name = ".".join(gbk_file.split("/")[-1].split(".")[:-1])
 		except:
-			gbk_name = gbk_file.split(".")[-2]	
+			gbk_name = ".".join(gbk_file.split(".")[:-1])
 			
 		sizes, inits, ends, lengths = create_kar(gbk_file, tmp, output, complete)
 

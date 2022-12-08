@@ -71,11 +71,11 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
     matrixScale = totalWidth / max([sum([a["size"] for a in images[i:i+matrixColumns]]) for i in range(0,len(images),matrixColumns)]) # 1 # matrixRows * totalWidth / max([a["size"] for a in images])
     beginGroup = '<g transform="translate({},{}) scale({})">\n'
     if align == "auto":
-        if len(images) > 1 and images[1]["size"] > images[0]["size"]*0.75 and images[0]["size"] + images[1]["size"] > totalWidth*0.5:
+        if len(images) > 1 and images[1]["size"] > images[0]["size"]*0.75 and images[0]["size"] + images[1]["size"] > totalWidth*0.5 and images[0]["size"] < totalWidth*0.5 and images[1]["size"] < totalWidth*0.5:
             align = "U"
         elif len(images) == 1 or images[0]["size"] > totalWidth * 0.5:
             align = "A"
-        elif len(images) > 3:
+        elif len(images) > 3 or len(images) == 2:
             align = "matrix"
         else:
             align = "A"
@@ -141,6 +141,7 @@ def mergeImages(images, outFile = "merged.svg", align = "auto", scale = "variabl
                 secondSize = float(image["size"])/totalWidth
                 if firstSize > 0.5:
                     file.write(beginGroup.format((3000 * firstSize), 0, secondSize))
+
                 else:
                     file.write(beginGroup.format(1500, 0, secondSize))
                 currentX = 1500 + 1500*(firstSize + secondSize - 1) - 3000*float(image["size"])/totalWidth

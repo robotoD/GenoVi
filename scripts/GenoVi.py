@@ -258,7 +258,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                             if scale == "variable":
                                 captionsPosition = "right"
                             else:
-                                captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
+                                captionsPosition = "top" if alignment == "bottom" else "bottom"
                         if title_position == "center":
                             addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
                             os.remove(output_file + "-contig_" + "1.svg")
@@ -411,7 +411,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     if scale == "variable":
                         captionsPosition = "right"
                     else:
-                        captionsPosition = "top-right" if alignment == "bottom" else "bottom-right"
+                        captionsPosition = "top" if alignment == "bottom" else "bottom"
                 if title_position == "center":
                     addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
                     os.remove(output_file + "-contig_" + "1.svg")
@@ -499,7 +499,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     if delete_background:
                         change_background("none")
                     if captions or title != "" or size:
-                        captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
+                        captionsPosition = "bottom" if captionsPosition == "auto" else captionsPosition
                         if title == "filename":
                             addText(".".join(input_file.split("/")[-1].split(".")[:-1]), inFile = "circos.svg", captions = False, cogs_captions = False, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
                         else:
@@ -580,7 +580,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             if delete_background:
                 change_background("none")
             if captions or title != "" or size:
-                captionsPosition = "bottom-right" if captionsPosition == "auto" else captionsPosition
+                captionsPosition = "bottom" if captionsPosition == "auto" else captionsPosition
                 addText(title, position = title_position, inFile = "circos.svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = cogs_p.union(cogs_n).intersection(set(wanted_cogs)),
                         pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour, size = sum(sizes) if size else "", tracks_explain = tracks_explain)
                 os.remove("circos.svg")

@@ -92,7 +92,54 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
             if size != "":
                 destiny.write(sizeElement)
             if captions:
-                legendElement = '<g>'
+
+                COGs1 = [{"symbol": "D", "description":"[D] Cell cycle control, adivision, chromosome partitioning", "colour": "105, 123, 183"},
+                    {"symbol": "M", "description":"[M] Cell wall/membrane/envelope biogenesis", "colour": "48, 78, 157"},
+                    {"symbol": "N", "description":"[N] Cell motility", "colour": "106, 154, 181"},
+                    {"symbol": "O", "description":"[O] Post translational modification, protein turnover, chaperones", "colour": "29, 130, 176"},
+                    {"symbol": "T", "description":"[T] Signal transduction mechanism", "colour": "76, 169, 181"},
+                    {"symbol": "U", "description":"[U] Intracellular trafficking, secretion and vesicular transport", "colour": "28, 104, 117"},
+                    {"symbol": "V", "description":"[V] Defense mechanism", "colour": "109, 191, 164"},
+                    {"symbol": "W", "description":"[W] Extracellular structures", "colour": "26, 147, 111"},
+                    {"symbol": "Y", "description":"[Y] Nuclear structure", "colour": "78, 177, 96"},
+                    {"symbol": "Z", "description":"[Z] Cytoskeleton", "colour": "28, 118, 51"}]
+                
+                COGs2 = [{"symbol": "A", "description":"[A] RNA processing and modification", "colour": "227, 73, 73"},
+                    {"symbol": "B", "description":"[B] Chromatin structure and dynamics", "colour": "205, 27, 27"},
+                    {"symbol": "J", "description":"[J] Translation, ribosomal structure and biogenesis", "colour": "173, 91, 159"},
+                    {"symbol": "K", "description":"[K] Transcription", "colour": "163, 55, 140"},
+                    {"symbol": "L", "description":"[L] Replication, recombination and repair", "colour": "143, 118, 180"},
+                    {"symbol": "X", "description":"[X] Mobilome: prophages, transposons", "colour": "83, 61, 145"}]
+                COGs3 = [
+                    {"symbol": "C", "description":"[C] Energy production and conversion", "colour": "181, 210, 123"},
+                    {"symbol": "E", "description":"[E] Amino acid transport and metabolism", "colour": "131, 173, 41"},
+                    {"symbol": "F", "description":"[F] Nucleotide transport and metabolism", "colour": "188, 184, 104"},
+                    {"symbol": "G", "description":"[G] Carbohydrate transport and metabolism", "colour": "152, 143, 28"},
+                    {"symbol": "H", "description":"[H] Coenzyme transport and metabolism", "colour": "237, 194, 138"},
+                    {"symbol": "I", "description":"[I] Lipid transport and metabolism", "colour": "183, 130, 42"},
+                    {"symbol": "P", "description":"[P] Inorganic ion transport and metabolism", "colour": "221, 137, 80"},
+                    {"symbol": "Q", "description":"[Q] Secondary metabolities biosynthesis, transport and metabolism", "colour": "198, 95, 23"}]
+                COGs4 = [
+                    {"symbol": "R", "description":"[R] General function prediction only", "colour": "105, 105, 105"},
+                    {"symbol": "S", "description":"[S] Function unknown", "colour": "153, 153, 153"},
+                    {"symbol": "None", "description":"Unclassified", "colour": "234, 234, 234"}]
+                
+                if captionsPosition == "bottom":
+                    legendElement = '<g style="transform: scale(3) translate(-2000px, -1700px)">'
+                    X2 = 650.86
+                elif captionsPosition == "top":
+                    legendElement = '<g style="transform: scale(3) translate(-2000px, -300px)">'
+                    X2 = 650.86
+                else:
+                    legendElement = '<g>'
+                    X2 = 580.86
+
+                allCogs = [ {"cogs": COGs1, "x": 233.95, "y": 44.68, "name": "Cellular Processes and Signaling"},
+                            {"cogs": COGs2, "x": 233.95, "y": 162.9, "name": "Information Storage and Processing"},
+                            {"cogs": COGs3, "x": X2, "y": 44.68, "name": "Metabolism"},
+                            {"cogs": COGs4, "x": X2, "y": 162.9, "name": "Poorly Characterized"}
+                ]
+
                 index = 0
                 legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
                                 <text x="{5}" y="{1}" font-size="16.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
@@ -106,41 +153,6 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                     {"description":"GC content", "colour": GC_content_colour},
                     {"description":"GC skew", "colour": "line"}]
                 if cogs_captions:
-                    COGs1 = [{"symbol": "D", "description":"[D] Cell cycle control, adivision, chromosome partitioning", "colour": "105, 123, 183"},
-                    {"symbol": "M", "description":"[M] Cell wall/membrane/envelope biogenesis", "colour": "48, 78, 157"},
-                    {"symbol": "N", "description":"[N] Cell motility", "colour": "106, 154, 181"},
-                    {"symbol": "O", "description":"[O] Post translational modification, protein turnover, chaperones", "colour": "29, 130, 176"},
-                    {"symbol": "T", "description":"[T] Signal transduction mechanism", "colour": "76, 169, 181"},
-                    {"symbol": "U", "description":"[U] Intracellular trafficking, secretion and vesicular transport", "colour": "28, 104, 117"},
-                    {"symbol": "V", "description":"[V] Defense mechanism", "colour": "109, 191, 164"},
-                    {"symbol": "W", "description":"[W] Extracellular structures", "colour": "26, 147, 111"},
-                    {"symbol": "Y", "description":"[Y] Nuclear structure", "colour": "78, 177, 96"},
-                    {"symbol": "Z", "description":"[Z] Cytoskeleton", "colour": "28, 118, 51"}]
-                    
-                    COGs2 = [{"symbol": "A", "description":"[A] RNA processing and modification", "colour": "227, 73, 73"},
-                    {"symbol": "B", "description":"[B] Chromatin structure and dynamics", "colour": "205, 27, 27"},
-                    {"symbol": "J", "description":"[J] Translation, ribosomal structure and biogenesis", "colour": "173, 91, 159"},
-                    {"symbol": "K", "description":"[K] Transcription", "colour": "163, 55, 140"},
-                    {"symbol": "L", "description":"[L] Replication, recombination and repair", "colour": "143, 118, 180"},
-                    {"symbol": "X", "description":"[X] Mobilome: prophages, transposons", "colour": "83, 61, 145"}]
-                    COGs3 = [
-                    {"symbol": "C", "description":"[C] Energy production and conversion", "colour": "181, 210, 123"},
-                    {"symbol": "E", "description":"[E] Amino acid transport and metabolism", "colour": "131, 173, 41"},
-                    {"symbol": "F", "description":"[F] Nucleotide transport and metabolism", "colour": "188, 184, 104"},
-                    {"symbol": "G", "description":"[G] Carbohydrate transport and metabolism", "colour": "152, 143, 28"},
-                    {"symbol": "H", "description":"[H] Coenzyme transport and metabolism", "colour": "237, 194, 138"},
-                    {"symbol": "I", "description":"[I] Lipid transport and metabolism", "colour": "183, 130, 42"},
-                    {"symbol": "P", "description":"[P] Inorganic ion transport and metabolism", "colour": "221, 137, 80"},
-                    {"symbol": "Q", "description":"[Q] Secondary metabolities biosynthesis, transport and metabolism", "colour": "198, 95, 23"}]
-                    COGs4 = [
-                    {"symbol": "R", "description":"[R] General function prediction only", "colour": "105, 105, 105"},
-                    {"symbol": "S", "description":"[S] Function unknown", "colour": "153, 153, 153"},
-                    {"symbol": "None", "description":"Unclassified", "colour": "234, 234, 234"}]
-                    allCogs = [ {"cogs": COGs1, "x": 233.95, "y": 44.68, "name": "Cellular Processes and Signaling"},
-                                {"cogs": COGs2, "x": 233.95, "y": 162.9, "name": "Information Storage and Processing"},
-                                {"cogs": COGs3, "x": 580.86, "y": 44.68, "name": "Metabolism"},
-                                {"cogs": COGs4, "x": 580.86, "y": 162.9, "name": "Poorly Characterized"}
-                     ]
                     if captionsPosition == "right" or captionsPosition == "left":
                         legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
                                 <text x="{5}" y="{1}" font-size="25.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
@@ -165,39 +177,40 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             legendElement += legendPiece.format(50 + index*35, 64 + index*35, feature["description"], feature["colour"],
                                              3000 if captionsPosition == "right" else -900, 3030 if captionsPosition == "right" else -870, font_colour)
                             index += 1
-                    elif captionsPosition == "top" or captionsPosition == "bottom":
-                        legendPiece = '''<rect x="{4}" y="{0}" width="30" height="30" fill="rgb({3})" stroke="{6}"/>
-                                <text x="{5}" y="{1}" font-size="38.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
-                        otherLegendPiece = '''<path d="M{4} {0} m0 20 h6 l4 -10 10 20 4-10 6 0" fill="{3}" stroke="{6}"/>
-                                <text x="{5}" y="{1}" font-size="40.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
-                        index = 0
-                        for COG in COGs1:
-                            
-                            if COG["symbol"] in cogs:
-                                legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, COG["description"], COG["colour"],
-                                                 40, 80, font_colour)
-                                index += 1
-                            elif COG["symbol"] == "space":
-                                index += 1
-                        index = 0
-                        for COG in COGs2:
-                            
-                            if COG["symbol"] in cogs:
-                                legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, COG["description"], COG["colour"],
-                                                 1340, 1380, font_colour)
-                                index += 1
-                            elif COG["symbol"] == "space":
-                                index += 1
-                        index = 0
-                        for feature in features:
-                            if feature["colour"] == "line":
-                                legendPiece = otherLegendPiece
-                                feature["colour"] = "none"
-                            if "eval" in feature["colour"]:
-                                feature["colour"] = "100,100,100"
-                            legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, feature["description"], feature["colour"],
-                                             2640, 2680, font_colour)
-                            index += 1
+#                    '''elif captionsPosition == "top" or captionsPosition == "bottom":
+#                        legendPiece = '''<rect x="{4}" y="{0}" width="30" height="30" fill="rgb({3})" stroke="{6}"/>
+#                                <text x="{5}" y="{1}" font-size="38.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+#                        otherLegendPiece = '''<path d="M{4} {0} m0 20 h6 l4 -10 10 20 4-10 6 0" fill="{3}" stroke="{6}"/>
+#                                <text x="{5}" y="{1}" font-size="40.0px" font-family="CMUBright-Roman" style="text-anchor:start;" fill="{6}">{2}</text>\n'''
+#                        index = 0
+#                        for COG in COGs1:
+#                            
+#                            if COG["symbol"] in cogs:
+#                                legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, COG["description"], COG["colour"],
+#                                                 40, 80, font_colour)
+#                                index += 1
+#                            elif COG["symbol"] == "space":
+#                                index += 1
+#                        index = 0
+#                        for COG in COGs2:
+#                            
+#                            if COG["symbol"] in cogs:
+#                                legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, COG["description"], COG["colour"],
+#                                                 1340, 1380, font_colour)
+#                                index += 1
+#                            elif COG["symbol"] == "space":
+#                                index += 1
+#                        index = 0
+#                        for feature in features:
+#                            if feature["colour"] == "line":
+#                                legendPiece = otherLegendPiece
+#                                feature["colour"] = "none"
+#                            if "eval" in feature["colour"]:
+#                                feature["colour"] = "100,100,100"
+#                            legendElement += legendPiece.format((-900 if captionsPosition == "top" else 3000) + index*50, (-870 if captionsPosition == "top" else 3030) + index*50, feature["description"], feature["colour"],
+#                                             2640, 2680, font_colour)
+#                            index += 1
+#                    '''
                     else:
                         xb = 50 if "left" in captionsPosition else 2050
                         yb = 50 if "top" in captionsPosition else 2750
@@ -244,7 +257,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                                 legendElement += '''<line stroke = "#13110C" x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" />'''.format(x1 = xb + functionalGroup["x"] - 0.36, x2 = xb + functionalGroup["x"] + 318, y = yb + functionalGroup["y"] + 5.4)
                         if cogsAreDrawn:
                             legendElement += '''<text font-size="20px" x="{x}" y="{y}">Cluster of Ortologues Groups (COGs)</text>'''.format(x = xb + 209.98, y = yb + 17.16)
-                            legendElement += '''<line stroke = "#13110C" x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" />'''.format(x1 = xb + 209.98 - 0.36, x2 = xb + 209.98 + 635, y = yb + 17.16 + 5.4)
+                            legendElement += '''<line stroke = "#13110C" x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" />'''.format(x1 = xb + 209.98 - 0.36, x2 = xb + 209.98 + 705, y = yb + 17.16 + 5.4)
 
                 else: # if not cogs_legend
                     xb = 50 if "left" in captionsPosition else 2750

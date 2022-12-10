@@ -137,6 +137,8 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             if cogs_classified:
                 cog_classification_table = open("COG_Classification.csv", "w")
                 cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
+                cog_percentage_table = open("COG_Classification_percentages.csv", "w")
+                cog_percentage_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
             for input_file in files_to_draw:
                 
                 input_file = "../" + input_folder + "/" + input_file
@@ -305,6 +307,9 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         cog_classification_table.write(output_file + "\n")
                         with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
                             cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
+                        cog_percentage_table.write(output_file + "\n")
+                        with open(output_file + "/" + output_file + "_COG_Classification_percentages.csv") as local_table:
+                            cog_percentage_table.write("\n".join(local_table.read().split("\n")[2:]))
                 except:
                     if verbose:
                         print("\nError processing file: " + input_file)
@@ -312,6 +317,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             gral_stats_table.close()
             if cogs_classified:
                 cog_classification_table.close()
+                cog_percentage_table.close()
             try:
                 os.remove("circos.png")
                 # os.remove("circos.svg")
@@ -443,6 +449,8 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             if cogs_classified:
                 cog_classification_table = open("COG_Classification.csv", "w")
                 cog_classification_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
+                cog_percentage_table = open("COG_Classification_percentages.csv", "w")
+                cog_percentage_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
             for input_file in files_to_draw:
                 output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
                 input_file = "../" + input_folder + "/" + input_file
@@ -536,12 +544,16 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         cog_classification_table.write(output_file + "\n")
                         with open(output_file + "/" + output_file + "_COG_Classification.csv") as local_table:
                             cog_classification_table.write("\n".join(local_table.read().split("\n")[2:]))
+                        cog_percentage_table.write(output_file + "\n")
+                        with open(output_file + "/" + output_file + "_COG_Classification_percentages.csv") as local_table:
+                            cog_percentage_table.write("\n".join(local_table.read().split("\n")[2:]))
                 except:
                     if verbose:
                         print("Error processing " + input_file)            
             gral_stats_table.close()
             if cogs_classified:
-                cog_classification_table.close()
+                cog_percentage_table.close()
+
             mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
             addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_classified, captionsPosition = captionsPosition,
                 pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
@@ -651,7 +663,7 @@ def get_args():
 
     text_group = parser.add_argument_group("text")
     text_group.add_argument("-c", "--captions_not_included", action='store_false', help = "Do not include captions for genomic features and COG colors.", required = False)
-    text_group.add_argument("-cp", "--captions_position", type=str, choices=["right", "left", "top", "bottom", "auto"], help = "Where to position figure captions. Options: left, right, top, bottom, auto.", default = "auto")
+    text_group.add_argument("-cp", "--captions_position", type=str, choices=["top", "bottom", "bottom-right", "auto"], help = "Where to position figure captions. Options: top, bottom, bottom-right.", default = "auto")
     text_group.add_argument("-t", "--title", type=str, help="Title of the image (e.g., strain taxomomical identification). By default, it does not include title", default = "")
     text_group.add_argument("--title_position", type=str, choices=["center", "top", "bottom"], default = "center")
     text_group.add_argument("--italic_words", type=int, help="How many of words of the title should be written in italics. WARNING: Italics is not supported by the svg-to-png engine, so PNG image will not be available if this option is used. Default: 0", default = 0)

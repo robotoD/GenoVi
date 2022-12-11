@@ -76,7 +76,6 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
                     wanted_cogs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+"):
-
     if not cairo:
         print("There's been an error finding cairoSVG library, so PNG images might be different from expected. Please prefer using SVG output.")
     if output_file[-4:] == ".svg" or output_file[-4:] == ".png":
@@ -659,7 +658,7 @@ def get_args():
     parser.add_argument("-r", "--reuse_predictions", action='store_true', help="If available, reuse DeepNog prediction result from previous run. Useful only after --keep_temporary_files flag enabled.", required = False)
     
     parser.add_argument("-w", "--window", "--step", type=int, help="Base pair window for GC plotting. Default: 5000", default = 5000)
-    parser.add_argument("-v", "--verbose", type=bool, help="Weather to print progress log.", default = True)
+    parser.add_argument("-v", "--verbose", type=str, help="Weather to print progress log.", default = "True")
 
     text_group = parser.add_argument_group("text")
     text_group.add_argument("-c", "--captions_not_included", action='store_false', help = "Do not include captions for genomic features and COG colors.", required = False)
@@ -687,8 +686,10 @@ def get_args():
     
     args = parser.parse_args()
 
+    verbose = args.verbose.upper() == "TRUE"
+
     return (args.input_file, args.status, args.output_file,
-    args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, args.verbose,
+    args.cogs_unclassified, args.deepnog_confidence_threshold, args.alignment, args.scale, args.keep_temporary_files, args.reuse_predictions, args.window, verbose,
     args.captions_not_included, args.captions_position, args.title, args.title_position, args.italic_words, args.size, args.tracks_explain,
     args.colour_scheme, args.background, args.font_colour, args.GC_content_colour, args.GC_skew_colour, args.tRNA_colour, args.rRNA_colour, args.CDS_positive_colour, args.CDS_negative_colour, args.GC_skew_line_colour,
     args.cogs)

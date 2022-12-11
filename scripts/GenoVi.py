@@ -3,27 +3,27 @@
 # GenoVi is a pipeline that generates circular maps for bacterial (complete or non-complete)
 # genomes using Circos software. It also allows the user to annotate COG classifications
 # through DeepNOG predictions.
-# 
+#
 # GenoVi is under a BY-NC-SA Creative Commons License, Please cite. Cumsille et al., 2021
 # You may remix, tweak, and build upon this work even for commercial purposes, as long as
 # you credit this work and license your new creations under the identical terms.
-# 
+#
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
 #from create_raw import base, postprocess
 #from GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
-#from genbank2fna import gbkToFna, mainFna 
+#from genbank2fna import gbkToFna, mainFna
 #from genbank2faa import modify_locus, genbankToFaa, mainFaa
 #from createConf import create_conf, create_conf_main
-#from addText import addText 
-#from mergeImages import mergeImages 
+#from addText import addText
+#from mergeImages import mergeImages
 #from colours import parseColours
 #from create_tables import gral_table, draw_histogram
 
 from .addText import addText
 from .colours import parseColours
-from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base_complete, base, get_categories, create_kar_complete, create_feature_complete, new_loc, write_cog_files, write_lines, createRaw, postprocess
+from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base, get_categories, new_loc, write_cog_files, write_lines, postprocess
 from .createConf import create_conf, create_conf_main
 from .GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
 from .genbank2faa import modify_locus, genbankToFaa, mainFaa
@@ -71,7 +71,7 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
 
 # Full pipeline
 # input: anotated genome filename.
-def visualiseGenome(input_file, status, output_file = "genovi", 
+def visualiseGenome(input_file, status, output_file = "genovi",
                     cogs_classified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
@@ -100,19 +100,19 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             wanted_cogs = int(wanted_cogs)
         except ValueError:
             wanted_cogs = list(wanted_cogs)
-    
+
 
     if which("circos") == None:
         if verbose:
             print("Circos is not installed. please install for using GenoVi.")
         raise Exception("Circos is not installed. please install for using GenoVi.")
-    
+
     colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour = parseColours(colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour)
     delete_background = False
     if background_colour == "transparent" or background_colour == "none" or background_colour == "auto":
         delete_background = True
         background_colour = "white"
-    
+
     temp_folder = output_file + "-temp"
     if not os.path.exists(temp_folder) and not os.path.isdir(input_file):
         os.mkdir(temp_folder)
@@ -139,7 +139,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 cog_percentage_table = open("COG_Classification_percentages.csv", "w")
                 cog_percentage_table.write(",Cellular Processes and Signaling,,,,,,,,,,Information Storage and Processing,,,,,,Metabolism,,,,,,,,Poorly Characterized,,,\nReplicon,D,M,N,O,T,U,V,W,Y,Z,A,B,J,K,L,X,C,E,F,G,H,I,P,Q,R,S,Unclassified\n")
             for input_file in files_to_draw:
-                
+
                 input_file = "../" + input_folder + "/" + input_file
                 output_file = ".".join((input_file.split("/")[-1]).split(".")[0:-1])
                 temp_folder = output_file + "-temp"
@@ -169,7 +169,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                             with open(input_file , 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
 
-                    
+
                     file = open(input_file)
                     contigs = file.read().split("\n//\n")
                     file.close()
@@ -179,16 +179,16 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
                         contigFile.write(contigs[i - 1])
                         contigFile.close()
-                    
+
                     images = []
                     full_cogs = set([])
-                    
+
                     sizes_full = []
                     lengths_full = []
                     chrms_full = []
                     gc_avg_full = []
                     hists_full = []
-                    
+
                     for i in range(1, len(contigs) + 1):
                         output_file_part = "contig_" + str(i) + "-" + output_file
                         file = temp_folder + "/" + str(i) + ".gbk"
@@ -202,15 +202,15 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         if hist is not None:
                             hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
                             hists_full.append(hist)
-                        
+
                         full_cogs = full_cogs.union(cogs_p).union(cogs_n)
                         images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
                         gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
                         maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
                         gc_avg_full = gc_avg_full + gc_avg
-                        
+
                         create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
-                        
+
                         if verbose:
                             print("Drawing {}...".format(i))
                         os.system("circos circos.conf >/dev/null 2>&1")
@@ -239,9 +239,9 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         if not delete_background:
                             os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
                         os.remove(file)
-                    
+
                     chrms_full = postprocess(chrms_full)
-                    
+
                     if len(hists_full) > 0:
                         new_hist = pd.DataFrame()
                         for hist in hists_full:
@@ -249,9 +249,9 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         new_hist['Frequency'] = new_hist.sum(axis=1)
                         new_hist['COG Category'] = hists_full[0]['COG Category']
                         new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
-                        
-                        draw_histogram(new_hist, output_file + "/" + output_file, status) 
-                    
+
+                        draw_histogram(new_hist, output_file + "/" + output_file, status)
+
                     gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
 
                     if captions or title != "":
@@ -278,7 +278,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                     for i in range(1, len(contigs) + 1):
                         os.rename(output_file + "-contig_" + str(i) + ".svg", output_file + "/" + output_file + "-contig_" + str(i) + ".svg")
                         os.rename(output_file + "-contig_" + str(i) + ".png", output_file + "/" + output_file + "-contig_" + str(i) + ".png")
-                    
+
                     if not keep_temporary_files:
                         if verbose:
                             print("deleting temporary files")
@@ -312,7 +312,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 except:
                     if verbose:
                         print("\nError processing file: " + input_file)
-            
+
             gral_stats_table.close()
             if cogs_classified:
                 cog_classification_table.close()
@@ -336,16 +336,16 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 contigFile = open(temp_folder + "/" + str(i) + ".gbk", "w")
                 contigFile.write(contigs[i - 1])
                 contigFile.close()
-            
+
             images = []
             full_cogs = set([])
-            
+
             sizes_full = []
             lengths_full = []
             chrms_full = []
             gc_avg_full = []
             hists_full = []
-            
+
             for i in range(1, len(contigs) + 1):
                 output_file_part = "contig_" + str(i) + "-" + output_file
                 file = temp_folder + "/" + str(i) + ".gbk"
@@ -359,15 +359,15 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 if hist is not None:
                     hist.columns = ["COG Category", "Frequency", "chr"+str(i)]
                     hists_full.append(hist)
-                
+
                 full_cogs = full_cogs.union(cogs_p).union(cogs_n)
                 images.append({"size": sizes[0], "fileName": output_file + "-contig_" + str(i) + ".svg"})
                 gbkToFna(file, temp_folder + "/" + output_file_part + ".fna", verbose)
                 maxmins, gc_avg = makeGC(temp_folder + "/" + output_file_part + ".fna", temp_folder + "/" + output_file_part, window)
                 gc_avg_full = gc_avg_full + gc_avg
-                
+
                 create_conf(output_file_part, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, set(cogs_p).intersection(set(wanted_cogs)), set(cogs_n).intersection(set(wanted_cogs)), tracks_explain, 1)
-                
+
                 if verbose:
                     print("Drawing {}...".format(i))
                 os.system("circos circos.conf >/dev/null 2>&1")
@@ -396,9 +396,9 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 if not delete_background:
                     os.rename("circos.png", output_file + "-contig_" + str(i) + ".png")
                 os.remove(file)
-            
+
             chrms_full = postprocess(chrms_full)
-            
+
             if len(hists_full) > 0:
                 new_hist = pd.DataFrame()
                 for hist in hists_full:
@@ -406,9 +406,9 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 new_hist['Frequency'] = new_hist.sum(axis=1)
                 new_hist['COG Category'] = hists_full[0]['COG Category']
                 new_hist = new_hist[['COG Category', 'Frequency']+[c for c in new_hist.columns if c[:3] == "chr"]]
-                
-                draw_histogram(new_hist, output_file + "/" + output_file, status) 
-            
+
+                draw_histogram(new_hist, output_file + "/" + output_file, status)
+
             gral_table(lengths_full, gc_avg_full, chrms_full, output_file + "/" + output_file + "_Gral_Stats.csv")
 
             if captions or title != "":
@@ -468,7 +468,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                                 shutil.copyfileobj(f_in, f_out)
 
                     temp_folder = output_file + "-temp"
-                    
+
                     if not os.path.exists(temp_folder):
                         os.mkdir(temp_folder)
                     if not os.path.exists(output_file):
@@ -480,10 +480,10 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                             with open(input_file , 'wb') as f_out:
                                 shutil.copyfileobj(f_in, f_out)
 
-                    
+
                     if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
                         os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-                    sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
+                    sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
                     images.append({"size": sum(sizes), "fileName": output_file + "/" + output_file + ".svg"})
                     if hist is not None:
                         draw_histogram(hist, output_file + "/" + output_file, status)
@@ -535,7 +535,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         file = open(output_file + "/" + output_file + ".svg")
                         svg2png(bytestring = file.read(), write_to = output_file + "/" + output_file + ".png")
                         file.close()
-                    
+
                     gral_stats_table.write(output_file + "\n")
                     with open(output_file + "/" + output_file + "_Gral_Stats.csv") as local_table:
                         gral_stats_table.write("\n".join(local_table.read().split("\n")[1:]))
@@ -548,7 +548,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                             cog_percentage_table.write("\n".join(local_table.read().split("\n")[2:]))
                 except:
                     if verbose:
-                        print("Error processing " + input_file)            
+                        print("Error processing " + input_file)
             gral_stats_table.close()
             if cogs_classified:
                 cog_percentage_table.close()
@@ -568,8 +568,8 @@ def visualiseGenome(input_file, status, output_file = "genovi",
         else:
             if (not reuse_predictions) and os.path.exists(temp_folder + "/" + output_file + "_prediction_deepnog.csv"):
                 os.remove(temp_folder + "/" + output_file + "_prediction_deepnog.csv")
-            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs) 
-                
+            sizes, cogs_p, cogs_n, lengths, chrms, hist, wanted_cogs = base(input_file, temp_folder + "/" + output_file, output_file + "/" + output_file, True, True, cogs_classified, cogs_classified, False, True, deepnog_confidence_threshold, verbose, wanted_cogs=wanted_cogs)
+
             if hist is not None:
                 draw_histogram(hist, output_file + "/" + output_file, status)
 
@@ -625,7 +625,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
         if not reuse_predictions:
             os.rmdir(temp_folder)
         os.rmdir("conf")
-    
+
 def get_version():
 	try:
 		_dist = get_distribution('genovi')
@@ -639,10 +639,10 @@ def get_version():
 		__version__ = 'Please install this project with\n pip install genovi'
 	else:
 		__version__ = _dist.version
-		
+
 	return __version__
-   
-    
+
+
 # Parse user arguments
 def get_args():
     parser = ap.ArgumentParser()
@@ -656,7 +656,7 @@ def get_args():
     parser.add_argument("--scale", type=str, choices=["variable", "linear", "sqrt"], help="To select the scale-up ratio between each circular representations when the file is processes as a complete genome. This is useful to ensure visibility of each representation when the length difference is too high. Options: variable, linear, sqrt. Default: sqrt", default = "sqrt")
     parser.add_argument("-k", "--keep_temporary_files", action='store_true', help="Do not delete files used for circos image generation, including protein categories prediction by Deepnog.", required = False)
     parser.add_argument("-r", "--reuse_predictions", action='store_true', help="If available, reuse DeepNog prediction result from previous run. Useful only after --keep_temporary_files flag enabled.", required = False)
-    
+
     parser.add_argument("-w", "--window", "--step", type=int, help="Base pair window for GC plotting. Default: 5000", default = 5000)
     parser.add_argument("-v", "--verbose", type=str, help="Weather to print progress log.", default = "True")
 
@@ -681,9 +681,9 @@ def get_args():
     colour_group.add_argument("-cc", "--GC_content_colour", type=str, help="Colour for GC content, in R, G, B format. Default: '23, 0, 115'", default = "auto")
     colour_group.add_argument("-sc", "--GC_skew_colour", type=str, help="Colour scheme for GC skew. Might be a pair of RGB colours or Circos-readable code. For details, please read CIRCOS documentation. Default: '140, 150, 198 - 158, 188, 218'", default = 'auto')
     colour_group.add_argument("-sl", "--GC_skew_line_colour", type=str, help="Colour for GC skew line. Default: black", default = 'auto')
-    
+
     parser.add_argument("--version", action="version", version=f'%(prog)s {__version__}')
-    
+
     args = parser.parse_args()
 
     verbose = args.verbose.upper() == "TRUE"

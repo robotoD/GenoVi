@@ -46,47 +46,62 @@ def gral_table(lengths, contents, chrms, output):
 
 def cogs_classif(hist, output, status):
 
-    header1 = ["","Cellular Processes and Signaling"]+[""]*9+["Information Storage and Processing"]+[""]*5+["Metabolism"]+[""]*7+["Poorly Characterized","","",""]
-    header2 = ["Replicon","D","M","N","O","T","U","V","W","Y","Z","A","B","J","K","L","X","C","E","F","G","H","I","P","Q","R","S","Unclassified"]
+	header1 = ["","Cellular Processes and Signaling"]+[""]*9+["Information Storage and Processing"]+[""]*5+["Metabolism"]+[""]*7+["Poorly Characterized","","",""]
+	header2 = ["Replicon","D","M","N","O","T","U","V","W","Y","Z","A","B","J","K","L","X","C","E","F","G","H","I","P","Q","R","S","Unclassified"]
+	csv_file = open(output, 'w')
+	writer = csv.writer(csv_file)
+	writer.writerow(header1)
+	writer.writerow(header2)
 
-    csv_file = open(output, 'w')
-    writer = csv.writer(csv_file)
-    writer.writerow(header1)
-    writer.writerow(header2)
+	total = hist["Frequency"].sum()
 
-    total = hist["Frequency"].sum()
+	if status == "complete":
+		aux = output.split(".")
+		csv_file2 = open(aux[-2]+"_percentages."+aux[-1], 'w')
+		writer2 = csv.writer(csv_file2)
+		writer2.writerow(header1)
+		writer2.writerow(header2)
 
-    if status == "complete":
-        aux = output.split(".")
-        csv_file2 = open(".".join(aux[:-1])+"_percentages."+aux[-1], 'w')
-        writer2 = csv.writer(csv_file2)
-        writer2.writerow(header1)
-        writer2.writerow(header2)
+		plt.figure()
+		ax = plt.gca()
+		divider = make_axes_locatable(ax)
+		cax = divider.append_axes("right", size="5%", pad=0.1)
 
-    for column in hist.columns:
-        if column[:3] != "chr":
-            continue
-        i = column[3:]
-        line = map(str,[i] + [hist[hist["COG Category"] == c]["chr"+i].item() for c in header2[1:]])
-        writer.writerow(line)
+		heat_data = hist[hist.columns[2:]].T
+		heat_data = (heat_data.div(heat_data.sum(axis=1),axis=0)*100).round(1).fillna(0)
+		heat_map = sns.heatmap(heat_data, annot = True, square=True, cmap="crest", xticklabels=header2[1:-1]+["Uncl."],
+								ax=ax, cbar_ax=cax, linewidths=0.01, fmt='g', annot_kws={"size": 10})#, annot_kws={"size": 8 / np.sqrt(len(heat_data))})
+		heat_map.set(title="COG category classification frequency in percentages", xlabel='COG Category', ylabel='Contig')
 
-        if status == "complete":
-            total_i = hist["chr"+i].sum()
-            line2 = map(str,[i] + [round(hist[hist["COG Category"] == c]["chr"+i].item()/total_i*100,1) for c in header2[1:]])
-            writer2.writerow(line2)
+		plt.gcf().set_size_inches(15, 12)
+		plt.yticks(rotation=90)
+		plt.tight_layout()
+		plt.savefig(output+"_percentage.png", dpi=180)
 
-    footer = map(str,["Total"] + [hist[hist["COG Category"] == c]["Frequency"].item() for c in header2[1:]])
-    footer2 = map(str,["Percentage"] + [round(hist[hist["COG Category"] == c]["Frequency"].item()/total*100,1) for c in header2[1:]])
-    writer.writerow(footer)
-    writer.writerow(footer2)
-    csv_file.close()
+	for column in hist.columns:
+		if column[:3] != "chr":
+			continue
+		i = column[3:]
+		line = map(str,[i] + [hist[hist["COG Category"] == c]["chr"+i].item() for c in header2[1:]])
+		writer.writerow(line)
 
-    if status == "complete":
-        footer2 = map(str,["Total"] + [round(hist[hist["COG Category"] == c]["Frequency"].item()/total*100,1) for c in header2[1:]])
-        writer2.writerow(footer2)
-        csv_file2.close()
+		if status == "complete":
+			total_i = hist["chr"+i].sum()
+			line2 = map(str,[i] + [round(hist[hist["COG Category"] == c]["chr"+i].item()/total_i*100,1) for c in header2[1:]])
+			writer2.writerow(line2)
 
-    return
+	footer = map(str,["Total"] + [hist[hist["COG Category"] == c]["Frequency"].item() for c in header2[1:]])
+	footer2 = map(str,["Percentage"] + [round(hist[hist["COG Category"] == c]["Frequency"].item()/total*100,1) for c in header2[1:]])
+	writer.writerow(footer)
+	writer.writerow(footer2)
+	csv_file.close()
+
+	if status == "complete":
+		footer2 = map(str,["Total"] + [round(hist[hist["COG Category"] == c]["Frequency"].item()/total*100,1) for c in header2[1:]])
+		writer2.writerow(footer2)
+		csv_file2.close()
+
+	return
 
 
 def draw_histogram(hist, output, status):

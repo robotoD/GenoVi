@@ -1,6 +1,9 @@
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
+import seaborn as sns
+plt.style.use("seaborn")
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 def fill_unique_chrms(chrms, n):
 

@@ -30,6 +30,7 @@ pip install genovi
 * Pandas 1.2.4
 * Biopython 1.79
 * CairoSVG 2.5.2
+* Seaborn 0.12
 * Perl 5
 * List::MoreUtils (Perl library)
 

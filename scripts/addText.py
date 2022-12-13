@@ -149,6 +149,21 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                     {"description":"rRNA", "colour": rRNA_colour},
                     {"description":"GC content", "colour": GC_content_colour},
                     {"description":"GC skew", "colour": "line"}]
+
+                if "-right" in captionsPosition:
+                    xb = 2050
+                elif "left" == captionsPosition:
+                    xb = -950
+                else:
+                    xb = 50
+                if "bottom-" in captionsPosition:
+                    yb = 2750
+                elif "top-" in captionsPosition:
+                    yb = 50
+                elif "bottom" in captionsPosition:
+                    yb = 3050
+                else:
+                    yb = -950
                 if cogs_captions:
                     if captionsPosition == "right" or captionsPosition == "left":
                         legendPiece = '''<rect x="{4}" y="{0}" width="15" height="15" fill="rgb({3})" stroke="{6}"/>
@@ -175,20 +190,7 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                                              3000 if captionsPosition == "right" else -900, 3030 if captionsPosition == "right" else -870, font_colour)
                             index += 1
                     else:
-                        if "-right" in captionsPosition:
-                            xb = 2050
-                        elif "left" == captionsPosition:
-                            xb = -950
-                        else:
-                            xb = 50
-                        if "bottom-" in captionsPosition:
-                            yb = 2750
-                        elif "top-" in captionsPosition:
-                            yb = 50
-                        elif "bottom" in captionsPosition:
-                            yb = 3050
-                        else:
-                            yb = -950
+                        
                         legendElement += '''<text font-size="{title_font_size}px" x="{x}" y="{y}">Genomic features</text>
                         <line stroke = "{font_colour}" x1="{xb}" y1="{yl}" x2="{xl}" y2="{yl}" />
                         <rect stroke = "{font_colour}" fill = "rgb({pCDS_color})" x="{xf}" y="{yf1}" width="{rect_size}" height="{rect_size}" />
@@ -239,29 +241,31 @@ def addText(text, position = "center", inFile="circos.svg", outFile="default", i
                             legendElement += '''<line stroke = "#13110C" x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" />'''.format(x1 = xb + (209.98 - 0.36) * scale, x2 = xb + (209.98 + 705) * scale, y = yb + (17.16 + 5.4) * scale)
 
                 else: # if not cogs_legend
-                    xb = 50 if "left" in captionsPosition else 2750
-                    yb = 50 if "top" in captionsPosition else 2750
-                    legendElement += '''<text font-size="20px" x="{x}" y="{y}">Genomic features</text>
+                    legendElement += '''<text font-size="{title_font_size}px" x="{x}" y="{y}">Genomic features</text>
                     <line stroke = "{font_colour}" x1="{xb}" y1="{yl}" x2="{xl}" y2="{yl}" />
-                    <rect stroke = "{font_colour}" fill = "rgb({pCDS_color})" x="{xf}" y="{yf1}" width="18.66" height="18.66" />
-                    <text x="{xft}" y="{yft1}" >positive CDS</text>
-                    <rect stroke = "{font_colour}" fill = "rgb({nCDS_color})" x="{xf}" y="{yf2}" width="18.66" height="18.66" />
-                    <text x="{xft}" y="{yft2}" >negative CDS</text>
-                    <rect stroke = "{font_colour}" fill = "rgb({tRNA_color})" x="{xf}" y="{yf3}" width="18.66" height="18.66" />
-                    <text x="{xft}" y="{yft3}">tRNA</text>
-                    <rect stroke = "{font_colour}" fill = "rgb({rRNA_color})" x="{xf}" y="{yf4}" width="18.66" height="18.66" />
-                    <text x="{xft}" y="{yft4}">rRNA</text>
-                    <rect stroke = "{font_colour}" fill = "rgb({GC_color})" x="{xf}" y="{yf5}" width="18.66" height="18.66" />
-                    <text x="{xft}" y="{yft5}">GC content</text>
-                    <path stroke="{font_colour}" fill="none" d="M{xf6} {yf6} m0 10 h3 l2 -5 5 10 2-5 3 0" />
-                    <text x="{xft}" y="{yft6}">GC skew</text>
-                    '''.format( x = xb + 1.62,y = yb + 17.16,
-                                xb = xb, yl = yb + 22.52, xl = 167.56 + xb,
-                                xf = xb + 8.17, xft = xb + 35.5,
-                                yf1 = yb + 55.84, yf2 = yb + 82.73, yf3 = yb + 109.14, yf4 = yb + 136.03, yf5 = yb + 162.42, yf6 = yb + 192, xf6 = xb + 10,
-                                yft1 = yb + 70.54, yft2 = yb + 97.72, yft3 = yb + 124.89, yft4 = yb + 152.07, yft5 = yb + 179.25, yft6 = yb + 206.43,
-                                font_colour = font_colour,
+                    <rect stroke = "{font_colour}" fill = "rgb({pCDS_color})" x="{xf}" y="{yf1}" width="{rect_size}" height="{rect_size}" />
+                    <text font-size="{font_size}px" x="{xft}" y="{yft1}" >positive CDS</text>
+                    <rect stroke = "{font_colour}" fill = "rgb({nCDS_color})" x="{xf}" y="{yf2}" width="{rect_size}" height="{rect_size}" />
+                    <text font-size="{font_size}px" x="{xft}" y="{yft2}" >negative CDS</text>
+                    <rect stroke = "{font_colour}" fill = "rgb({tRNA_color})" x="{xf}" y="{yf3}" width="{rect_size}" height="{rect_size}" />
+                    <text font-size="{font_size}px" x="{xft}" y="{yft3}">tRNA</text>
+                    <rect stroke = "{font_colour}" fill = "rgb({rRNA_color})" x="{xf}" y="{yf4}" width="{rect_size}" height="{rect_size}" />
+                    <text font-size="{font_size}px" x="{xft}" y="{yft4}">rRNA</text>
+                    <rect stroke = "{font_colour}" fill = "rgb({GC_color})" x="{xf}" y="{yf5}" width="{rect_size}" height="{rect_size}" />
+                    <text font-size="{font_size}px" x="{xft}" y="{yft5}">GC content</text>
+                    <text font-size="{font_size}px" x="{xft}" y="{yft6}">GC skew</text>
+                    '''.format( x = xb + (1.62)*scale, y = yb + (17.16)*scale,
+                                xb = xb * scale, yl = yb + (22.52) * scale, xl = xb + 167.56 * scale,
+                                xf = xb + (8.17) * scale, xft = xb + (35.5) * scale,
+                                yf1 = yb + (55.84) * scale, yf2 = yb + (82.73) * scale, yf3 = yb + (109.14) * scale, yf4 = yb + (136.03) * scale, yf5 = yb + (162.42) * scale,
+                                yft1 = yb + (70.54) * scale, yft2 = yb + (97.72) * scale, yft3 = yb + (124.89) * scale, yft4 = yb + (152.07) * scale, yft5 = yb + (179.25) * scale, yft6 = yb + (206.43) * scale,
+                                font_colour = font_colour, title_font_size = 20 * scale, font_size = 16 * scale, rect_size = 18.66 * scale,
                                 pCDS_color = pCDS_colour, nCDS_color = nCDS_colour, tRNA_color = tRNA_colour, rRNA_color = rRNA_colour, GC_color = GC_content_colour)
+                    if scale == 3:
+                        gc_skew_legend_symbol = '''<path stroke="{font_colour}" fill="none" d="M{xf6} {yf6} m0 30 h9 l6 -15 15 30 6-15 9 0" />'''
+                    else:
+                        gc_skew_legend_symbol = '''<path stroke="{font_colour}" fill="none" d="M{xf6} {yf6} m0 10 h3 l2 -5 5 10 2-5 3 0" />'''
+                    legendElement += gc_skew_legend_symbol.format(font_colour = font_colour, yf6 = yb + (192) * scale, xf6 = xb + (10) * scale)
 
                 legendElement += '</g>\n'
                 destiny.write(legendElement)

@@ -60,7 +60,7 @@ def cogs_classif(hist, output, status):
 
 	# if status == "complete":
 	aux = output.split(".")
-	csv_file2 = open(aux[-2]+"_percentages."+aux[-1], 'w')
+	csv_file2 = open(".".join(aux[:-1])+"_percentages."+aux[-1], 'w')
 	writer2 = csv.writer(csv_file2)
 	writer2.writerow(header1)
 	writer2.writerow(header2)

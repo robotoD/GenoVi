@@ -72,7 +72,7 @@ def change_background(colour, finalImage = True, fileName = "circos.svg"):
 # Full pipeline
 # input: anotated genome filename.
 def visualiseGenome(input_file, status, output_file = "genovi",
-                    cogs_classified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "variable", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
+                    cogs_classified = True, deepnog_confidence_threshold = 0, alignment = "center", scale = "sqrt", keep_temporary_files = False, reuse_predictions = False, window = 5000, verbose = False,
                     captions = True, captionsPosition = "auto", title = "", title_position = "center", italic_words = 2, size = False, tracks_explain = False,
                     colour_scheme = "auto", background_colour = "transparent", font_colour = "0, 0, 0", GC_content = "auto", GC_skew ='auto', tRNA = 'auto', rRNA = 'auto', CDS_positive = 'auto', CDS_negative = 'auto', skew_line_colour = '0, 0, 0',
                     wanted_cogs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ+"):
@@ -256,10 +256,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
 
                     if captions or title != "":
                         if captionsPosition == "auto":
-                            if scale == "variable":
-                                captionsPosition = "right"
-                            else:
-                                captionsPosition = "top" if alignment == "bottom" else "bottom"
+                            captionsPosition = "top" if alignment == "bottom" else "bottom"
                         if title_position == "center":
                             addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
                             os.remove(output_file + "-contig_" + "1.svg")
@@ -413,10 +410,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
 
             if captions or title != "":
                 if captionsPosition == "auto":
-                    if scale == "variable":
-                        captionsPosition = "right"
-                    else:
-                        captionsPosition = "top" if alignment == "bottom" else "bottom"
+                    captionsPosition = "top" if alignment == "bottom" else "bottom"
                 if title_position == "center":
                     addText(title, position = title_position, inFile = output_file + "-contig_" + "1.svg", italic = italic_words, captions = False, font_colour = font_colour)
                     os.remove(output_file + "-contig_" + "1.svg")
@@ -551,6 +545,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                         print("Error processing " + input_file)
             gral_stats_table.close()
             if cogs_classified:
+                cog_classification_table.close()
                 cog_percentage_table.close()
 
             mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)

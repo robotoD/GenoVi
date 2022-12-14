@@ -91,7 +91,7 @@ More detailed information about the arguments can be found in the [user guide](h
 Check the tutorials in the [user guide tutorials](https://github.com/robotoD/GenoVi/wiki/User-guide#tutorials-).
 
 ## Output files  
-Resulting images are saved in a folder called **\[name\]** as **\[name\].svg** and **\[name\].png** (name being specified with `output_file` argument or, by default, genovi. In case of a complete genome, individual contig image files are stored in a **\[name\]** subdirectory as **\[name\]-contig_\[i\].png** with i in \[1, the number of circles\]. In case of draft genomes, GenoVi displays the replicons as delivered by the initial genbank file.
+Resulting images are saved in a folder called **\[name\]** as **\[name\].svg** and **\[name\].png** (name being specified with `output_file` argument or, by default, genovi. In case of a complete genome, individual contig image files are stored in a **\[name\]** subdirectory as **\[name\]-contig_\[i\].png** with i in \[1, the number of circles\]. In the case of draft genomes, GenoVi displays the replicons as delivered by the initial GenBank file.
 
 Besides images, if `-k` or `--keep_temporary_files` was called, files described in [user guide arguments](https://github.com/robotoD/GenoVi/wiki/User-guide#keep-temporary-files-) will also be stored. 
 

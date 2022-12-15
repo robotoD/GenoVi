@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use("seaborn")
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from natsort import natsorted
 
 def fill_unique_chrms(chrms, n):
 
@@ -70,14 +71,19 @@ def cogs_classif(hist, output, status):
 	divider = make_axes_locatable(ax)
 	cax = divider.append_axes("right", size="5%", pad=0.1)
 
-	heat_data = hist[hist.columns[2:]].T
+	heat_data = hist[hist.columns[2:]]
+	heat_data.columns = [i[3:] for i in heat_data.columns]
+	heat_data = heat_data.reindex(natsorted(heat_data.columns), axis=1)
+	ylabels = heat_data.columns
+	heat_data = heat_data.T
 	heat_data = (heat_data.div(heat_data.sum(axis=1),axis=0)*100).round(1).fillna(0)
 	heat_map = sns.heatmap(heat_data, annot = True, square=True, cmap="crest", xticklabels=header2[1:-1]+["Uncl."],
-							ax=ax, cbar_ax=cax, linewidths=0.01, fmt='g', annot_kws={"size": 10})#, annot_kws={"size": 8 / np.sqrt(len(heat_data))})
+							yticklabels=ylabels, ax=ax, cbar_ax=cax, linewidths=0.01, fmt='g', annot_kws={"size": 10})#, annot_kws={"size": 8 / np.sqrt(len(heat_data))})
 	heat_map.set(title="COG category classification frequency in percentages", xlabel='COG Category', ylabel='Contig')
+	heat_map.set_yticklabels(heat_map.get_yticklabels(), rotation = 0)
 
 	plt.gcf().set_size_inches(15, 12)
-	plt.yticks(rotation=90)
+
 	plt.tight_layout()
 	plt.savefig(output+"_percentage.png", dpi=180)
 

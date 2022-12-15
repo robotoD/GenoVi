@@ -33,6 +33,7 @@ pip install genovi
 * Seaborn 0.12
 * Perl 5
 * List::MoreUtils (Perl library)
+* Natsort 8.2.0
 
 ## Usage <a name="usage"></a>
 

@@ -53,15 +53,15 @@ genovi [-h] [options ..] -i input_file -s status
 
 ### COGs:
 * `-cu`, `--cogs`_unclassified. Do not classify each coding sequence into Clusters of Orthologous Groups of proteins (COGs).
-* `--cogs`, `COGS` To specify which COG categories include in the circular representation. For example 'ABJKLX'
+* `--cogs`. To specify which COG categories include in the circular representation. For example `ABJKLX`, `met-` or a numerical value to show only the N-most abundant cogs, `5`. 
 * `-b`, `--deepnog`_confidence_threshold. DeepNOG confidence threshold range \[0,1\] Default: 0. If provided, predictions below the threshold are discarded.
 
 ### Format:
-* `-a`, `--alignment`. When a `--status complete` is specified, this flag defines the alignment of each individual contig. Options: `center`, `top`, `bottom`, `A` (First on top), `<` (first to the left), `U` (Two on top, the rest below). By default, this is defined by contig sizes.
-* `--scale`. When using `--status complete`, whether to use a different scale format to ensure visibility. Options: `variable`, `linear`, `sqrt`. Default: `sqrt`.
+* `-a`, `--alignment`. When a `--status complete` is specified, this flag defines the alignment of each individual replicon. Options: `center`, `top`, `bottom`, `A` (First on top), `<` (first to the left), `U` (Two on top, the rest below). By default, this is defined by replicon size.
+* `--scale`. If `--status complete` is specified, whether to use a different scale format to ensure visibility of all replicons. Options: `variable`, `linear`, `sqrt`. Default: `sqrt`.
 * `-k`, `--keep_temporary_files`. Keep temporary files.
-* `-r`, `-reuse_predictions`. If available, reuse DeepNog prediction result from the previous run. Useful only if --keep_temporary_files flag is enabled.
-* `-w`, `--window`. Window size (base pair) to assign a GC analysis. Default: `5000`.
+* `-r`, `-reuse_predictions`. If available, reuse DeepNog prediction result from a previous run. Useful only if --keep_temporary_files flag was enabled `-k`.
+* `-w`, `--window`. Window size (base pair) to assign a GC content analysis. Default: `5000`.
 * `-v`, `--verbose`. Verbose or in-console log messages activated.
 
 ### Text:
@@ -69,12 +69,12 @@ genovi [-h] [options ..] -i input_file -s status
 * `-cp`, `--captions_position`. Captions position. Options: `left`, `right`, `auto`.
 * `-t`, `--title`. Figure title.
 * `--title_position`. Title position. Options: `center`, `top`, `bottom`.
-* `--italic_words`. How many title words should be written in italic. Default: `2`.
+* `--italic_words`. How many words in the title should be written in italic. Default: `2`.
 * `--size`. Displays the genome size of each independent circular representation.
-* `-te`, `--tracks_explain`. Adds a space break in the circular representation, including captions for each track within the ideogram. 
+* `-te`, `--tracks_explanation`. Adds a space break in the circular representation, including captions for each track within the ideogram. 
 
 ### Colours:
-* `-cs`, `--colour_scheme`. Prebuilt color scheme to use for CDS, RNAs, and GC analysis. Options: `strong`,`autumn`,`dawn`,`blossom`,`paradise`,`neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
+* `-cs`, `--colour_scheme`. Prebuilt color scheme to use for CDS, RNAs, and GC analysis. Options: Color-blind safe palettes: `strong`,`autumn`,`dawn`,`blossom`,`paradise`; other color palettes: `neutral`, `blue`, `purple`, `soil`, `grayscale`, `velvet`, `pastel`, `ocean`, `wood`, `beach`, `desert`, `ice`, `island`, `forest`, `toxic`, `fire`, `spring`.
 * `-bc`, `--background`. Background colour, in R, G, B format. Default: `transparent`.
 * `-fc`, `--font_colour`. Font color. Default: `black`.
 * `-pc`, `--CDS_positive_colour`. Colour for positive CDSs, in R, G, B format. Default: `'180, 205, 222'`.

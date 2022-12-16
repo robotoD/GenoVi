@@ -87,6 +87,7 @@ def cogs_classif(hist, output, status):
 	plt.tight_layout()
 	plt.savefig(output+"_percentage.png", dpi=180)
 
+	hist = hist.reindex(natsorted(hist.columns), axis=1)
 	for column in hist.columns:
 		if column[:3] != "chr":
 			continue

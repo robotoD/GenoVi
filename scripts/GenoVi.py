@@ -11,16 +11,6 @@
 # Developed by Andres Cumsille, Andrea Rodriguez, Roberto E. Duran & Vicente Saona Urmeneta
 # For any code related query, contact: andrea.rodriguezdelherbe@rdm.ox.ac.uk, vicente.saona@sansano.usm.cl.
 
-#from create_raw import base, postprocess
-#from GC_analysis import get_args_, write_content, generate_result, makeGC, createGC
-#from genbank2fna import gbkToFna, mainFna
-#from genbank2faa import modify_locus, genbankToFaa, mainFaa
-#from createConf import create_conf, create_conf_main
-#from addText import addText
-#from mergeImages import mergeImages
-#from colours import parseColours
-#from create_tables import gral_table, draw_histogram
-
 from .addText import addText
 from .colours import parseColours
 from .create_raw import getArgs, listdir_r, ends_sorted, create_kar, create_feature, base, get_categories, new_loc, write_cog_files, write_lines, postprocess
@@ -435,6 +425,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             os.chdir(output_file)
             output_folder = output_file
             images = []
+            found_cogs = set([])
             files_to_draw = [x for x in os.listdir("../" + input_folder) if ".gb" in x]
 
             gral_stats_table = open("Gral_Stats.csv", "w")
@@ -484,6 +475,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
 
                     cogs_p = set(map(lambda x : "None" if x == None else x[0], cogs_p))
                     cogs_n = set(map(lambda x : "None" if x == None else x[0], cogs_n))
+                    found_cogs = found_cogs.union(cogs_p).union(cogs_n)
                     gbkToFna(input_file, temp_folder + "/" + output_file + ".fna", verbose)
                     maxmins, gc_avg = makeGC(temp_folder + "/" + output_file + ".fna", temp_folder + "/" + output_file, window)
                     create_conf(output_file, temp_folder, maxmins, font_colour, GC_content, GC_skew, CDS_positive, CDS_negative, tRNA, rRNA, skew_line_colour, background_colour, cogs_classified, cogs_p.intersection(set(wanted_cogs)), cogs_n.intersection(set(wanted_cogs)), tracks_explain, len(sizes))
@@ -549,7 +541,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                 cog_percentage_table.close()
 
             mergeImages(images, outFile = output_folder + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-            addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_classified, captionsPosition = captionsPosition,
+            addText("", inFile=output_folder + ".svg", outFile="default", captions=captions, cogs_captions=cogs_classified, captionsPosition = captionsPosition, cogs = found_cogs.intersection(wanted_cogs),
                 pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
             os.remove(output_folder + ".svg")
             os.rename("titled_" + output_folder + ".svg", output_folder + ".svg")

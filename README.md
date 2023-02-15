@@ -1,6 +1,6 @@
 # GenoVi: Genome Visualiser Software
 
-**GenoVi** generates circular genome representations for complete or draft bacterial and archaeal genomes. **GenoVi** pipeline combines several python scripts to automatically generate all needed files for Circos, including customisable options for colour palettes, fonts, font format, background colour and scaling options for complete or draft genomes comprising more than 1 replicon. Optionally, **GenoVi** built-in workflow integrates DeepNOG to annotate COG categories using alignment-free methods with user-defined thresholds.
+**GenoVi** generates circular genome representations for complete, draft, and multiple bacterial and archaeal genomes. **GenoVi** pipeline combines several python scripts to automatically generate all needed files for Circos to generate circular plots, including customisable options for colour palettes, fonts, font format, background colour and scaling options for genomes comprising more than 1 replicon. Optionally, **GenoVi** built-in workflow integrates DeepNOG to annotate COG categories using alignment-free methods with user-defined thresholds, creating COG categories histograms and COG distribution plots per genome, contig or replicon, useful for further analyses.
 
 ![Diagram](Figures/Diagram.png "Diagram")
 
@@ -104,11 +104,11 @@ For further information, please read the [user guide](https://github.com/robotoD
 
 ## Publication
 
-WIP
+Cumsille, A., Durán, R.E., Rodríguez-Delherbe, A., Saona-Urmeneta, V., Cámara, B., Seeger, M., Araya, M., Jara, N., Buil-Aranda, C. (2023). GenoVi, an open-source automated circular genome visualizer for bacteria and archaea. (Accepted)
 
 ## Citation and License
 
 GenoVi is under a BY-NC-SA Creative Commons License, Please cite.
-Cumsille et al., 2022 
+Cumsille et al., 2023 
 
 You may remix, tweak, and build upon this work even for commercial purposes, as long as you credit this work and license your new creations under the identical terms. 

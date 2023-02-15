@@ -1,4 +1,4 @@
-# GenoVi: Genome Visualiser Software
+# GenoVi: Genome Visualizer Software
 
 **GenoVi** generates circular genome representations for complete, draft, and multiple bacterial and archaeal genomes. **GenoVi** pipeline combines several python scripts to automatically generate all needed files for Circos to generate circular plots, including customisable options for colour palettes, fonts, font format, background colour and scaling options for genomes comprising more than 1 replicon. Optionally, **GenoVi** built-in workflow integrates DeepNOG to annotate COG categories using alignment-free methods with user-defined thresholds, creating COG categories histograms and COG distribution plots per genome, contig or replicon, useful for further analyses.
 

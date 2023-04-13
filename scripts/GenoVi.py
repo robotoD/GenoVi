@@ -97,6 +97,10 @@ def visualiseGenome(input_file, status, output_file = "genovi",
             print("Circos is not installed. please install for using GenoVi.")
         raise Exception("Circos is not installed. please install for using GenoVi.")
 
+    if "/" in output_file:
+        output_file = list(filter(None,output_file.split("/")))[-1]
+
+
     colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour = parseColours(colour_scheme, background_colour, GC_content, GC_skew, tRNA, rRNA, CDS_positive, CDS_negative, skew_line_colour)
     delete_background = False
     if background_colour == "transparent" or background_colour == "none" or background_colour == "auto":

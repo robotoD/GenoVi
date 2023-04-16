@@ -260,7 +260,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                                     pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
                         else:
                             mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                            addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                            addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
                                     pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
                         os.remove(output_file + ".svg")
                         os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")
@@ -414,7 +414,7 @@ def visualiseGenome(input_file, status, output_file = "genovi",
                             pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
                 else:
                     mergeImages(images, outFile = output_file + ".svg", align = alignment, scale = scale, background_colour = "none" if delete_background else background_colour)
-                    addText(title, position = title_position, inFile = output_file + "/" + output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
+                    addText(title, position = title_position, inFile = output_file + ".svg", italic = italic_words, captions = captions, cogs_captions = cogs_classified, captionsPosition = captionsPosition, cogs = full_cogs.intersection(set(wanted_cogs)),
                             pCDS_colour = CDS_positive, nCDS_colour = CDS_negative, tRNA_colour = tRNA, rRNA_colour = rRNA, GC_content_colour = GC_content, font_colour = font_colour)
                 os.remove(output_file + ".svg")
                 os.rename("titled_" + output_file + ".svg", output_file + "/" + output_file + ".svg")

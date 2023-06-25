@@ -102,9 +102,10 @@ Four additional files are stored in **\[name\]** folder: a histogram displaying 
 ## Additional information
 For further information, please read the [user guide](https://github.com/robotoD/GenoVi/wiki/User-guide).
 
-## Publication
+## Citation
+If you use GenoVi in your research, please cite [our latest paper].(https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010998)
 
-Cumsille, A., Durán, R.E., Rodríguez-Delherbe, A., Saona-Urmeneta, V., Cámara, B., Seeger, M., Araya, M., Jara, N., Buil-Aranda, C. (2023). GenoVi, an open-source automated circular genome visualizer for bacteria and archaea. (Accepted)
+Cumsille A, Durán RE, Rodríguez-Delherbe A, Saona-Urmeneta V, Cámara B, Seeger M, et al. GenoVi, an open-source automated circular genome visualizer for bacteria and archaea. PLoS Comput Biol. 2023;19:e1010998.
 
 ## Citation and License
 
